@@ -34,3 +34,8 @@ ex1
 
 # vim files
 .swp
+
+# visual studio files
+*.vcxproj.*
+Debug
+*.vcxproj
