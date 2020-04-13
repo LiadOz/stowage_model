@@ -3,13 +3,13 @@
 #include <ostream>
 using std::ostream;
 
-ostream& operator<<(ostream& out, const Plan &p){
+ostream& operator<<(ostream& out, const Plan& p){
     pair<int, int> dim = p.getDimensions();
     return out << "X = " << dim.first
         << ", Y = " << dim.second;
 }
 
-bool ShipPlans::appendPlan(Plan plan){
+bool ShipPlans::appendPlan(const Plan& plan){
     if(plans.size() == 0){
         plans.push_back(plan);
         return true;
@@ -24,7 +24,7 @@ bool ShipPlans::appendPlan(Plan plan){
     return false;
 }
 
-ostream& operator<<(ostream& out, const ShipPlans &p){
+ostream& operator<<(ostream& out, const ShipPlans& p){
     for (int i = 0; i < p.size(); ++i) {
         out << "floor " << i << " " << p.plans[i] << "\n";
     }

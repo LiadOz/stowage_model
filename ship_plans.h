@@ -28,7 +28,7 @@ private:
 public:
     ShipPlans(){};
     // appends a plan if it can be fit on top the previous plan
-    bool appendPlan(Plan plan);
+    bool appendPlan(const Plan& plan);
     int size() const { return plans.size(); }
     friend ostream& operator<<(ostream& out, const ShipPlans &p);
 };
