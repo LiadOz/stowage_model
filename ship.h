@@ -3,21 +3,21 @@
 
 #include <vector>
 #include <string>
-#include "ship_plans.h"
+#include "inventory.h"
+#include "container.h"
 using std::vector;
 using std::string;
 
 class Ship {
 private:
-    int decks;
-    vector<string> routes;
-    // each plan can be a matrix of boolean which indicate open spaces
-    ShipPlans plans;
+    size_t decks;
+    Inventory storage;
 
 public:
     // when you create a ship you supply the list of plans
-    Ship();
-    virtual ~Ship();
+    Ship(string& file_path): storage(file_path){decks = storage.getNumFloors();}
+    bool insertContainer(int x, int y, Container* c); // insertes container to (x,y)
+    Container* removeContainer(int x, int y); // remove container from (x,y)
 };
 
 #endif /* SHIP_H */
