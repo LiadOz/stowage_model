@@ -29,8 +29,10 @@ bool validContainer(string id){
     }
     int secondary = (int)(digitValidate/11) * 11;
     digitValidate -= secondary;
-    if (id[id.length()-1] - '0' == digitValidate)
+    if (id[id.length()-1] - '0' == digitValidate){
+        std::cout << "valid" << std::endl;
         return true;
+    }
     return false;
 
 }
