@@ -32,11 +32,11 @@ void Inventory::initFromRow(vector<size_t> row){
 void Inventory::parseRow(vector<size_t> row){
     size_t floors = row[FLOORS], x = row[X_POSITION], y = row[Y_POSITION];
     if(floors > maxFloors){
-        logError("Initilization", "Too much floors in input");
+        Logger::Instance().logError("Too much floors in input");
         floors = maxFloors;
     }
     if(x > heights[0].size() || y > heights.size())
-        logError("Initilization", "Cell outside of range");
+        Logger::Instance().logError("Cell outside of range");
     else heights[y][x] = floors;
 }
 
@@ -76,7 +76,7 @@ bool Inventory::fullCoordinate(size_t x, size_t y){
 }
 bool Inventory::pushContainer(size_t x, size_t y, Container* c){
     if (fullCoordinate(x, y)){
-        logError("insertion", "attempted to insert container in full space");
+        Logger::Instance().logError("attempted to insert container in full space");
         return false;
     }
     storage[y][x].push_back(c);
@@ -84,7 +84,7 @@ bool Inventory::pushContainer(size_t x, size_t y, Container* c){
 }
 Container* Inventory::popContainer(size_t x, size_t y){
     if (emptyCoordinate(x, y)){
-        logError("removal", "tried to remove non-existing cargo");
+        Logger::Instance().logError("tried to remove non-existing cargo");
         return nullptr;
     }
     Container* c = storage[y][x].back();

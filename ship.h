@@ -15,7 +15,7 @@ private:
 
 public:
     // when you create a ship you supply the list of plans
-    Ship(string& file_path): storage(file_path){decks = storage.getNumFloors();}
+    Ship(const string& file_path): storage(file_path){decks = storage.getNumFloors();}
     bool insertContainer(int x, int y, Container* c); // insertes container to (x,y)
     Container* removeContainer(int x, int y); // remove container from (x,y)
 };
