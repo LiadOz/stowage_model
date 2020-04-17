@@ -16,6 +16,13 @@ protected:
     vector<string> routes;
     unordered_set<Container*> outside;
     void unloadAll(string port);
+
+    // insertes container to the next free location
+    // return false if there is no space left
+    size_t next_x, next_y;
+    bool insertNextFree(Container* c);
+    virtual void getPortInstructions(const string& port,
+            const string& input_path){};
 public:
     Algorithm (){};
     void readShipPlan(const string& full_path_and_file_name){ s = Ship(full_path_and_file_name); }
@@ -23,22 +30,27 @@ public:
     void finalDestination();
     virtual void getInstructionsForCargo(
             const string& input_full_path_and_file_name,
-            const string& output_full_path_and_file_name){};
+            const string& output_full_path_and_file_name);
 };
 
 // the brute algorithm moves every container off the ship
 // then loads them back on
 class BruteAlgroithm : public Algorithm {
-private:
-    // insertes container to the next free location
-    // return false if there is no space left
-    size_t next_x, next_y;
-    bool insertNextFree(Container* c);
+protected:
+    virtual void getPortInstructions(const string& port,
+            const string& input_path);
 public:
     BruteAlgroithm (){};
-    virtual void getInstructionsForCargo(
-            const string& input_full_path_and_file_name,
-            const string& output_full_path_and_file_name);
+};
+
+// the reject algorithm accepts only cargo that needs to go
+// to the next route
+class RejectAlgorithm : public Algorithm {
+protected:
+    virtual void getPortInstructions(const string& port,
+            const string& input_path);
+public:
+    RejectAlgorithm(){};
 };
 
 #endif /* ALGORITHM_H */

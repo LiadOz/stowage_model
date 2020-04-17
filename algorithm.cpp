@@ -60,6 +60,23 @@ void Algorithm::unloadAll(string port){
     }
 }
 
+bool Algorithm::insertNextFree(Container* c){
+    pair<size_t, size_t> d = s.getStorageDimensions();
+    while(next_x < d.first && next_y < d.second){
+        if (!s.fullCoordinate(next_x, next_y)){
+            s.insertContainer(next_x, next_y, c);
+            return true;
+        }
+        if (next_x == d.first - 1){
+            next_y++;
+            next_x = 0;
+        }
+        else next_x++;
+    }
+    return false;
+}
+
+
 void setAwaitingCargo(const string& file_path, vector<Container*>& awaiting){
     ifstream file(file_path);
     string line, data;
@@ -85,16 +102,28 @@ void setAwaitingCargo(const string& file_path, vector<Container*>& awaiting){
     }
 }
 
-void BruteAlgroithm::getInstructionsForCargo(
+void Algorithm::getInstructionsForCargo(
         const string& input_full_path_and_file_name,
         const string& output_full_path_and_file_name){
-    s.setLoggerFile(output_full_path_and_file_name);
 
-    string currentPort = routes.back();
+    s.setLoggerFile(output_full_path_and_file_name);
+    s.setLogToScreen(true);
+
+    // when reaching final port
     if(routes.size() == 1)
-        currentPort = UNLOAD_ALL;
-    
-    unloadAll(currentPort);
+        unloadAll(UNLOAD_ALL);
+    else {
+        string currentPort = routes.back();
+        routes.pop_back();
+        this->getPortInstructions(currentPort, input_full_path_and_file_name);
+    }
+    s.closeLogFile();
+}
+
+void BruteAlgroithm::getPortInstructions(const string& port,
+        const string& input_path){
+
+    unloadAll(port);
     next_x = next_y = 0;
 
     // inserting all cargos the were removed
@@ -103,7 +132,7 @@ void BruteAlgroithm::getInstructionsForCargo(
 
     // pushing new cargo
     vector<Container*> awaiting;
-    setAwaitingCargo(input_full_path_and_file_name, awaiting);
+    setAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
         success = insertNextFree(c);
@@ -113,23 +142,31 @@ void BruteAlgroithm::getInstructionsForCargo(
         }
             
     }
-    s.closeLogFile();
-    routes.pop_back();
 }
 
-bool BruteAlgroithm::insertNextFree(Container* c){
-    pair<size_t, size_t> d = s.getStorageDimensions();
-    while(next_x < d.first && next_y < d.second){
-        if (!s.fullCoordinate(next_x, next_y)){
-            s.insertContainer(next_x, next_y, c);
-            return true;
+void RejectAlgorithm::getPortInstructions(const string& port,
+        const string& input_path){
+
+    unloadAll(port);
+    next_x = next_y = 0;
+
+    // pushing new cargo
+    vector<Container*> awaiting;
+    setAwaitingCargo(input_path, awaiting);
+    bool success;
+    for (auto c : awaiting) {
+        if (c->getDestination().compare(routes.back()) != 0){
+            // reject container that is not to the next route
+            s.rejectContainer(c);
+            delete c;
+            continue;
         }
-        if (next_x == d.first - 1){
-            next_y++;
-            next_x = 0;
+        success = insertNextFree(c);
+        if (!success){
+            // reject if there is no more space
+            s.rejectContainer(c);
+            delete c;
         }
-        else next_x++;
+            
     }
-    return false;
 }
-

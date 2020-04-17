@@ -18,8 +18,11 @@ using std::ofstream;
 class ShipLogger {
 private:
     ofstream file;
+    bool logToScreen;
 public:
+    ShipLogger(): logToScreen(false){}
     void setLogFile(const string& file_path){ file.open(file_path);}
+    void setLogToScreen(bool flag){ logToScreen = flag;}
     void closeLogFile(){ file.close();}
     void logAction(const string& action);
 };
@@ -43,6 +46,7 @@ public:
     bool fullCoordinate(size_t x, size_t y){return storage.fullCoordinate(x, y);}
     pair<size_t, size_t> getStorageDimensions(){ return storage.getDimensions(); }
     void setLoggerFile(const string& file_path){logger.setLogFile(file_path);}
+    void setLogToScreen(bool flag){ logger.setLogToScreen(flag);}
     void closeLogFile(){logger.closeLogFile();}
     
 };

@@ -5,6 +5,8 @@ using std::to_string;
 
 void ShipLogger::logAction(const string& action){
     file << action << std::endl;
+    if (logToScreen)
+        std::cout << "(ship logger): " << action << std::endl;
 }
 void Ship::insertContainer(size_t x, size_t y, Container* c){
     storage.pushContainer(x, y, c);
@@ -15,9 +17,10 @@ void Ship::insertContainer(size_t x, size_t y, Container* c){
 }
 
 Container* Ship::removeContainer(size_t x, size_t y){
+    int h = getCoordinateHeight(x, y);
     Container* c = storage.popContainer(x, y);
     logger.logAction("<U>," + c->getId() + "," +
-            to_string(INVALID_ARG) + "," + to_string(x) + "," + to_string(y)
+            to_string(h) + "," + to_string(x) + "," + to_string(y)
             );
     return c;
 }
