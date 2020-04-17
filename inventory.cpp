@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -6,6 +7,7 @@
 
 using std::ifstream;
 using std::stringstream;
+using std::out_of_range;
 
 #define PARSING_WORDS 3
 #define PARSING_DEPTH 0
@@ -18,6 +20,7 @@ using std::stringstream;
 // initialize the size of the arrays
 void Inventory::initFromRow(vector<size_t> row){
     maxFloors = row[PARSING_DEPTH];
+    dimensions = {row[PARSING_X], row[PARSING_Y]};
     heights = vector<vector<size_t>>(
             row[PARSING_Y],
             vector<size_t>(row[PARSING_X], 0)
@@ -66,27 +69,32 @@ Inventory::Inventory(const string& file_path){
 
     file.close();
 }
+
+void Inventory::rangeCheck(size_t x, size_t y){
+    if (x >= dimensions.first || y >= dimensions.second)
+        throw out_of_range("Attempted to access invalid location");
+}
 bool Inventory::emptyCoordinate(size_t x, size_t y){
+    rangeCheck(x, y);
     if (storage[y][x].size() == 0) return true;
     return false;
 }
 bool Inventory::fullCoordinate(size_t x, size_t y){
+    rangeCheck(x, y);
     if (storage[y][x].size() == heights[y][x]) return true;
     return false;
 }
 bool Inventory::pushContainer(size_t x, size_t y, Container* c){
-    if (fullCoordinate(x, y)){
-        Logger::Instance().logError("attempted to insert container in full space");
-        return false;
-    }
+    rangeCheck(x, y);
+    if (fullCoordinate(x, y))
+        throw out_of_range("Coordinate is full");
     storage[y][x].push_back(c);
     return true;
 }
 Container* Inventory::popContainer(size_t x, size_t y){
-    if (emptyCoordinate(x, y)){
-        Logger::Instance().logError("tried to remove non-existing cargo");
-        return nullptr;
-    }
+    rangeCheck(x, y);
+    if (emptyCoordinate(x, y))
+        throw out_of_range("Coordinate is empty");
     Container* c = storage[y][x].back();
     storage[y][x].pop_back();
     return c;

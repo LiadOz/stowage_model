@@ -7,6 +7,7 @@ using std::string;
 
 bool valid_file(string file_path);
 int getIthFile(string filename);
+bool validRoute(string route);
 
 class Logger{
 private:
