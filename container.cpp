@@ -1,6 +1,8 @@
 #include <regex>
+#include <stdexcept>
 #include <cmath>
 #include "container.h"
+#include "util.h"
 #define CONTAINER_REGEX "[A-Z]{3}[U,J,Z]\\d{6}\\d"
 #define ID_NUMBER_OF_LETTERS 4
 
@@ -29,16 +31,17 @@ bool validContainer(string id){
     }
     int secondary = (int)(digitValidate/11) * 11;
     digitValidate -= secondary;
-    if (id[id.length()-1] - '0' == digitValidate){
-        std::cout << "valid" << std::endl;
+    if (id[id.length()-1] - '0' == digitValidate)
         return true;
-    }
     return false;
 
 }
 
 Container::Container(int weight, string destination, string id){
-    validContainer(id);
+    if(!validContainer(id))
+        throw std::invalid_argument("invalid id " + id);
+    if(!validRoute(destination))
+        throw std::invalid_argument("invalid destination " + destination);
     this->weight = weight;
     this->destination = destination;
     this->id = id;
