@@ -1,9 +1,9 @@
+# problem with blank lines
 # starting port
 AERKT
 JPSNR
 # ending port
 BRSFK
-
 # ========================================
 # regex = "[A-Z]{5}"
 # sample names:
