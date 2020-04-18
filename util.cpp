@@ -1,5 +1,9 @@
+#include <regex>
 #include <iostream>
 #include "util.h"
+
+using std::regex;
+using std::regex_match;
 
 bool valid_file(string file_path){
     return true;
@@ -7,6 +11,12 @@ bool valid_file(string file_path){
 int getIthFile(string filename){
     // TODO
     return 0;
+}
+bool validRoute(string route){
+    regex r("[A-Z]{5}");
+    if(!regex_match(route, r))
+        return false;
+    return true;
 }
 
 Logger* Logger::instance_p = nullptr;
@@ -17,6 +27,7 @@ Logger& Logger::Instance() {
    return *instance_p;
 }
 
+// currently the logger prints to the screen
 void Logger::logError(string message){
     std::cout << "Error in " << logType << " : " << message << std::endl;
 }

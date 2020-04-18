@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include "container.h"
 #include "ship.h"
+#include "algorithm.h"
 #include "util.h"
 #include "Port.h"
-//#include "Port.h"
 
 using std::string;
 using std::vector;
@@ -38,3 +38,15 @@ int main() {
 
 	return EXIT_SUCCESS;
 }
+// int main() {
+//     Logger& l = Logger::Instance();
+//     l.setLogType("init");
+//     Algorithm& a = *(new RejectAlgorithm());
+//     a.readShipPlan("./example/sample.plan");
+//     a.readShipRoute("./example/ports");
+//     l.setLogType("alg1");
+//     a.getInstructionsForCargo("./example/AERKT_34.cargo_data", "out1");
+//     l.setLogType("alg2");
+//     a.getInstructionsForCargo("./example/JPSNR_3.cargo_data", "out2");
+//     a.getInstructionsForCargo("./example/JPSNR_3.cargo_data", "out3");
+// }
