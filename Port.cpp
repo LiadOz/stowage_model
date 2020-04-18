@@ -3,6 +3,7 @@
 #include "Port.h"
 #include <sstream>
 #include "util.h"
+#include "Parser.h"
 
 using std::stringstream;
 using std::ofstream;
@@ -18,63 +19,6 @@ Port::Port(string code) {
 bool Port::validateSeaPortCode(string code) {
 	/*TODO: REGEX CHECK*/
 	return true;
-}
-
-bool isCommentLine(string line) {
-
-	unsigned index = 0;
-	while (index < line.length()) {
-		if (isspace(line[index]))
-		{
-			index++;
-		}
-		else {
-			break;
-		}
-	}
-
-	/*shouldn't happen - a line full of empty spaces*/
-	if (index == line.length())
-	{
-		/*TODO: maybe better solution?*/
-		return true;
-	}
-
-	return line[index] == FILE_COMMENT_LINE_CHAR;
-}
-
-//get a vector with all data in string format
-vector<string> getDataFromLine(string line, int howManyParams) {
-
-	vector<string> dataVector;
-	stringstream streamLineFromFile(line);
-	string data;
-
-	for (size_t i = 0; i < howManyParams; i++)
-	{
-		if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR))
-		{
-			//get rid of whitespace
-			stringstream dataStream(data);
-			dataStream >> data;
-
-			dataVector.push_back(data);
-		}
-		else
-		{
-			//TODO: add to log
-			cout << "error in getDataFromLine, not enough params" << endl;
-		};
-	}
-
-	//check if there are too many params
-	if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR))
-	{
-		//TODO: add to log
-		cout << "error in port load containers, too many params" << endl;
-	}
-
-	return dataVector;
 }
 
 bool Port::LoadContainersFromFile(string filePath) {
@@ -93,12 +37,12 @@ bool Port::LoadContainersFromFile(string filePath) {
 	{
 
 		/*if line is a comment - ignore*/
-		if (isCommentLine(lineFromFile))
+		if (Parser::isCommentLine(lineFromFile))
 		{
 			continue;
 		}
 
-		containerData = getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
+		containerData = Parser::getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
 
 		if (containerData.size() != PORT_FILE_NUM_OF_PARAMS)
 		{
@@ -119,7 +63,7 @@ bool Port::LoadContainersFromFile(string filePath) {
 
 				AddContainer(container);
 			}
-			catch (std::invalid_argument)
+			catch (std::invalid_argument error)
 			{
 				//TODO: add error to log
 				cout << "can't parse " << containerData[1] << " into an Integer." << endl;

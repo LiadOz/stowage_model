@@ -9,6 +9,7 @@
 
 //files params
 #define PORT_FILE_NUM_OF_PARAMS 3
+#define SHIPROUTE_FILE_NUM_OF_PARAMS 1
 
 using std::string;
 

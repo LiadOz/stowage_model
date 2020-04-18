@@ -4,4 +4,4 @@
 					#don't read me either
 	 5,    AKSD, JLAKD
 CSQU3054383, 5, JLAKD
-ARFU2153419, 14,	 PORTB
+NSNU6563949, 14,	 PORTB

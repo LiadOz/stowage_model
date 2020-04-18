@@ -36,6 +36,7 @@ int main() {
 	Port portA("portA");
 	portA.LoadContainersFromFile("./myTests.txt");
 
+	ShipRoute route("./Example/ports");
 	return EXIT_SUCCESS;
 }
 // int main() {

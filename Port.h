@@ -14,7 +14,6 @@ class Port
 private:
 	string seaPortCode;
 	vector<Container> containers;
-	bool validateSeaPortCode(string code);
 
 public:
 	string const getPortCode() {
@@ -25,4 +24,5 @@ public:
 	bool LoadContainersFromFile(string filePath);
 	bool AddContainer(Container containerToAdd);
 	bool RemoveContainer(Container containerToRemove);
+	static bool validateSeaPortCode(string code);
 };
