@@ -5,6 +5,8 @@
 #include <string>
 #include "inventory.h"
 #include "container.h"
+#include "ShipRoute.h"
+
 using std::vector;
 using std::string;
 
@@ -12,7 +14,6 @@ class Ship {
 private:
     size_t decks;
     Inventory storage;
-
 public:
     // when you create a ship you supply the list of plans
     Ship(const string& file_path): storage(file_path){decks = storage.getNumFloors();}

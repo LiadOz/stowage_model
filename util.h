@@ -1,9 +1,19 @@
-#ifndef UTIL_H
-#define UTIL_H
+#pragma once
 
 #include <string>
 
+//TODO: move this to a better place
+//files special chars defs
+#define FILE_COMMENT_LINE_CHAR '#'
+#define FILE_LINE_SEPARATOR_CHAR ','
+
+//files params
+#define PORT_FILE_NUM_OF_PARAMS 3
+
 using std::string;
+
+//General commons
+
 
 bool valid_file(string file_path);
 int getIthFile(string filename);
@@ -21,4 +31,3 @@ public:
     void logError(string message);
     void setLogType(string type){ logType = type; }
 };
-#endif /* UTIL_H */
