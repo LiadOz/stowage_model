@@ -27,12 +27,12 @@ bool Simulation::LoadContainersToPortsInRoute()
 {
 	map<string, list<string>> portsMap = CreatePortsCargoFromFiles();
 
-	vector<Port>* ports = this->route->getRoute();
+	 vector<Port>& ports = this->route->getRoute();
 	
 	//last port doesn't need a file, ignore it
-	for (size_t i = 0; i < ports->size()-1; i++)
+	for (size_t i = 0; i < ports.size()-1; i++)
 	{
-		Port& port = (*ports)[i];
+		 Port& port = ports[i];
 		string portCode = port.getPortCode();
 
 		if (portsMap.find(portCode) == portsMap.end())

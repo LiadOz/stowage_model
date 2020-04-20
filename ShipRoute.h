@@ -19,8 +19,8 @@ public:
 	ShipRoute() {};
 	ShipRoute(string filePath);
 
-	vector<Port>* const getRoute() {
-		return &route;
+	vector<Port>& getRoute() {
+		return route;
 	}
 
 };

@@ -16,7 +16,7 @@ private:
 	vector<Container> containers;
 
 public:
-	string const getPortCode() {
+	string getPortCode() {
 		return seaPortCode;
 	}
 
