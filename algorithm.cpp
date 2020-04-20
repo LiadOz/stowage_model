@@ -24,12 +24,17 @@ using std::pair;
 using std::ifstream;
 using std::stringstream;
 
+void Algorithm::readShipPlan(const string& full_path_and_file_name){
+    s = Ship(full_path_and_file_name); 
+}
+
 void Algorithm::readShipRoute(const string& full_path_and_file_name){
     vector<string> temp;
     string line;
     ifstream file(full_path_and_file_name);
+    if(!file.good()) throw std::runtime_error("Invalid ship route file");
     while(getline(file, line)){
-        if(line[0] == '#') continue;
+        if(isCommentLine(line)) continue;
         if(!validRoute(line)){
             Logger::Instance().logError("invalid port name " + line);
             continue;
