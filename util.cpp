@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 #include "util.h"
+#include <sstream>
 
 using std::regex;
 using std::regex_match;
@@ -18,6 +19,12 @@ bool validRoute(string route){
     if(!regex_match(route, r))
         return false;
     return true;
+}
+bool validCargoFile(string filename) {
+	regex r("[A-Z]{5}_\\d*.cargo_data");
+	if (!regex_match(filename, r))
+		return false;
+	return true;
 }
 
 Logger* Logger::instance_p = nullptr;

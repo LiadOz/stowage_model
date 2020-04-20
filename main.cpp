@@ -36,6 +36,9 @@ int main() {
 	
 	Port portA("portA");
 	portA.LoadContainersFromFile("./myTests.txt");
+	Port portB("portB");
+	portB.LoadContainersFromFile("./Simulation/travelA/portsCargo/AERKT_34.cargo_data");
+	
 	
 	string routeFilePath = "./Example/ports";
 	string shipFilePath = "./Example/sample.plan";

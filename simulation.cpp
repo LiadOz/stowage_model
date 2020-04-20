@@ -1,25 +1,23 @@
 #pragma once
 #include "simulation.h"
 #include <iostream>
-#include <map>
-#include <string>
 #include <filesystem>
 #include "util.h"
 
 namespace fs = std::filesystem;
-using std::map;
+
 using std::stringstream;
 
 #define FILE_SEPARATOR "/"
-#define SIMULATION_ROOT_FOLDER "./Simulation"
+#define SIMULATION_ROOT_FOLDER "./Simulation/"
 #define SIMULATION_SHIP_FILE_NAME "sample.plan"
 #define SIMULATION_ROUTE_FILE_NAME "ports"
-#define SIMULATION_PORTS_FOLDER_NAME "/portsCargo"
+#define SIMULATION_PORTS_FOLDER_NAME "portsCargo/"
 
 Simulation::Simulation(string rootFolder)
 {
 	folder = SIMULATION_ROOT_FOLDER;
-	folder += FILE_SEPARATOR + rootFolder + FILE_SEPARATOR;
+	folder += rootFolder + FILE_SEPARATOR;
 	ship = new Ship(folder+SIMULATION_SHIP_FILE_NAME);
 	algorithm = new Algorithm();
 	route = new ShipRoute(folder + SIMULATION_ROUTE_FILE_NAME);
@@ -27,33 +25,65 @@ Simulation::Simulation(string rootFolder)
 
 bool Simulation::LoadContainersToPortsInRoute()
 {
-	map<string, int> portsEncounteredMap;
+	map<string, list<string>> portsMap = CreatePortsCargoFromFiles();
 
-	auto ports = this->route->getRoute();
+	vector<Port>* ports = this->route->getRoute();
 	
-	for (size_t i = 0; i < ports.size(); i++)
+	//last port doesn't need a file, ignore it
+	for (size_t i = 0; i < ports->size()-1; i++)
 	{
-		Port& port = ports[i];
+		Port& port = (*ports)[i];
 		string portCode = port.getPortCode();
 
-		if (portsEncounteredMap[portCode] == 0)
+		if (portsMap.find(portCode) == portsMap.end())
 		{
-			portsEncounteredMap[portCode] = 1;
+			//TODO: log that the port doesn't have files
 		}
-		cout << "this is the value: " << portsEncounteredMap[portCode] << endl;
+
+		else
+		{
+			auto& filesList = portsMap.find(portCode)->second;
+			if (filesList.empty())
+			{
+				//TODO: not enough files for port, log it
+			}
+
+			else
+			{
+				port.LoadContainersFromFile(folder+SIMULATION_PORTS_FOLDER_NAME+filesList.front());
+				filesList.pop_front();
+			}
+		}
 	}
 
-	CreatePortFilesMap();
 	return true;
 }
 
-map<string, vector<int>> Simulation::CreatePortFilesMap()
+map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 {
-	for (const auto& entry : fs::directory_iterator(folder+SIMULATION_PORTS_FOLDER_NAME))
-		std::cout << entry.path().filename() << std::endl;
+	map<string, list<string>> map;
 
-	map<string, vector<int>> mapy;
-	return mapy;
+	for (const auto& entry : fs::directory_iterator(folder + SIMULATION_PORTS_FOLDER_NAME))
+	{
+		string fileName = entry.path().filename().string();
+		
+		if (validCargoFile(fileName))
+		{
+			string portCode = fileName.substr(0, 5);
+
+			//port is not in the map yet
+			if (map.find(portCode) == map.end())
+			{
+				list<string> list;
+				map.insert(std::make_pair(portCode, list));
+			}
+
+			//add file to map
+			map.find(portCode)->second.push_back(fileName);
+		}
+	}
+
+	return map;
 }
 
 Simulation::~Simulation() {

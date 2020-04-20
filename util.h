@@ -20,6 +20,7 @@ using std::vector;
 
 int getIthFile(string filename);
 bool validRoute(string route);
+bool validCargoFile(string filename);
 bool isCommentLine(string line);
 vector<string> getDataFromLine(string line, int howManyParams);
 

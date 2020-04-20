@@ -1,11 +1,13 @@
 #pragma once
-#include "algorithm.h"
-#include "ship.h"
 #include <map>
+#include <list>
 #include <string>
 #include <vector>
+#include "algorithm.h"
+#include "ship.h"
 
 using std::map;
+using std::list;
 
 class Simulation {
 private:
@@ -13,7 +15,7 @@ private:
 	Ship* ship;
 	ShipRoute* route;
 	string folder;
-	map<string, vector<int>> CreatePortFilesMap();
+	map<string, list<string> > CreatePortsCargoFromFiles();
 public:
 	Simulation(string rootFolder);
 	bool LoadContainersToPortsInRoute();

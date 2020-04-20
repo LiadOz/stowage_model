@@ -3,7 +3,6 @@
 #include "Port.h"
 #include <sstream>
 #include "util.h"
-#include "Parser.h"
 
 using std::stringstream;
 using std::ofstream;
@@ -32,17 +31,16 @@ bool Port::LoadContainersFromFile(string filePath) {
 	int containerWeight;
 	string portDest;
 
-
 	while (getline(file, lineFromFile))
 	{
 
 		/*if line is a comment - ignore*/
-		if (Parser::isCommentLine(lineFromFile))
+		if (isCommentLine(lineFromFile))
 		{
 			continue;
 		}
 
-		containerData = Parser::getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
+		containerData = getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
 
 		if (containerData.size() != PORT_FILE_NUM_OF_PARAMS)
 		{
