@@ -73,8 +73,10 @@ vector<string> getDataFromLine(string line, int howManyParams) {
 	}
 
 	//check if there are too many params
+    /* TODO: determine if it's needed
 	if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR))
         throw runtime_error("too many params");
+    */
 
 	return dataVector;
 }

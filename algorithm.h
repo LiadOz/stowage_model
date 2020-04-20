@@ -25,6 +25,7 @@ protected:
             const string& input_path){};
 public:
     Algorithm (){};
+    virtual ~Algorithm (){};
     void readShipPlan(const string& full_path_and_file_name);
     void readShipRoute(const string& full_path_and_file_name);
     void finalDestination();
@@ -35,12 +36,13 @@ public:
 
 // the brute algorithm moves every container off the ship
 // then loads them back on
-class BruteAlgroithm : public Algorithm {
+class BruteAlgorithm : public Algorithm {
 protected:
     virtual void getPortInstructions(const string& port,
             const string& input_path);
 public:
-    BruteAlgroithm (){};
+    BruteAlgorithm (){};
+    virtual ~BruteAlgorithm(){};
 };
 
 // the reject algorithm accepts only cargo that needs to go
@@ -51,6 +53,7 @@ protected:
             const string& input_path);
 public:
     RejectAlgorithm(){};
+    virtual ~RejectAlgorithm(){};
 };
 
 #endif /* ALGORITHM_H */

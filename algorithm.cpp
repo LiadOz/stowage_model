@@ -87,7 +87,7 @@ void setAwaitingCargo(const string& file_path, vector<Container*>& awaiting){
     string line, data;
 
     while(getline(file, line)){
-        if(line[0] == '#') continue;
+        if(isCommentLine(line)) continue;
         vector<string> row;
         stringstream s(line);
 
@@ -125,7 +125,7 @@ void Algorithm::getInstructionsForCargo(
     s.closeLogFile();
 }
 
-void BruteAlgroithm::getPortInstructions(const string& port,
+void BruteAlgorithm::getPortInstructions(const string& port,
         const string& input_path){
 
     unloadAll(port);
