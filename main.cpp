@@ -6,6 +6,7 @@
 #include "algorithm.h"
 #include "util.h"
 #include "Port.h"
+#include "simulation.h"
 
 using std::string;
 using std::vector;
@@ -35,8 +36,13 @@ int main() {
 	
 	Port portA("portA");
 	portA.LoadContainersFromFile("./myTests.txt");
+	
+	string routeFilePath = "./Example/ports";
+	string shipFilePath = "./Example/sample.plan";
 
 	ShipRoute route("./Example/ports");
+	Simulation simulation("travelA");
+	simulation.LoadContainersToPortsInRoute();
 	return EXIT_SUCCESS;
 }
 // int main() {
