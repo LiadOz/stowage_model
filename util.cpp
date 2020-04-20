@@ -1,13 +1,14 @@
 #include <regex>
 #include <iostream>
+#include <fstream>
+#include <stdexcept>
 #include "util.h"
 
 using std::regex;
 using std::regex_match;
+using std::runtime_error;
+using std::stringstream;
 
-bool valid_file(string file_path){
-    return true;
-}
 int getIthFile(string filename){
     // TODO
     return 0;
@@ -30,4 +31,50 @@ Logger& Logger::Instance() {
 // currently the logger prints to the screen
 void Logger::logError(string message){
     std::cout << "Error in " << logType << " : " << message << std::endl;
+}
+
+bool isCommentLine(string line) {
+
+	unsigned index = 0;
+	while (index < line.length()) {
+		if (isspace(line[index]))
+			index++;
+		else 
+			break;
+	}
+
+	/*shouldn't happen - a line full of empty spaces*/
+	if (index == line.length())
+	{
+		/*TODO: maybe better solution?*/
+		return true;
+	}
+
+	return line[index] == FILE_COMMENT_LINE_CHAR;
+}
+
+//get a vector with all data in string format
+vector<string> getDataFromLine(string line, int howManyParams) {
+
+	vector<string> dataVector;
+	stringstream streamLineFromFile(line);
+	string data;
+
+	for (size_t i = 0; i < howManyParams; i++) {
+		if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR)) {
+			//get rid of whitespace
+			stringstream dataStream(data);
+			dataStream >> data;
+
+			dataVector.push_back(data);
+		}
+		else
+            throw runtime_error("not enough params");
+	}
+
+	//check if there are too many params
+	if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR))
+        throw runtime_error("too many params");
+
+	return dataVector;
 }

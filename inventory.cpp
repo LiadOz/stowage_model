@@ -8,6 +8,8 @@
 using std::ifstream;
 using std::stringstream;
 using std::out_of_range;
+using std::runtime_error;
+using std::stoi;
 
 #define PARSING_WORDS 3
 #define PARSING_DEPTH 0
@@ -18,22 +20,34 @@ using std::out_of_range;
 #define FLOORS 2
 
 // initialize the size of the arrays
-void Inventory::initFromRow(vector<size_t> row){
-    maxFloors = row[PARSING_DEPTH];
-    dimensions = {row[PARSING_X], row[PARSING_Y]};
-    heights = vector<vector<size_t>>(
-            row[PARSING_Y],
-            vector<size_t>(row[PARSING_X], 0)
+void Inventory::initFromRow(vector<string> row){
+    size_t depth, x, y;
+    try {
+        depth = std::stoi(row[PARSING_DEPTH]); 
+        x = stoi(row[PARSING_X]);
+        y = stoi(row[PARSING_Y]);
+    }catch(std::exception& e) {
+        throw runtime_error("Parsed string instead of int in plan file");
+    }
+    maxFloors = depth;
+    dimensions = {x, y};
+    heights = vector<vector<size_t>>(y, vector<size_t>(x, 0)
             );
-    storage = vector<vector<vector<Container*>>>(
-            row[PARSING_Y],
-            vector<vector<Container*>>(row[PARSING_X])
+    storage = vector<vector<vector<Container*>>>(y,
+            vector<vector<Container*>>(x)
             );
 }
 
 // writes the height of each (x,y)
-void Inventory::parseRow(vector<size_t> row){
-    size_t floors = row[FLOORS], x = row[X_POSITION], y = row[Y_POSITION];
+void Inventory::parseRow(vector<string> row){
+    size_t floors, x, y;
+    try {
+        floors = std::stoi(row[FLOORS]); 
+        x = stoi(row[X_POSITION]);
+        y = stoi(row[Y_POSITION]);
+    }catch(std::exception& e) {
+        throw runtime_error("Parsed string instead of int in plan file");
+    }
     if(floors > maxFloors){
         Logger::Instance().logError("Too much floors in input");
         floors = maxFloors;
@@ -45,18 +59,15 @@ void Inventory::parseRow(vector<size_t> row){
 
 Inventory::Inventory(const string& file_path){
     ifstream file(file_path);
+    if(!file.good()){
+        throw runtime_error("Invalid ship plan file");
+    }
     string line, data;
     bool firstRow = true;
 
     while(getline(file, line)){
-        if(line[0] == '#') continue;
-        vector<size_t> row;
-        stringstream s(line);
-
-        for (int i = 0; i < PARSING_WORDS; ++i) {
-            getline(s, data, ',');
-            row.push_back(std::stoi(data));
-        }
+        if(isCommentLine(line)) continue;
+        vector<string> row = getDataFromLine(line, PARSING_WORDS);
 
         // parsing the first row
         if(firstRow){

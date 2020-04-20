@@ -15,11 +15,12 @@ private:
     vector<vector<vector<Container*>>> storage;
     pair<size_t, size_t> dimensions;
 
-    void parseRow(vector<size_t> row);
-    void initFromRow(vector<size_t> row);
+    void parseRow(vector<string> row);
+    void initFromRow(vector<string> row);
     void rangeCheck(size_t x, size_t y);
 public:
     Inventory(){}
+    // initializes from file, throws exception when the file is invalid
     Inventory (const string& file_path);
     bool emptyCoordinate(size_t x, size_t y);
     bool fullCoordinate(size_t x, size_t y);

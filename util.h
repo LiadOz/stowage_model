@@ -1,6 +1,8 @@
-#pragma once
+#ifndef UTIL_H
+#define UTIL_H
 
 #include <string>
+#include <vector>
 
 //TODO: move this to a better place
 //files special chars defs
@@ -12,13 +14,14 @@
 #define SHIPROUTE_FILE_NUM_OF_PARAMS 1
 
 using std::string;
+using std::vector;
 
 //General commons
 
-
-bool valid_file(string file_path);
 int getIthFile(string filename);
 bool validRoute(string route);
+bool isCommentLine(string line);
+vector<string> getDataFromLine(string line, int howManyParams);
 
 class Logger{
 private:
@@ -33,3 +36,5 @@ public:
     void logError(string message);
     void setLogType(string type){ logType = type; }
 };
+
+#endif /* UTIL_H */
