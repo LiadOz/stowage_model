@@ -16,9 +16,11 @@ class ShipRoute {
 private:
 	vector<Port> route;
 public:
+	ShipRoute() {};
+	ShipRoute(string filePath);
+
 	vector<Port> const getRoute() {
 		return route;
 	}
 
-	ShipRoute(string filePath);
 };
