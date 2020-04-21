@@ -1,5 +1,5 @@
 #include "ShipRoute.h"
-#include "Parser.h"
+#include "util.h"
 
 ShipRoute::ShipRoute(string filePath) {
 	ifstream file(filePath);
@@ -13,12 +13,12 @@ ShipRoute::ShipRoute(string filePath) {
 	{
 
 		/*if line is a comment - ignore*/
-		if (Parser::isCommentLine(lineFromFile))
+		if (isCommentLine(lineFromFile))
 		{
 			continue;
 		}
 
-		portData = Parser::getDataFromLine(lineFromFile, SHIPROUTE_FILE_NUM_OF_PARAMS);
+		portData = getDataFromLine(lineFromFile, SHIPROUTE_FILE_NUM_OF_PARAMS);
 
 		if (portData.size() != SHIPROUTE_FILE_NUM_OF_PARAMS)
 		{

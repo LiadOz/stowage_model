@@ -1,7 +1,6 @@
 #include "Port.h"
 #include <sstream>
 #include "util.h"
-#include "Parser.h"
 
 using std::stringstream;
 using std::ofstream;
@@ -9,9 +8,10 @@ using std::ifstream;
 using std::cout;
 using std::endl;
 
-Port::Port(string code) {
+Port::Port(string code, string filePathForCargo) {
 	/*TODO: throw execption if not valid code*/
 	seaPortCode = code;
+	cargoFilePath = filePathForCargo;
 }
 
 bool Port::validateSeaPortCode(string code) {
@@ -30,17 +30,16 @@ bool Port::LoadContainersFromFile(string filePath) {
 	int containerWeight;
 	string portDest;
 
-
 	while (getline(file, lineFromFile))
 	{
 
 		/*if line is a comment - ignore*/
-		if (Parser::isCommentLine(lineFromFile))
+		if (isCommentLine(lineFromFile))
 		{
 			continue;
 		}
 
-		containerData = Parser::getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
+		containerData = getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
 
 		if (containerData.size() != PORT_FILE_NUM_OF_PARAMS)
 		{
@@ -70,6 +69,7 @@ bool Port::LoadContainersFromFile(string filePath) {
 	}
 
 	file.close();
+	this->cargoFilePath = filePath;
 
 	//TODO: decide if when failing try to keep reading, or return false on first fail
 	return true;
