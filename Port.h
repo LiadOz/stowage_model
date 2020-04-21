@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PORT_H
+#define PORT_H
+
 
 #include <iostream>
 #include <fstream>
@@ -31,3 +33,4 @@ public:
 	bool RemoveContainer(Container containerToRemove);
 	static bool validateSeaPortCode(string code);
 };
+#endif /* PORT_H */

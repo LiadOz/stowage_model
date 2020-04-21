@@ -1,6 +1,6 @@
 COMP = g++-8
 #put all your object files here
-OBJS = main.o container.o inventory.o util.o ship.o algorithm.o calculator.o simulation.o ShipRoute.o port.o
+OBJS = main.o container.o inventory.o util.o ship.o algorithm.o calculator.o simulation.o ShipRoute.o Port.o
 #The executabel filename DON'T CHANGE
 EXEC = ex1
 #CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG

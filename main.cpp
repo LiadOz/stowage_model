@@ -37,8 +37,9 @@ int main() {
 	//
 
 	Algorithm* algorithm = new BruteAlgorithm();
-	Simulation simulation("travelA", algorithm);
+	Simulation simulation("example_input_2", algorithm);
 	simulation.RunSimulation();
+    delete algorithm;
 
 	return EXIT_SUCCESS;
 }

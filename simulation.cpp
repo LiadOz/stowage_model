@@ -1,4 +1,3 @@
-#pragma once
 #include "simulation.h"
 #include <iostream>
 #include <filesystem>
@@ -17,6 +16,7 @@ using std::stringstream;
 
 Simulation::Simulation(string rootFolder, Algorithm* algo)
 {
+    Logger::Instance().setLogType("Simulation init");
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
@@ -48,7 +48,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 
 		if (portsMap.find(portCode) == portsMap.end())
 		{
-			//TODO: log that the port doesn't have files
+            Logger::Instance().logError("Port file doesn't exist");
 		}
 
 		else
@@ -56,7 +56,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 			auto& filesList = portsMap.find(portCode)->second;
 			if (filesList.empty())
 			{
-				//TODO: not enough files for port, log it
+                Logger::Instance().logError("Port file doesn't exist");
 			}
 
 			else
@@ -99,11 +99,10 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 
 void Simulation::RunSimulation()
 {
-
 	vector<Port>& ports = this->route->getRoute();
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
-	for (size_t i = 0; i < ports.size(); i++)
-	{
+	for (size_t i = 0; i < ports.size(); i++) {
+        Logger::Instance().setLogType("Simulation Port - " + ports[i].getPortCode());
 		string outputFilePath = outputFolderPath + std::to_string(i);
 		algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
 		ValidateOperationsFromFile(outputFilePath);
@@ -166,6 +165,5 @@ void Simulation::ValidateOperationsFromFile(string filePath)
 
 Simulation::~Simulation() {
 	delete this->ship;
-	delete this->algorithm;
 	delete this->route;
 }

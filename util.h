@@ -22,6 +22,7 @@ int getIthFile(string filename);
 bool validRoute(string route);
 bool validCargoFile(string filename);
 bool isCommentLine(string line);
+// throws exception if got too many arugments
 vector<string> getDataFromLine(string line, int howManyParams);
 
 // singleton to log errors 
