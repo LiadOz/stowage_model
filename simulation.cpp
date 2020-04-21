@@ -13,14 +13,25 @@ using std::stringstream;
 #define SIMULATION_SHIP_FILE_NAME "sample.plan"
 #define SIMULATION_ROUTE_FILE_NAME "ports"
 #define SIMULATION_PORTS_FOLDER_NAME "portsCargo/"
+#define SIMULATION_CARGO_INSTRUCTIONS_FOLDER "Instructions/"
 
-Simulation::Simulation(string rootFolder)
+Simulation::Simulation(string rootFolder, Algorithm* algo)
 {
-	folder = SIMULATION_ROOT_FOLDER;
-	folder += rootFolder + FILE_SEPARATOR;
-	ship = new Ship(folder+SIMULATION_SHIP_FILE_NAME);
-	algorithm = new Algorithm();
-	route = new ShipRoute(folder + SIMULATION_ROUTE_FILE_NAME);
+	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
+	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
+	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
+	folder = folderPath;
+	route = new ShipRoute(routePath);
+	LoadContainersToPortsInRoute();
+	ship = new Ship(shipPath);
+	algorithm = algo;
+	PrepareAlgorithm(shipPath, routePath);
+}
+
+void Simulation::PrepareAlgorithm(string shipPath, string routePath)
+{
+	algorithm->readShipPlan(shipPath);
+	algorithm->readShipRoute(routePath);
 }
 
 bool Simulation::LoadContainersToPortsInRoute()
@@ -32,7 +43,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 	//last port doesn't need a file, ignore it
 	for (size_t i = 0; i < ports.size()-1; i++)
 	{
-		 Port& port = ports[i];
+		Port& port = ports[i];
 		string portCode = port.getPortCode();
 
 		if (portsMap.find(portCode) == portsMap.end())
@@ -84,6 +95,73 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 	}
 
 	return map;
+}
+
+void Simulation::RunSimulation()
+{
+
+	vector<Port>& ports = this->route->getRoute();
+	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
+	for (size_t i = 0; i < ports.size(); i++)
+	{
+		string outputFilePath = outputFolderPath + std::to_string(i);
+		algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
+		ValidateOperationsFromFile(outputFilePath);
+	}
+}
+
+void Simulation::ValidateOperationsFromFile(string filePath)
+{
+	//ifstream file(filePath);
+	//string lineFromFile;
+	//vector<string> operatoinsData;
+
+	////data members for a port
+	//string portName;
+
+	//while (getline(file, lineFromFile))
+	//{
+
+	//	/*if line is a comment - ignore*/
+	//	if (isCommentLine(lineFromFile))
+	//	{
+	//		continue;
+	//	}
+
+	//	portData = getDataFromLine(lineFromFile, SHIPROUTE_FILE_NUM_OF_PARAMS);
+
+	//	if (portData.size() != SHIPROUTE_FILE_NUM_OF_PARAMS)
+	//	{
+	//		//TODO: error message and stuff
+	//	}
+
+	//	else
+	//	{
+	//		//try to parse the first param to weight & create the object
+	//		//TODO: validate params when creating a container
+	//		try
+	//		{
+	//			portName = portData[0];
+	//			if (Port::validateSeaPortCode(portName))
+	//			{
+	//				Port port(portName);
+	//				route.push_back(port);
+	//			}
+	//			else
+	//			{
+	//				//TODO: throw an error that port is not valid and log it
+	//			}
+
+	//		}
+	//		catch (std::invalid_argument error)
+	//		{
+	//			//TODO: add error to log
+	//			cout << "error in ShipRoute constructor";
+	//		}
+	//	}
+	//}
+
+	//file.close();
 }
 
 Simulation::~Simulation() {

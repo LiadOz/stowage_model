@@ -34,18 +34,16 @@ int main() {
 	//Port* p = new Port();
 	//cout << p->getPortCode();
 	
-	Port portA("portA");
-	portA.LoadContainersFromFile("./myTests.txt");
-	Port portB("portB");
-	portB.LoadContainersFromFile("./Simulation/travelA/portsCargo/AERKT_34.cargo_data");
-	
-	
-	string routeFilePath = "./Example/ports";
-	string shipFilePath = "./Example/sample.plan";
+	//Port portA("portA");
+	//portA.LoadContainersFromFile("./myTests.txt");
+	//Port portB("portB");
+	//portB.LoadContainersFromFile("./Simulation/travelA/portsCargo/AERKT_34.cargo_data");
+	//
 
-	ShipRoute route("./Example/ports");
-	Simulation simulation("travelA");
-	simulation.LoadContainersToPortsInRoute();
+	Algorithm* algorithm = new BruteAlgorithm();
+	Simulation simulation("travelA", algorithm);
+	simulation.RunSimulation();
+
 	return EXIT_SUCCESS;
 }
 // int main() {

@@ -10,9 +10,10 @@ using std::ifstream;
 using std::cout;
 using std::endl;
 
-Port::Port(string code) {
+Port::Port(string code, string filePathForCargo) {
 	/*TODO: throw execption if not valid code*/
 	seaPortCode = code;
+	cargoFilePath = filePathForCargo;
 }
 
 bool Port::validateSeaPortCode(string code) {
@@ -70,6 +71,7 @@ bool Port::LoadContainersFromFile(string filePath) {
 	}
 
 	file.close();
+	this->cargoFilePath = filePath;
 
 	//TODO: decide if when failing try to keep reading, or return false on first fail
 	return true;

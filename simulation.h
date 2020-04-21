@@ -5,6 +5,7 @@
 #include <vector>
 #include "algorithm.h"
 #include "ship.h"
+#include "calculator.h"
 
 using std::map;
 using std::list;
@@ -16,8 +17,11 @@ private:
 	ShipRoute* route;
 	string folder;
 	map<string, list<string> > CreatePortsCargoFromFiles();
-public:
-	Simulation(string rootFolder);
+	void PrepareAlgorithm(string shipPath, string routePath);
 	bool LoadContainersToPortsInRoute();
+	void ValidateOperationsFromFile(string filePath);
+public:
+	Simulation(string rootFolder, Algorithm* alg);
+	void RunSimulation();
 	~Simulation();
 };

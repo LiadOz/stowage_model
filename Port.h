@@ -14,13 +14,18 @@ class Port
 private:
 	string seaPortCode;
 	vector<Container> containers;
+	string cargoFilePath;
 
 public:
 	string getPortCode() {
 		return seaPortCode;
 	}
 
-	Port(string code);
+	string getCargoFilePath() {
+		return cargoFilePath;
+	}
+
+	Port(string code, string cargoFilePath = "");
 	bool LoadContainersFromFile(string filePath);
 	bool AddContainer(Container containerToAdd);
 	bool RemoveContainer(Container containerToRemove);
