@@ -6,7 +6,7 @@ port in its route, when it reaches a port it unloads all it's containers.
 
 When an error ouccurs it is handled and a proper error is printed to the screen.
 
-You can see an example of the code in directories example_input_1 and example_input_2.
+You can see an example of the code in directories Simulation/example_input_1 and Simulation/example_input_2.
 In each input file lines beginning with "#" are comment lines and are not parsed.
 Whenever there is an error in the input of the ship plan we assume that error is critical and so the 
 program will stop running.

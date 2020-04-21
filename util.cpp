@@ -10,10 +10,6 @@ using std::regex_match;
 using std::runtime_error;
 using std::stringstream;
 
-int getIthFile(string filename){
-    // TODO
-    return 0;
-}
 bool validRoute(string route){
     regex r("[A-Z]{5}");
     if(!regex_match(route, r))
@@ -67,7 +63,7 @@ vector<string> getDataFromLine(string line, int howManyParams) {
 	stringstream streamLineFromFile(line);
 	string data;
 
-	for (size_t i = 0; i < howManyParams; i++) {
+	for (int i = 0; i < howManyParams; i++) {
 		if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR)) {
 			//get rid of whitespace
 			stringstream dataStream(data);

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHIPROUTE_H
+#define SHIPROUTE_H
 
 #include <vector>
 #include "Port.h"
@@ -22,5 +23,6 @@ public:
 	vector<Port>& getRoute() {
 		return route;
 	}
-
 };
+
+#endif /* SHIPROUTE_H */

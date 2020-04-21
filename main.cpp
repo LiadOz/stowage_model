@@ -16,21 +16,17 @@ using std::endl;
 
 int main() {
     //Logger& l = Logger::Instance();
-    //l.setLogType("creating conatiners");
-    //Container* c1 = new Container(10, "a", "CSQU3054383");
-    //Container* c2 = new Container(10, "a", "CSQU305438s");
-    //string a = "example/sample.plan";
-    //Ship s(a);
-    //l.setLogType("inserting Containers");
-    //s.insertContainer(0, 0, c1);
-    //s.insertContainer(0, 0, c2);
-    //s.removeContainer(0, 0);
-    //s.removeContainer(0, 0);
-    //s.removeContainer(0, 0);
-    //s.removeContainer(0, 0);
-    //s.removeContainer(0, 0);
-    //s.removeContainer(0, 0);
-    //s.removeContainer(0, 0);
+    //l.setLogType("init");
+    //Algorithm* b = new RejectAlgorithm();
+    //Algorithm& a = *b;
+    //a.readShipPlan("./example/sample.plan");
+    //a.readShipRoute("./example/ports");
+    //l.setLogType("alg1");
+    //a.getInstructionsForCargo("./example/AERKT_34.cargo_data", "out1");
+    //l.setLogType("alg2");
+    //a.getInstructionsForCargo("./example/JPSNR_3.cargo_data", "out2");
+    //a.getInstructionsForCargo("./example/JPSNR_3.cargo_data", "out3");
+    //delete b;
 
 	//Port* p = new Port();
 	//cout << p->getPortCode();
@@ -42,20 +38,9 @@ int main() {
 	//
 
 	Algorithm* algorithm = new BruteAlgorithm();
-	Simulation simulation("travelA", algorithm);
+	Simulation simulation("example_input_2", algorithm);
 	simulation.RunSimulation();
+    delete algorithm;
 
 	return EXIT_SUCCESS;
 }
-// int main() {
-//     Logger& l = Logger::Instance();
-//     l.setLogType("init");
-//     Algorithm& a = *(new RejectAlgorithm());
-//     a.readShipPlan("./example/sample.plan");
-//     a.readShipRoute("./example/ports");
-//     l.setLogType("alg1");
-//     a.getInstructionsForCargo("./example/AERKT_34.cargo_data", "out1");
-//     l.setLogType("alg2");
-//     a.getInstructionsForCargo("./example/JPSNR_3.cargo_data", "out2");
-//     a.getInstructionsForCargo("./example/JPSNR_3.cargo_data", "out3");
-// }

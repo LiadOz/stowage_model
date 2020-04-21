@@ -1,7 +1,6 @@
-#pragma once
-
 #include "Port.h"
 #include <sstream>
+#include <stdexcept>
 #include "util.h"
 
 using std::stringstream;
@@ -11,14 +10,11 @@ using std::cout;
 using std::endl;
 
 Port::Port(string code, string filePathForCargo) {
-	/*TODO: throw execption if not valid code*/
+    if(!validRoute(code)){
+        throw std::runtime_error("Invalid route");
+    }
 	seaPortCode = code;
 	cargoFilePath = filePathForCargo;
-}
-
-bool Port::validateSeaPortCode(string code) {
-	/*TODO: REGEX CHECK*/
-	return true;
 }
 
 bool Port::LoadContainersFromFile(string filePath) {
@@ -43,31 +39,19 @@ bool Port::LoadContainersFromFile(string filePath) {
 
 		containerData = getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
 
-		if (containerData.size() != PORT_FILE_NUM_OF_PARAMS)
-		{
-			//TODO: error message and stuff
-		}
-
-		else {
-
 			//try to parse the first param to weight & create the object
-			//TODO: validate params when creating a container
-			try
-			{
-				containerWeight = stoi(containerData[1]);
-				containerID = containerData[0];
-				portDest = containerData[2];
+        try {
+            containerWeight = stoi(containerData[1]);
+            containerID = containerData[0];
+            portDest = containerData[2];
 
-				Container container(containerWeight, portDest, containerID);
+            Container container(containerWeight, portDest, containerID);
 
-				AddContainer(container);
-			}
-			catch (std::invalid_argument error)
-			{
-				//TODO: add error to log
-				cout << "can't parse " << containerData[1] << " into an Integer." << endl;
-			}
-		}
+            AddContainer(container);
+        }
+        catch (std::invalid_argument& error) {
+            Logger::Instance().logError(error.what());
+        }
 	}
 
 	file.close();
@@ -75,7 +59,7 @@ bool Port::LoadContainersFromFile(string filePath) {
 
 	//TODO: decide if when failing try to keep reading, or return false on first fail
 	return true;
-};
+}
 
 
 bool Port::AddContainer(Container containerToAdd) {
