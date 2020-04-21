@@ -7,6 +7,7 @@
 #include "util.h"
 #include "Port.h"
 #include "simulation.h"
+#include "CraneOperations.h"
 
 using std::string;
 using std::vector;
