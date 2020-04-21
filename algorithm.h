@@ -22,7 +22,7 @@ protected:
     size_t next_x, next_y;
     bool insertNextFree(Container* c);
     virtual void getPortInstructions(const string& port,
-            const string& input_path){};
+            const string& input_path){(void)port;(void)input_path;};
 public:
     Algorithm (){};
     virtual ~Algorithm (){};
