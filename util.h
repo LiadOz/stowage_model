@@ -12,6 +12,7 @@
 //files params
 #define PORT_FILE_NUM_OF_PARAMS 3
 #define SHIPROUTE_FILE_NUM_OF_PARAMS 1
+#define CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS 7
 
 using std::string;
 using std::vector;
@@ -23,7 +24,7 @@ bool validRoute(string route);
 bool validCargoFile(string filename);
 bool isCommentLine(string line);
 // throws exception if got too many arugments
-vector<string> getDataFromLine(string line, int howManyParams);
+vector<string> getDataFromLine(string line, int howManyParams, bool unlimitedParams = false);
 
 // singleton to log errors 
 // cannot be while the program is runnig

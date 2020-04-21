@@ -6,6 +6,8 @@
 #include "algorithm.h"
 #include "ship.h"
 #include "calculator.h"
+#include "CraneOperations.h"
+#include "Port.h"
 
 using std::map;
 using std::list;
@@ -19,7 +21,8 @@ private:
 	map<string, list<string> > CreatePortsCargoFromFiles();
 	void PrepareAlgorithm(string shipPath, string routePath);
 	bool LoadContainersToPortsInRoute();
-	void ValidateOperationsFromFile(string filePath);
+	void PerformAlgorithmActions(string filePath, Port& port);
+	CraneOperation* CreateOperationFromLine(string line);
 public:
 	Simulation(string rootFolder, Algorithm* alg);
 	void RunSimulation();

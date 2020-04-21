@@ -57,7 +57,10 @@ bool isCommentLine(string line) {
 }
 
 //get a vector with all data in string format
-vector<string> getDataFromLine(string line, int howManyParams) {
+//NOTE: not enough time for a pretty solution,
+//unlimitedParams is to bypass not enough params error (for crane operations where you can get different amount of params),
+//should create a new function and delete this logic later
+vector<string> getDataFromLine(string line, int howManyParams, bool unlimitedParams) {
 
 	vector<string> dataVector;
 	stringstream streamLineFromFile(line);
@@ -71,7 +74,7 @@ vector<string> getDataFromLine(string line, int howManyParams) {
 
 			dataVector.push_back(data);
 		}
-		else
+		else if(!unlimitedParams)
             throw runtime_error("not enough params");
 	}
 

@@ -5,8 +5,17 @@
 #define OPERATION_MOVE "<M>"
 #define OPERATION_REJECT "<R>"
 
-#include <string>
+#define CRANE_OPERATION_LOAD_NUM_OF_PARAM 5
+#define CRANE_OPERATION_UNLOAD_NUM_OF_PARAM 5
+#define CRANE_OPERATION_MOVE_NUM_OF_PARAM 8
+#define CRANE_OPERATION_REJECT_NUM_OF_PARAM 2
 
+#include <vector>
+#include <string>
+#include "ship.h"
+#include "Port.h"
+
+using std::vector;
 using std::string;
 
 enum class Operations { undefined, load, unload, move, reject };
@@ -16,9 +25,10 @@ protected:
 	Operations operation;
 	string containerID;
 public:
-	void DoOperation();
+	virtual void DoOperation(Ship* ship, Port& port) = 0;
 	static Operations GetOperationType(string str);
 	CraneOperation() { operation = Operations::undefined; containerID = ""; };
+	virtual ~CraneOperation() {};
 };
 
 class LoadCraneOperation : public CraneOperation {
@@ -27,8 +37,10 @@ private:
 	int col;
 	int height;
 public:
-	LoadCraneOperation(int rowIndex, int colIndex, int heightValue);
-	virtual void DoOperation();
+	LoadCraneOperation(vector<string>& params);
+	virtual void DoOperation(Ship* ship, Port& port);
+	virtual ~LoadCraneOperation() {};
+
 };
 
 class UnloadCraneOperation : public CraneOperation {
@@ -37,8 +49,9 @@ private:
 	int col;
 	int height;
 public:
-	UnloadCraneOperation(int rowIndex, int colIndex, int heightValue);
-	virtual void DoOperation();
+	UnloadCraneOperation(vector<string>& params);
+	virtual void DoOperation(Ship* ship, Port& port);
+	virtual ~UnloadCraneOperation() {};
 };
 
 class MoveCraneOperation : public CraneOperation {
@@ -50,13 +63,15 @@ private:
 	int colTo;
 	int heightTo;
 public:
-	MoveCraneOperation(int fromRow, int fromCol, int fromHeight, int toRow, int toCol, int toHeight);
-	virtual void DoOperation();
+	MoveCraneOperation(vector<string>& params);
+	virtual void DoOperation(Ship* ship, Port& port);
+	virtual ~MoveCraneOperation() {};
 };
 
 class RejectCraneOperation : public CraneOperation {
 private:
 public:
-	RejectCraneOperation(string containerID);
-	virtual void DoOperation();
+	RejectCraneOperation(vector<string>& params);
+	virtual void DoOperation(Ship* ship, Port& port);
+	virtual ~RejectCraneOperation() {};
 };
