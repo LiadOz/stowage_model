@@ -43,7 +43,7 @@ ShipRoute::ShipRoute(string filePath) {
 				}
 
 			}
-			catch (std::invalid_argument error)
+			catch (std::invalid_argument& error)
 			{
 				//TODO: add error to log
 				cout << "error in ShipRoute constructor";

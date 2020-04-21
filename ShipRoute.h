@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SHIPROUTE_H
+#define SHIPROUTE_H
 
 #include <vector>
 #include "Port.h"
@@ -22,3 +23,5 @@ public:
 
 	ShipRoute(string filePath);
 };
+
+#endif /* SHIPROUTE_H */

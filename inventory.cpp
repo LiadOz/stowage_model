@@ -81,6 +81,7 @@ Inventory::Inventory(const string& file_path){
     file.close();
 }
 
+// test the range of (x, y) if it's outside throws out_of_range error
 void Inventory::rangeCheck(size_t x, size_t y){
     if (x >= dimensions.first || y >= dimensions.second)
         throw out_of_range("Attempted to access invalid location");

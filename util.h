@@ -23,6 +23,8 @@ bool validRoute(string route);
 bool isCommentLine(string line);
 vector<string> getDataFromLine(string line, int howManyParams);
 
+// singleton to log errors 
+// cannot be while the program is runnig
 class Logger{
 private:
     Logger(){};
@@ -32,7 +34,6 @@ private:
     string logType;
 public:
     static Logger& Instance();
-    ~Logger(){delete instance_p;}
     void logError(string message);
     void setLogType(string type){ logType = type; }
 };

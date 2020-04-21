@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Port.h"
 #include <sstream>
 #include "util.h"
@@ -75,7 +73,7 @@ bool Port::LoadContainersFromFile(string filePath) {
 
 	//TODO: decide if when failing try to keep reading, or return false on first fail
 	return true;
-};
+}
 
 
 bool Port::AddContainer(Container containerToAdd) {
