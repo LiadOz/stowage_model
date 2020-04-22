@@ -1,10 +1,10 @@
-COMP = g++-8
+COMP = g++-8.3.0
 #put all your object files here
 OBJS = main.o container.o inventory.o util.o ship.o algorithm.o calculator.o simulation.o ShipRoute.o Port.o CraneOperations.o
 #The executabel filename DON'T CHANGE
 EXEC = ex1
-#CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
-CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -pedantic-errors -DNDEBUG
+CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
+#CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -pedantic-errors -DNDEBUG
 CPP_LINK_FLAG = -lstdc++fs
 
 $(EXEC): $(OBJS)
