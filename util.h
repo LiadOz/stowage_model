@@ -41,7 +41,7 @@ private:
     bool firstLine = true;
 public:
     static Logger& Instance();
-    void setFile(const string& file_path){ file.open(file_path);}
+    void setFile(const string& file_path){ file.open(file_path); firstLine = true;}
     void saveFile(){file.close();}
     void logError(const string& message);
     void setLogType(const string& type);
