@@ -1,3 +1,5 @@
+sample runs are in ./Simulation/[Travel folder]
+
 There are currently two algorithms: Brute Algorithm and Reject Algorithm.
 Brute Algorithm - unloads all the containers inside and then reloads all the containers
 that needs to go further, then it loads all the containers it can from the port.
@@ -26,4 +28,3 @@ we assume there are the relevant folders in each travel: Instructions and portsC
 we used similar formats to the suggested ones (not always the same), you can check our files to see the format we've used.
 
 In each input file lines beginning with "#" are comment lines and are not parsed.
-
