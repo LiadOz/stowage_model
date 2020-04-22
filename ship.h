@@ -37,7 +37,7 @@ private:
 public:
     // when you create a ship you supply the list of plans
     Ship(){};
-    Ship(const string& file_path): storage(file_path){decks = storage.getNumFloors();}
+    Ship(const string& file_path): storage(file_path), totalCorrectUnloads(0){decks = storage.getNumFloors();}
     // returns the max height of the coordinate
     size_t getCoordinateHeight(size_t x, size_t y){ return storage.getCoordinateHeight(x, y);}
     // pushes container to (x1, y1) throws error if cannot be executed
