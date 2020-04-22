@@ -29,6 +29,7 @@ public:
 	static Operations GetOperationType(const string& str);
 	CraneOperation() { operation = Operations::undefined; containerID = ""; };
 	virtual ~CraneOperation() {};
+	Operations GetOperation() { return operation; }
 };
 
 class LoadCraneOperation : public CraneOperation {
@@ -40,7 +41,6 @@ public:
 	LoadCraneOperation(vector<string>& params);
 	virtual void DoOperation(Ship* ship, Port& port);
 	virtual ~LoadCraneOperation() {};
-
 };
 
 class UnloadCraneOperation : public CraneOperation {

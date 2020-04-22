@@ -33,6 +33,7 @@ private:
     size_t decks;
     Inventory storage;
     ShipLogger logger;
+	int totalCorrectUnloads;
 public:
     // when you create a ship you supply the list of plans
     Ship(){};
@@ -54,7 +55,8 @@ public:
     void setLogToScreen(bool flag){ logger.setLogToScreen(flag);}
     void closeLogFile(){logger.closeLogFile();}
     vector<Container> getShipContainers() {return storage.getAllContainers();}
-    
+	void UnloadedCargoAtCorrectPort() { totalCorrectUnloads++; }
+	int GetTotalCorrectUnloads() { return totalCorrectUnloads; }
 };
 
 #endif /* SHIP_H */

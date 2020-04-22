@@ -91,6 +91,10 @@ void UnloadCraneOperation::DoOperation(Ship* ship, Port& port) {
 		{
 			throw runtime_error("container already in port");
 		}
+		if (container.getDestination() == port.getPortCode())
+		{
+			ship->UnloadedCargoAtCorrectPort();
+		}
 	}
 	catch (const std::exception & error)
 	{

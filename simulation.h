@@ -21,6 +21,7 @@ private:
 	ShipRoute* route;
 	string folder;
 	int actionsPerformedCounter;
+	static int totalUnloadsInCorrectPort;
 	map<string, list<string> > CreatePortsCargoFromFiles();
 	void PrepareAlgorithm(const string& shipPath, const string& routePath);
 	bool LoadContainersToPortsInRoute();

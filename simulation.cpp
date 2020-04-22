@@ -27,7 +27,6 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo)
 	ship = new Ship(shipPath);
 	algorithm = algo;
 	PrepareAlgorithm(shipPath, routePath);
-	actionsPerformedCounter = 0;
 }
 
 void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePath)
@@ -234,6 +233,7 @@ void Simulation::LogResults()
 	ofstream file;
 	file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
 	file << "algorithm " << algorithm->getName() << " has performed " << actionsPerformedCounter << " actions." << endl;
+	file << "the ship successfully delivered " << ship->GetTotalCorrectUnloads() << " cargos. " << endl;
 	file.close();
 }
 
