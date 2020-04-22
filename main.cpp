@@ -1,19 +1,13 @@
-#include <iostream>
-#include <string>
 #include <stdlib.h>
-#include "container.h"
-#include "ship.h"
 #include "algorithm.h"
 #include "util.h"
-#include "Port.h"
 #include "simulation.h"
 #include <filesystem>
 
+#define LOG_FILE "simulation.errors"
+#define SIMULATION_ROOT_FOLDER "./Simulation/"
+#define FILE_SEPARATOR "/"
 
-using std::string;
-using std::vector;
-using std::cout;
-using std::endl;
 using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
 namespace fs = std::filesystem;
 
@@ -27,6 +21,9 @@ int main() {
 	for (const auto& entry : fs::directory_iterator(pathToShow)) {
 		const auto folderName = entry.path().filename().string();
 		if (entry.is_directory()) {
+            string folderPath = SIMULATION_ROOT_FOLDER + folderName+ FILE_SEPARATOR;
+            Logger::Instance().setFile(folderPath + LOG_FILE);
+            Logger::Instance().setLogType("General");
 			Simulation::RemoveLogFiles(entry.path().string());
 			Simulation simulation(folderName, bruteAlgorithm);
 			simulation.RunSimulation();
