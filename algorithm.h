@@ -14,13 +14,12 @@ class Algorithm {
 protected:
     Ship s;
     vector<string> routes;
-    unordered_set<Container*> outside;
-	void unloadAll(string port);
+    vector<Container> unloadAll(string port);
 
     // insertes container to the next free location
     // return false if there is no space left
     size_t next_x, next_y;
-    bool insertNextFree(Container* c);
+    bool insertNextFree(Container c);
     // this function is called inside getInstructionsForCargo and detailes
     // the operation each algorithm does polymophically
     virtual void getPortInstructions(const string& port,

@@ -48,24 +48,25 @@ void Algorithm::readShipRoute(const string& full_path_and_file_name){
 }
 
 // unloads all cargo to port and frees current port containers
-void Algorithm::unloadAll(string port){
+vector<Container> Algorithm::unloadAll(string port){
     pair<size_t, size_t> d = s.getStorageDimensions();
+    vector<Container> outside;
     for (size_t i = 0; i < d.second; ++i) {
         for (size_t j = 0; j < d.first; ++j) {
             while(!s.emptyCoordinate(i, j)){
-                Container* c = s.removeContainer(i, j);
+                Container c = s.removeContainer(i, j);
                 // freeing the port's cargo
                 if (port.compare(UNLOAD_ALL) == 0 || 
-                        c->getDestination().compare(port) == 0)
-                    delete c;
+                        c.getDestination().compare(port) == 0);
                 else
-                    outside.insert(c);
+                    outside.push_back(c);
             }
         }
     }
+    return outside;
 }
 
-bool Algorithm::insertNextFree(Container* c){
+bool Algorithm::insertNextFree(Container c){
     pair<size_t, size_t> d = s.getStorageDimensions();
     while(next_x < d.first && next_y < d.second){
         if (!s.fullCoordinate(next_x, next_y)){
@@ -82,7 +83,7 @@ bool Algorithm::insertNextFree(Container* c){
 }
 
 
-void setAwaitingCargo(const string& file_path, vector<Container*>& awaiting){
+void setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
     ifstream file(file_path);
     string line, data;
 
@@ -96,9 +97,8 @@ void setAwaitingCargo(const string& file_path, vector<Container*>& awaiting){
             row.push_back(data);
         }
         
-        Container* c;
         try {
-            c = new Container(std::stoi(row[PARSING_WEIGHT]), row[PARSING_PORT], row[PARSING_ID]);
+            Container c = Container(std::stoi(row[PARSING_WEIGHT]), row[PARSING_PORT], row[PARSING_ID]);
             awaiting.push_back(c);
         }
         catch(std::invalid_argument& e) { 
@@ -128,22 +128,21 @@ void Algorithm::getInstructionsForCargo(
 void BruteAlgorithm::getPortInstructions(const string& port,
         const string& input_path){
 
-    unloadAll(port);
+    vector<Container> outside = unloadAll(port);
     next_x = next_y = 0;
 
     // inserting all cargos the were removed
-    for (Container* c : outside)
+    for (Container c : outside)
         insertNextFree(c);
 
     // pushing new cargo
-    vector<Container*> awaiting;
+    vector<Container> awaiting;
     setAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
         success = insertNextFree(c);
         if (!success){
             s.rejectContainer(c);
-            delete c;
         }
             
     }
@@ -152,25 +151,23 @@ void BruteAlgorithm::getPortInstructions(const string& port,
 void RejectAlgorithm::getPortInstructions(const string& port,
         const string& input_path){
 
-    unloadAll(port);
+    vector<Container> outside = unloadAll(port);
     next_x = next_y = 0;
 
     // pushing new cargo
-    vector<Container*> awaiting;
+    vector<Container> awaiting;
     setAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
-        if (c->getDestination().compare(routes.back()) != 0){
+        if (c.getDestination().compare(routes.back()) != 0){
             // reject container that is not to the next route
             s.rejectContainer(c);
-            delete c;
             continue;
         }
         success = insertNextFree(c);
         if (!success){
             // reject if there is no more space
             s.rejectContainer(c);
-            delete c;
         }
             
     }
