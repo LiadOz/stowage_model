@@ -32,6 +32,7 @@ public:
     size_t getNumFloors(){ return maxFloors;}
     size_t getCoordinateHeight(size_t x, size_t y){ return storage[y][x].size();}
     pair<size_t, size_t> getDimensions(){ return dimensions; }
+    vector<Container> getAllContainers();
 };
 
 #endif /* INVENTORY_H */

@@ -3,6 +3,7 @@
 #include <filesystem>
 #include "util.h"
 
+#define LOG_FILE "simulation.errors"
 namespace fs = std::filesystem;
 
 using std::stringstream;
@@ -16,7 +17,8 @@ using std::stringstream;
 
 Simulation::Simulation(string rootFolder, Algorithm* algo)
 {
-	Logger::Instance().setLogType("Simulation init");
+    Logger::Instance().setFile(LOG_FILE);
+    Logger::Instance().setLogType("Simulation init");
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
@@ -217,4 +219,5 @@ void Simulation::LogResults(string algorithmName)
 Simulation::~Simulation() {
 	delete this->ship;
 	delete this->route;
+    Logger::Instance().saveFile();
 }

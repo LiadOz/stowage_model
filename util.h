@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <ostream>
+#include <fstream>
 
 //TODO: move this to a better place
 //files special chars defs
@@ -16,13 +18,14 @@
 
 using std::string;
 using std::vector;
+using std::ofstream;
 
 //General commons
 
-int getIthFile(string filename);
-bool validRoute(string route);
-bool validCargoFile(string filename);
-bool isCommentLine(string line);
+int getIthFile(const string& filename);
+bool validRoute(const string& route);
+bool validCargoFile(const string& filename);
+bool isCommentLine(const string& line);
 // throws exception if got too many arugments
 vector<string> getDataFromLine(string line, int howManyParams, bool unlimitedParams = false);
 
@@ -35,10 +38,14 @@ private:
     Logger& operator=(Logger const&);
     static Logger* instance_p;
     string logType;
+    ofstream file;
+    bool firstLine = true;
 public:
     static Logger& Instance();
-    void logError(string message);
-    void setLogType(string type){ logType = type; }
+    void setFile(const string& file_path){ file.open(file_path);}
+    void saveFile(){file.close();}
+    void logError(const string& message);
+    void setLogType(const string& type);
 };
 
 #endif /* UTIL_H */
