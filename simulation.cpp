@@ -104,6 +104,7 @@ void Simulation::RunSimulation()
 {
 	vector<Port>& ports = this->route->getRoute();
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
+    Logger::Instance().setLogType(this->algorithm->getName());
 	for (size_t i = 0; i < ports.size(); i++) {
 		try
 		{
