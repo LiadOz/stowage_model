@@ -210,7 +210,6 @@ CraneOperation* Simulation::CreateOperationFromLine(string lineFromFile) {
 
 void Simulation::LogResults(string algorithmName)
 {
-
 }
 
 

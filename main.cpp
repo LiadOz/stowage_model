@@ -40,5 +40,10 @@ int main() {
     delete bruteAlgorithm;
     delete rejectAlgorithm;
 
+	ofstream myfile;
+	myfile.open("exampler.txt");
+	myfile << "Writing this to a file.\n";
+	myfile.close();
+
 	return EXIT_SUCCESS;
 }
