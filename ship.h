@@ -53,6 +53,7 @@ public:
     void setLoggerFile(const string& file_path){logger.setLogFile(file_path);}
     void setLogToScreen(bool flag){ logger.setLogToScreen(flag);}
     void closeLogFile(){logger.closeLogFile();}
+    vector<Container> getShipContainers() {return storage.getAllContainers();}
     
 };
 

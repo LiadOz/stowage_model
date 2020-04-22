@@ -111,3 +111,15 @@ Container* Inventory::popContainer(size_t x, size_t y){
     storage[y][x].pop_back();
     return c;
 }
+
+vector<Container> Inventory::getAllContainers(){
+    vector<Container> l;
+    for (auto& vv : storage) {
+        for (auto& v : vv) {
+            for (auto& c : v) {
+                l.push_back(*c);
+            }
+        }
+    }
+    return l;
+}

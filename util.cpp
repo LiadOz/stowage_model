@@ -10,13 +10,13 @@ using std::regex_match;
 using std::runtime_error;
 using std::stringstream;
 
-bool validRoute(string route){
+bool validRoute(const string& route){
     regex r("[A-Z]{5}");
     if(!regex_match(route, r))
         return false;
     return true;
 }
-bool validCargoFile(string filename) {
+bool validCargoFile(const string& filename) {
 	regex r("[A-Z]{5}_\\d*.cargo_data");
 	if (!regex_match(filename, r))
 		return false;
@@ -25,18 +25,26 @@ bool validCargoFile(string filename) {
 
 Logger* Logger::instance_p = nullptr;
 Logger& Logger::Instance() {
-   if (!instance_p)   // Only allow one instance of class to be generated.
-      instance_p = new Logger;
- 
-   return *instance_p;
+    if (!instance_p){   // Only allow one instance of class to be generated.
+        instance_p = new Logger;
+    }
+    return *instance_p;
 }
 
 // currently the logger prints to the screen
-void Logger::logError(string message){
-    std::cout << "Error in " << logType << " : " << message << std::endl;
+void Logger::logError(const string& message){
+    file << "," << message;
+    //std::cout << "Error in " << logType << " : " << message << std::endl;
+}
+void Logger::setLogType(const string& type){
+    if(!firstLine)
+        file << std::endl;
+    firstLine = false;
+    logType = type; 
+    file << logType;
 }
 
-bool isCommentLine(string line) {
+bool isCommentLine(const string& line) {
 
 	unsigned index = 0;
 	while (index < line.length()) {
@@ -57,7 +65,7 @@ bool isCommentLine(string line) {
 }
 
 //get a vector with all data in string format
-vector<string> getDataFromLine(string line, int howManyParams) {
+vector<string> getDataFromLine(const string& line, int howManyParams) {
 
 	vector<string> dataVector;
 	stringstream streamLineFromFile(line);

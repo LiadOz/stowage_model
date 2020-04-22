@@ -29,6 +29,7 @@ public:
     void readShipPlan(const string& full_path_and_file_name);
     void readShipRoute(const string& full_path_and_file_name);
     void finalDestination();
+    virtual string getName(){return "NOT_DEFINED";};
     virtual void getInstructionsForCargo(
             const string& input_full_path_and_file_name,
             const string& output_full_path_and_file_name);
@@ -42,6 +43,7 @@ protected:
             const string& input_path);
 public:
     BruteAlgorithm (){};
+    virtual string getName(){ return "BruteAlgorithm";}
     virtual ~BruteAlgorithm(){};
 };
 
@@ -53,6 +55,7 @@ protected:
             const string& input_path);
 public:
     RejectAlgorithm(){};
+    virtual string getName(){ return "RejectAlgorithm";}
     virtual ~RejectAlgorithm(){};
 };
 
