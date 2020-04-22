@@ -17,7 +17,7 @@ private:
 public:
     // throws invalid argument if destination or id are not 
     // according to format
-    Container(int weight, string destination, string id);
+    Container(int weight, const string& destination, const string& id);
     friend ostream& operator<<(ostream& out, const Container &c);
     int getWeight(){ return weight; }
     string getDestination(){ return destination; }

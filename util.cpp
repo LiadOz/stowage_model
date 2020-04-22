@@ -67,7 +67,7 @@ bool isCommentLine(const string& line) {
 //NOTE: not enough time for a pretty solution,
 //unlimitedParams is to bypass not enough params error (for crane operations where you can get different amount of params),
 //should create a new function and delete this logic later
-vector<string> getDataFromLine(string line, int howManyParams, bool unlimitedParams) {
+vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams) {
 
 	vector<string> dataVector;
 	stringstream streamLineFromFile(line);

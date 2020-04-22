@@ -26,7 +26,7 @@ bool validRoute(const string& route);
 bool validCargoFile(const string& filename);
 bool isCommentLine(const string& line);
 // throws exception if got too many arugments
-vector<string> getDataFromLine(string line, int howManyParams, bool unlimitedParams = false);
+vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams = false);
 
 // singleton to log errors 
 // cannot be while the program is runnig

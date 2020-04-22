@@ -10,7 +10,7 @@ using std::ifstream;
 using std::runtime_error;
 
 
-Port::Port(string code, string filePathForCargo) {
+Port::Port(const string& code, const string& filePathForCargo) {
     if(!validRoute(code)){
         throw std::runtime_error("Invalid route");
     }
@@ -18,7 +18,7 @@ Port::Port(string code, string filePathForCargo) {
 	cargoFilePath = filePathForCargo;
 }
 
-bool Port::LoadContainersFromFile(string filePath) {
+bool Port::LoadContainersFromFile(const string& filePath) {
 
 	ifstream file(filePath);
 	string lineFromFile;
@@ -62,8 +62,8 @@ bool Port::LoadContainersFromFile(string filePath) {
 }
 
 
-bool Port::AddContainer(Container containerToAdd) {
-	for (Container container : containers) {
+bool Port::AddContainer(Container& containerToAdd) {
+	for (Container& container : containers) {
 		if (container.getId() == containerToAdd.getId())
 		{
 			return false;
@@ -74,7 +74,7 @@ bool Port::AddContainer(Container containerToAdd) {
 	return true;
 }
 
-Container Port::RemoveContainer(string containerToRemove) {
+Container Port::RemoveContainer(const string& containerToRemove) {
 
 	for (size_t index = 0; index < containers.size(); index++)
 	{

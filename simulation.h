@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SIMULATION_H
+#define SIMULATION_H
+
 #include <map>
 #include <list>
 #include <string>
@@ -21,16 +23,17 @@ private:
 	int actionsPerformedCounter;
 	static int totalUnloadsInCorrectPort;
 	map<string, list<string> > CreatePortsCargoFromFiles();
-	void PrepareAlgorithm(string shipPath, string routePath);
+	void PrepareAlgorithm(const string& shipPath, const string& routePath);
 	bool LoadContainersToPortsInRoute();
-	void PerformAlgorithmActions(string filePath, Port& port);
-	CraneOperation* CreateOperationFromLine(string line);
+	void PerformAlgorithmActions(const string& filePath, Port& port);
+	CraneOperation* CreateOperationFromLine(const string& line);
 	void ValidateAllPortCargoUnloaded(Ship* ship, Port& port);
 	void LogResults();
-	void LogSimulationErrors(string funcName, string error);
+	void LogSimulationErrors(const string& funcName, const string& error);
 public:
-	Simulation(string rootFolder, Algorithm* alg);
-	static void RemoveLogFiles(string simulationFolder);
+	Simulation(const string& rootFolder, Algorithm* alg);
+	static void RemoveLogFiles(const string& simulationFolder);
 	void RunSimulation();
 	~Simulation();
 };
+#endif /* SIMULATION_H */

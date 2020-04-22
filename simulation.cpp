@@ -16,7 +16,7 @@ using std::stringstream;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(string rootFolder, Algorithm* algo)
+Simulation::Simulation(const string& rootFolder, Algorithm* algo)
 {
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
@@ -29,14 +29,14 @@ Simulation::Simulation(string rootFolder, Algorithm* algo)
 	PrepareAlgorithm(shipPath, routePath);
 }
 
-void Simulation::PrepareAlgorithm(string shipPath, string routePath)
+void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePath)
 {
 	algorithm->readShipPlan(shipPath);
 	algorithm->readShipRoute(routePath);
 
 }
 
-void Simulation::RemoveLogFiles(string simulationFolder)
+void Simulation::RemoveLogFiles(const string& simulationFolder)
 {
 	string errorsFile = simulationFolder + FILE_SEPARATOR + SIMULATION_ERROR_FILE_NAME;
 	string resultsFile = simulationFolder + FILE_SEPARATOR + SIMULATION_RESULTS_FILE_NAME;
@@ -131,7 +131,7 @@ void Simulation::RunSimulation()
 	LogResults();
 }
 
-void Simulation::PerformAlgorithmActions(string filePath, Port& port)
+void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 {
 	ifstream file(filePath);
 	string lineFromFile;
@@ -190,7 +190,7 @@ void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
 	}
 }
 
-CraneOperation* Simulation::CreateOperationFromLine(string lineFromFile) {
+CraneOperation* Simulation::CreateOperationFromLine(const string& lineFromFile) {
 
 	vector<string> operationsData;
 	CraneOperation* craneOperation = NULL;
@@ -237,7 +237,7 @@ void Simulation::LogResults()
 	file.close();
 }
 
-void Simulation::LogSimulationErrors(string funcName, string error)
+void Simulation::LogSimulationErrors(const string& funcName, const string& error)
 {
     Logger::Instance().logError("function" + funcName + ": " + error);
 }
