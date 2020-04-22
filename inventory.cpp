@@ -33,8 +33,8 @@ void Inventory::initFromRow(vector<string> row){
     dimensions = {x, y};
     heights = vector<vector<size_t>>(y, vector<size_t>(x, 0)
             );
-    storage = vector<vector<vector<Container*>>>(y,
-            vector<vector<Container*>>(x)
+    storage = vector<vector<vector<Container>>>(y,
+            vector<vector<Container>>(x)
             );
 }
 
@@ -96,18 +96,18 @@ bool Inventory::fullCoordinate(size_t x, size_t y){
     if (storage[y][x].size() == heights[y][x]) return true;
     return false;
 }
-bool Inventory::pushContainer(size_t x, size_t y, Container* c){
+bool Inventory::pushContainer(size_t x, size_t y, Container c){
     rangeCheck(x, y);
     if (fullCoordinate(x, y))
         throw out_of_range("Coordinate is full");
     storage[y][x].push_back(c);
     return true;
 }
-Container* Inventory::popContainer(size_t x, size_t y){
+Container Inventory::popContainer(size_t x, size_t y){
     rangeCheck(x, y);
     if (emptyCoordinate(x, y))
         throw out_of_range("Coordinate is empty");
-    Container* c = storage[y][x].back();
+    Container c = storage[y][x].back();
     storage[y][x].pop_back();
     return c;
 }
@@ -117,7 +117,7 @@ vector<Container> Inventory::getAllContainers(){
     for (auto& vv : storage) {
         for (auto& v : vv) {
             for (auto& c : v) {
-                l.push_back(*c);
+                l.push_back(c);
             }
         }
     }
