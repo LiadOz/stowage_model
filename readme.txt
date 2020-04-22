@@ -11,18 +11,19 @@ algorithms are loaded in the main function - declare new ones there and add new 
 in the root folder of the program there msut be a folder named Simulation.
 in the Simulation folder, you may have folders for every "travel" (as defined in the pdf), named however you want.
 in each travel folder, we have the following:
-Instructions folder: (the algorithm will make it's outputs there)
-	- [integer] file: the output instructions for the i-th port in the route (files are in the suggested format)
-portsCargo folder: data for the cargo for each port (files are in the suggested format)
-
-When an error occurs it is logged in the travel folder under the file simulation.errors.
+Instructions folder: (the algorithm will make its outputs there)
+	- [integer] file: the output instructions for the i-th port in the route
+portsCargo folder: data for the cargo for each port 
+	-[portID]_[integer].cargo_data: the cargo file
+ports: a file containing the ports for the shiproute
+sample.plan: the plan of the ship. Whenever there is an error in the input of the ship plan,
+we assume that error is critical and so the program will stop running.
+results.txt: the results of the travel 
+simulation.errors: the errors that occured in the travel,
 we have a title stating the part of the program in which errors may occur (it will display even if no errors had occured)
 
-results are printed in a results.txt file in the root folder.
-
 we assume there are the relevant folders in each travel: Instructions and portsCargo.
+we used similar formats to the suggested ones (not always the same), you can check our files to see the format we've used.
 
-You can see an example of the code in directories Simulation/example_input_1 and Simulation/example_input_2.
 In each input file lines beginning with "#" are comment lines and are not parsed.
-Whenever there is an error in the input of the ship plan we assume that error is critical and so the 
-program will stop running.
+
