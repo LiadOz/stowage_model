@@ -28,5 +28,6 @@ private:
 public:
 	Simulation(string rootFolder, Algorithm* alg);
 	void RunSimulation();
+	void LogResults(string algorithmName);
 	~Simulation();
 };

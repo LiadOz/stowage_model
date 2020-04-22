@@ -103,10 +103,17 @@ void Simulation::RunSimulation()
 	vector<Port>& ports = this->route->getRoute();
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
 	for (size_t i = 0; i < ports.size(); i++) {
-		Logger::Instance().setLogType("Simulation Port - " + ports[i].getPortCode());
-		string outputFilePath = outputFolderPath + std::to_string(i);
-		algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
-		PerformAlgorithmActions(outputFilePath, ports[i]);
+		try
+		{
+			Logger::Instance().setLogType("Simulation Port - " + ports[i].getPortCode());
+			string outputFilePath = outputFolderPath + std::to_string(i);
+			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
+			PerformAlgorithmActions(outputFilePath, ports[i]);
+		}
+		catch (const std::exception & error)
+		{
+			//TODO: log error in sim
+		}
 	}
 }
 
@@ -141,7 +148,7 @@ void Simulation::PerformAlgorithmActions(string filePath, Port& port)
 				craneOperation->DoOperation(ship, port);
 				actionsPerformedCounter++;
 			}
-			catch (const std::exception& error)
+			catch (const std::exception & error)
 			{
 				//TODO: log the error
 			}
@@ -198,6 +205,12 @@ CraneOperation* Simulation::CreateOperationFromLine(string lineFromFile) {
 
 	return craneOperation;
 }
+
+void Simulation::LogResults(string algorithmName)
+{
+
+}
+
 
 
 
