@@ -16,7 +16,7 @@ using std::stringstream;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(const string& rootFolder, Algorithm* algo)
+Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerformedCounter(0)
 {
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
