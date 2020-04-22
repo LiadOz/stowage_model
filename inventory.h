@@ -8,6 +8,7 @@ using std::vector;
 using std::string;
 using std::pair;
 
+// represents the ship plan and allows storing containers
 class Inventory {
 private:
     size_t maxFloors;
