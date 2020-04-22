@@ -54,7 +54,7 @@ void LoadCraneOperation::DoOperation(Ship* ship, Port& port) {
 	try
 	{
 		Container container = port.RemoveContainer(this->containerID);
-		ship->insertContainer(row, col, &container);
+		ship->insertContainer(row, col, container);
 	}
 	catch (const std::exception & error)
 	{
@@ -85,8 +85,8 @@ UnloadCraneOperation::UnloadCraneOperation(vector<string>& params) {
 void UnloadCraneOperation::DoOperation(Ship* ship, Port& port) {
 	try
 	{
-		Container* container = ship->removeContainer(row, col);
-		bool addedContainerToPort = port.AddContainer(*(container));
+		Container container = ship->removeContainer(row, col);
+		bool addedContainerToPort = port.AddContainer(container);
 		if (!addedContainerToPort)
 		{
 			throw runtime_error("container already in port");
@@ -155,7 +155,7 @@ void RejectCraneOperation::DoOperation(Ship* ship, Port& port) {
 	try
 	{
 		Container container = port.RemoveContainer(containerID);
-		ship->rejectContainer(&container);
+		ship->rejectContainer(container);
 		port.AddContainer(container);
 
 	}

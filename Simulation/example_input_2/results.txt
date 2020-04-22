@@ -1,1 +1,2 @@
+algorithm BruteAlgorithm has performed 0 actions.
 algorithm RejectAlgorithm has performed 0 actions.
