@@ -29,6 +29,7 @@ private:
 	void LogSimulationErrors(string funcName, string error);
 public:
 	Simulation(string rootFolder, Algorithm* alg);
+	static void RemoveLogFiles(string simulationFolder);
 	void RunSimulation();
 	~Simulation();
 };

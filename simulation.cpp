@@ -40,9 +40,15 @@ void Simulation::PrepareAlgorithm(string shipPath, string routePath)
 	algorithm->readShipPlan(shipPath);
 	algorithm->readShipRoute(routePath);
 
-	string errorsFile = folder + SIMULATION_ERROR_FILE_NAME;
-	string resultsFile = folder + SIMULATION_RESULTS_FILE_NAME;
+}
 
+void Simulation::RemoveLogFiles(string simulationFolder)
+{
+	string errorsFile = simulationFolder + FILE_SEPARATOR + SIMULATION_ERROR_FILE_NAME;
+	string resultsFile = simulationFolder + FILE_SEPARATOR + SIMULATION_RESULTS_FILE_NAME;
+
+	remove(errorsFile.c_str());
+	remove(resultsFile.c_str());
 }
 
 bool Simulation::LoadContainersToPortsInRoute()
@@ -60,6 +66,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 		if (portsMap.find(portCode) == portsMap.end())
 		{
 			Logger::Instance().logError("Port file doesn't exist");
+			LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
 		}
 
 		else
@@ -68,6 +75,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 			if (filesList.empty())
 			{
 				Logger::Instance().logError("Port file doesn't exist");
+				LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
 			}
 
 			else
