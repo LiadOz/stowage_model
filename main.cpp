@@ -30,20 +30,13 @@ int main() {
 		if (entry.is_directory()) {
 			Simulation simulation(folderName, bruteAlgorithm);
 			simulation.RunSimulation();
-			simulation.LogResults("bruteAlgorithm");
 			Simulation simulation2(folderName, rejectAlgorithm);
 			simulation2.RunSimulation();
-			simulation2.LogResults("rejectAlgorithm");
 		}
 	}
 
     delete bruteAlgorithm;
     delete rejectAlgorithm;
-
-	ofstream myfile;
-	myfile.open("exampler.txt");
-	myfile << "Writing this to a file.\n";
-	myfile.close();
 
 	return EXIT_SUCCESS;
 }

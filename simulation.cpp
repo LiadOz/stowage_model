@@ -14,11 +14,13 @@ using std::stringstream;
 #define SIMULATION_ROUTE_FILE_NAME "ports"
 #define SIMULATION_PORTS_FOLDER_NAME "portsCargo/"
 #define SIMULATION_CARGO_INSTRUCTIONS_FOLDER "Instructions/"
+#define SIMULATION_ERROR_FILE_NAME "errors.txt"
+#define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
 Simulation::Simulation(string rootFolder, Algorithm* algo)
 {
-    Logger::Instance().setFile(LOG_FILE);
-    Logger::Instance().setLogType("Simulation init");
+	Logger::Instance().setFile(LOG_FILE);
+	Logger::Instance().setLogType("Simulation init");
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
@@ -35,6 +37,10 @@ void Simulation::PrepareAlgorithm(string shipPath, string routePath)
 {
 	algorithm->readShipPlan(shipPath);
 	algorithm->readShipRoute(routePath);
+
+	string errorsFile = folder + SIMULATION_ERROR_FILE_NAME;
+	string resultsFile = folder + SIMULATION_RESULTS_FILE_NAME;
+
 }
 
 bool Simulation::LoadContainersToPortsInRoute()
@@ -104,7 +110,7 @@ void Simulation::RunSimulation()
 {
 	vector<Port>& ports = this->route->getRoute();
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
-    Logger::Instance().setLogType(this->algorithm->getName());
+	Logger::Instance().setLogType(this->algorithm->getName());
 	for (size_t i = 0; i < ports.size(); i++) {
 		try
 		{
@@ -115,9 +121,11 @@ void Simulation::RunSimulation()
 		}
 		catch (const std::exception & error)
 		{
-			//TODO: log error in sim
+			LogSimulationErrors("RunSimulation", error.what());
 		}
 	}
+
+	LogResults();
 }
 
 void Simulation::PerformAlgorithmActions(string filePath, Port& port)
@@ -140,7 +148,7 @@ void Simulation::PerformAlgorithmActions(string filePath, Port& port)
 
 		if (craneOperation == NULL)
 		{
-			//TODO: log invalid operation
+			LogSimulationErrors("PerformAlgorithmActions", "craneOperation is null");
 		}
 
 		//operation format is valid
@@ -153,7 +161,7 @@ void Simulation::PerformAlgorithmActions(string filePath, Port& port)
 			}
 			catch (const std::exception & error)
 			{
-				//TODO: log the error
+				LogSimulationErrors("PerformAlgorithmActions", error.what());
 			}
 		}
 
@@ -168,7 +176,15 @@ void Simulation::PerformAlgorithmActions(string filePath, Port& port)
 void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
 {
 	string portID = port.getPortCode();
-	//TODO: go through all cargo in ship, if it has portID log it
+	vector<Container> shipContainers = ship->getShipContainers();
+
+	for (size_t i = 0; i < shipContainers.size(); i++)
+	{
+		if (shipContainers[i].getDestination() == portID)
+		{
+			LogSimulationErrors("ValidateAllPortCargoUnloaded", "container " + shipContainers[i].getId() + " didn't unload at port " + portID);
+		}
+	}
 }
 
 CraneOperation* Simulation::CreateOperationFromLine(string lineFromFile) {
@@ -196,28 +212,38 @@ CraneOperation* Simulation::CreateOperationFromLine(string lineFromFile) {
 			craneOperation = new RejectCraneOperation(operationsData);
 			break;
 		default:
-			//TODO: log enum error
+			LogSimulationErrors("CreateOperationFromLine", "invalid operation enum type");
 			break;
 		}
 	}
 	catch (const std::exception & error)
 	{
-		//TODO: LOG ERROR
+		LogSimulationErrors("CreateOperationFromLine", error.what());
 		cout << error.what();
 	}
 
 	return craneOperation;
 }
 
-void Simulation::LogResults(string algorithmName)
+void Simulation::LogResults()
 {
+	ofstream file;
+	file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
+	file << "algorithm " << algorithm->getName() << " has performed " << actionsPerformedCounter << " actions." << endl;
+	file.close();
 }
 
-
+void Simulation::LogSimulationErrors(string funcName, string error)
+{
+	ofstream file;
+	file.open(folder + SIMULATION_ERROR_FILE_NAME, std::ios::app);
+	file << "function" << funcName << ": " << error << endl;
+	file.close();
+}
 
 
 Simulation::~Simulation() {
 	delete this->ship;
 	delete this->route;
-    Logger::Instance().saveFile();
+	Logger::Instance().saveFile();
 }

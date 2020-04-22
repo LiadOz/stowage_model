@@ -54,10 +54,9 @@ bool isCommentLine(const string& line) {
 			break;
 	}
 
-	/*shouldn't happen - a line full of empty spaces*/
+	/*shouldn't happen - a line full of empty spaces, but ignore line anyways*/
 	if (index == line.length())
 	{
-		/*TODO: maybe better solution?*/
 		return true;
 	}
 

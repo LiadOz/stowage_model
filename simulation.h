@@ -25,9 +25,10 @@ private:
 	void PerformAlgorithmActions(string filePath, Port& port);
 	CraneOperation* CreateOperationFromLine(string line);
 	void ValidateAllPortCargoUnloaded(Ship* ship, Port& port);
+	void LogResults();
+	void LogSimulationErrors(string funcName, string error);
 public:
 	Simulation(string rootFolder, Algorithm* alg);
 	void RunSimulation();
-	void LogResults(string algorithmName);
 	~Simulation();
 };

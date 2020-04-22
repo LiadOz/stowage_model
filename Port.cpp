@@ -58,7 +58,6 @@ bool Port::LoadContainersFromFile(string filePath) {
 	file.close();
 	this->cargoFilePath = filePath;
 
-	//TODO: decide if when failing try to keep reading, or return false on first fail
 	return true;
 }
 
@@ -87,7 +86,7 @@ Container Port::RemoveContainer(string containerToRemove) {
 		}
 	}
 
-	//TODO: change to pointers later
+	//TODO: consider changing logic to pointers in exec2
 	throw runtime_error("container not in port");
 	
 }

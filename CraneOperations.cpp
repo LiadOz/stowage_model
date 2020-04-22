@@ -151,8 +151,7 @@ RejectCraneOperation::RejectCraneOperation(vector<string>& params) {
 }
 
 void RejectCraneOperation::DoOperation(Ship* ship, Port& port) {
-	//TODO: shouldn't be in ship class
-	//TODO: add GetContainer function in port
+	//TODO: shouldn't be in ship class (change in exec2), and add GetContainer function in port
 	try
 	{
 		Container container = port.RemoveContainer(containerID);

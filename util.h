@@ -6,7 +6,6 @@
 #include <ostream>
 #include <fstream>
 
-//TODO: move this to a better place
 //files special chars defs
 #define FILE_COMMENT_LINE_CHAR '#'
 #define FILE_LINE_SEPARATOR_CHAR ','
