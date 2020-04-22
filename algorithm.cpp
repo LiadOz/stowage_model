@@ -112,7 +112,6 @@ void Algorithm::getInstructionsForCargo(
         const string& output_full_path_and_file_name){
 
     s.setLoggerFile(output_full_path_and_file_name);
-    s.setLogToScreen(true);
 
     // when reaching final port
     if(routes.size() == 1)

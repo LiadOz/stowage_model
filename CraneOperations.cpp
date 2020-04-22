@@ -125,6 +125,7 @@ MoveCraneOperation::MoveCraneOperation(vector<string>& params) {
 void MoveCraneOperation::DoOperation(Ship* ship, Port& port) {
 	try
 	{
+        (void)port;
 		ship->moveContainer(rowFrom, colFrom, rowTo, colTo);
 	}
 	catch (const std::exception& error)

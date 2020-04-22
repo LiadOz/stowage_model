@@ -3,11 +3,11 @@
 #include <filesystem>
 #include "util.h"
 
-#define LOG_FILE "simulation.errors"
 namespace fs = std::filesystem;
 
 using std::stringstream;
 
+#define LOG_FILE "simulation.errors"
 #define FILE_SEPARATOR "/"
 #define SIMULATION_ROOT_FOLDER "./Simulation/"
 #define SIMULATION_SHIP_FILE_NAME "sample.plan"
@@ -19,10 +19,12 @@ using std::stringstream;
 
 Simulation::Simulation(string rootFolder, Algorithm* algo)
 {
-	Logger::Instance().setFile(LOG_FILE);
-	Logger::Instance().setLogType("Simulation init");
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
+
+	Logger::Instance().setFile(folderPath + LOG_FILE);
+	Logger::Instance().setLogType("Simulation init");
+
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
 	folder = folderPath;
 	route = new ShipRoute(routePath);
@@ -122,7 +124,6 @@ void Simulation::RunSimulation()
 	for (size_t i = 0; i < ports.size(); i++) {
 		try
 		{
-			Logger::Instance().setLogType("Simulation Port - " + ports[i].getPortCode());
 			string outputFilePath = outputFolderPath + std::to_string(i);
 			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
 			PerformAlgorithmActions(outputFilePath, ports[i]);
@@ -243,10 +244,7 @@ void Simulation::LogResults()
 
 void Simulation::LogSimulationErrors(string funcName, string error)
 {
-	ofstream file;
-	file.open(folder + SIMULATION_ERROR_FILE_NAME, std::ios::app);
-	file << "function" << funcName << ": " << error << endl;
-	file.close();
+    Logger::Instance().logError("function" + funcName + ": " + error);
 }
 
 
