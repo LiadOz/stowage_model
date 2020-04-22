@@ -32,7 +32,6 @@ Simulation::Simulation(string rootFolder, Algorithm* algo)
 	ship = new Ship(shipPath);
 	algorithm = algo;
 	PrepareAlgorithm(shipPath, routePath);
-	actionsPerformedCounter = 0;
 }
 
 void Simulation::PrepareAlgorithm(string shipPath, string routePath)
