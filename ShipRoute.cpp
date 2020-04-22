@@ -26,7 +26,7 @@ ShipRoute::ShipRoute(string filePath) {
             Port port(portName);
             route.push_back(port);
         }
-        catch (std::invalid_argument& error) {
+        catch (std::exception& error) {
             Logger::Instance().logError(error.what());
         }
 	}
