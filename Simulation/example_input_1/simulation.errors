@@ -1,2 +1,3 @@
-Simulation init,Invalid route,invalid port name AERKTF
-BruteAlgorithm
+General,Invalid route,invalid port name AERKTF
+BruteAlgorithm,Invalid route,invalid port name AERKTF
+RejectAlgorithm
