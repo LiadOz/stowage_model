@@ -26,7 +26,7 @@ public:
     bool emptyCoordinate(size_t x, size_t y);
     bool fullCoordinate(size_t x, size_t y);
     // pushes container to (x,y) throws error if out of bounds or cannot push more
-    bool pushContainer(size_t x, size_t y, Container c);
+    bool pushContainer(size_t x, size_t y, Container& c);
     // pops container from (x,y) throws error if out of bounds or cannot pop more
     Container popContainer(size_t x, size_t y);
     size_t getNumFloors(){ return maxFloors;}
