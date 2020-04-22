@@ -8,7 +8,7 @@ void ShipLogger::logAction(const string& action){
     if (logToScreen)
         std::cout << "(ship logger): " << action << std::endl;
 }
-void Ship::insertContainer(size_t x, size_t y, Container c){
+void Ship::insertContainer(size_t x, size_t y, Container& c){
     // TODO: add calculator check
     storage.pushContainer(x, y, c);
     logger.logAction("<L>," + c.getId() + "," +
@@ -45,6 +45,6 @@ void Ship::moveContainer(size_t x1, size_t y1, size_t x2, size_t y2){
             );
 }
 
-void Ship::rejectContainer(Container c){
+void Ship::rejectContainer(Container& c){
     logger.logAction("<R>," + c.getId());
 }

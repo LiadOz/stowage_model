@@ -96,7 +96,7 @@ bool Inventory::fullCoordinate(size_t x, size_t y){
     if (storage[y][x].size() == heights[y][x]) return true;
     return false;
 }
-bool Inventory::pushContainer(size_t x, size_t y, Container c){
+bool Inventory::pushContainer(size_t x, size_t y, Container& c){
     rangeCheck(x, y);
     if (fullCoordinate(x, y))
         throw out_of_range("Coordinate is full");
