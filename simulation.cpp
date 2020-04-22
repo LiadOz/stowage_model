@@ -238,6 +238,7 @@ void Simulation::LogResults()
 	ofstream file;
 	file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
 	file << "algorithm " << algorithm->getName() << " has performed " << actionsPerformedCounter << " actions." << endl;
+	file << "the ship successfully delivered " << ship->GetTotalCorrectUnloads() << " cargos. " << endl;
 	file.close();
 }
 
