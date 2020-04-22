@@ -19,7 +19,7 @@ int letterMapping(char c){
     return c - 'V' + 34;
 }
 
-bool validContainer(string id){
+bool validContainer(const string& id){
     regex valid(CONTAINER_REGEX);
     if(!regex_match(id, valid)) return false;
     int digitValidate = 0;
@@ -37,7 +37,7 @@ bool validContainer(string id){
 
 }
 
-Container::Container(int weight, string destination, string id){
+Container::Container(int weight, const string& destination, const string& id){
     if(!validContainer(id))
         throw std::invalid_argument("invalid id " + id);
     if(!validRoute(destination))

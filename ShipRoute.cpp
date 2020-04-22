@@ -1,7 +1,7 @@
 #include "ShipRoute.h"
 #include "util.h"
 
-ShipRoute::ShipRoute(string filePath) {
+ShipRoute::ShipRoute(const string& filePath) {
 	ifstream file(filePath);
 	string lineFromFile;
 	vector<string> portData;

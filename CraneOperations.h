@@ -26,7 +26,7 @@ protected:
 	string containerID;
 public:
 	virtual void DoOperation(Ship* ship, Port& port) = 0;
-	static Operations GetOperationType(string str);
+	static Operations GetOperationType(const string& str);
 	CraneOperation() { operation = Operations::undefined; containerID = ""; };
 	virtual ~CraneOperation() {};
 };

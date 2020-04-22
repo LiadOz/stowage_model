@@ -18,7 +18,7 @@ private:
 	vector<Port> route;
 public:
 	ShipRoute() {};
-	ShipRoute(string filePath);
+	ShipRoute(const string& filePath);
 
 	vector<Port>& getRoute() {
 		return route;

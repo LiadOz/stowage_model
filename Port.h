@@ -25,9 +25,9 @@ public:
 		return cargoFilePath;
 	}
 
-	Port(string code, string cargoFilePath = "");
-	bool LoadContainersFromFile(string filePath);
-	bool AddContainer(Container containerToAdd);
-	Container RemoveContainer(string containerToRemove);
-	static bool validateSeaPortCode(string code);
+	Port(const string& code, const string& cargoFilePath = "");
+	bool LoadContainersFromFile(const string& filePath);
+	bool AddContainer(Container& containerToAdd);
+	Container RemoveContainer(const string& containerToRemove);
+	static bool validateSeaPortCode(const string& code);
 };

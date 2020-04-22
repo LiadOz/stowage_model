@@ -6,7 +6,7 @@ using std::runtime_error;
 using std::stringstream;
 using std::stoi;
 
-Operations CraneOperation::GetOperationType(string opStr)
+Operations CraneOperation::GetOperationType(const string& opStr)
 {
 	if (opStr == OPERATION_LOAD)
 	{
