@@ -20,6 +20,7 @@ using std::string;
 
 enum class Operations { undefined, load, unload, move, reject };
 
+//base class, should not be initiated
 class CraneOperation {
 protected:
 	Operations operation;
@@ -32,6 +33,7 @@ public:
 	Operations GetOperation() { return operation; }
 };
 
+//the operation to load a cargo from the port to the ship
 class LoadCraneOperation : public CraneOperation {
 private:
 	int row;
@@ -43,6 +45,7 @@ public:
 	virtual ~LoadCraneOperation() {};
 };
 
+//the operation to unload a cargo from the ship to the port
 class UnloadCraneOperation : public CraneOperation {
 private:
 	int row;
@@ -54,6 +57,7 @@ public:
 	virtual ~UnloadCraneOperation() {};
 };
 
+//the operation to move a cargo inside the ship
 class MoveCraneOperation : public CraneOperation {
 private:
 	int rowFrom;
@@ -68,6 +72,7 @@ public:
 	virtual ~MoveCraneOperation() {};
 };
 
+//the operation to reject a cargo from the port
 class RejectCraneOperation : public CraneOperation {
 private:
 public:
