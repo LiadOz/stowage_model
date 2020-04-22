@@ -18,11 +18,13 @@ private:
 	Ship* ship;
 	ShipRoute* route;
 	string folder;
+	int actionsPerformedCounter;
 	map<string, list<string> > CreatePortsCargoFromFiles();
 	void PrepareAlgorithm(string shipPath, string routePath);
 	bool LoadContainersToPortsInRoute();
 	void PerformAlgorithmActions(string filePath, Port& port);
 	CraneOperation* CreateOperationFromLine(string line);
+	void ValidateAllPortCargoUnloaded(Ship* ship, Port& port);
 public:
 	Simulation(string rootFolder, Algorithm* alg);
 	void RunSimulation();

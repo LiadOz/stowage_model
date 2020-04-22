@@ -26,6 +26,7 @@ Simulation::Simulation(string rootFolder, Algorithm* algo)
 	ship = new Ship(shipPath);
 	algorithm = algo;
 	PrepareAlgorithm(shipPath, routePath);
+	actionsPerformedCounter = 0;
 }
 
 void Simulation::PrepareAlgorithm(string shipPath, string routePath)
@@ -138,6 +139,7 @@ void Simulation::PerformAlgorithmActions(string filePath, Port& port)
 			try
 			{
 				craneOperation->DoOperation(ship, port);
+				actionsPerformedCounter++;
 			}
 			catch (const std::exception& error)
 			{
@@ -148,15 +150,23 @@ void Simulation::PerformAlgorithmActions(string filePath, Port& port)
 		delete craneOperation;
 	}
 
+	ValidateAllPortCargoUnloaded(this->ship, port);
+
 	file.close();
+}
+
+void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
+{
+	string portID = port.getPortCode();
+	//TODO: go through all cargo in ship, if it has portID log it
 }
 
 CraneOperation* Simulation::CreateOperationFromLine(string lineFromFile) {
 
 	vector<string> operationsData;
 	CraneOperation* craneOperation = NULL;
-	string operationString = operationsData.size() ? operationsData[0] : "";
 	operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
+	string operationString = operationsData.size() ? operationsData[0] : "";
 	Operations operation = CraneOperation::GetOperationType(operationString);
 
 	try

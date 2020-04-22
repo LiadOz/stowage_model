@@ -2,12 +2,13 @@
 #include <sstream>
 #include <stdexcept>
 #include "util.h"
+#include <stdexcept>
 
 using std::stringstream;
 using std::ofstream;
 using std::ifstream;
-using std::cout;
-using std::endl;
+using std::runtime_error;
+
 
 Port::Port(string code, string filePathForCargo) {
     if(!validRoute(code)){
@@ -74,16 +75,19 @@ bool Port::AddContainer(Container containerToAdd) {
 	return true;
 }
 
-bool Port::RemoveContainer(Container containerToRemove) {
+Container Port::RemoveContainer(string containerToRemove) {
 
 	for (size_t index = 0; index < containers.size(); index++)
 	{
-		if (containers[index].getId() == containerToRemove.getId())
+		if (containers[index].getId() == containerToRemove)
 		{
+			Container contToReturn = containers[index];
 			containers.erase(containers.begin() + index);
-			return true;
+			return contToReturn;
 		}
 	}
 
-	return false;
+	//TODO: change to pointers later
+	throw runtime_error("container not in port");
+	
 }

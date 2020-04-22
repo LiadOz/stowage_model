@@ -40,9 +40,9 @@ LoadCraneOperation::LoadCraneOperation(vector<string>& params) {
 	{
 		operation = Operations::load;
 		containerID = params[1];
-		row = stoi(params[2]);
-		col = stoi(params[3]);
-		height = stoi(params[4]);
+		height = stoi(params[2]);
+		row = stoi(params[3]);
+		col = stoi(params[4]);
 	}
 	catch (const std::exception & error)
 	{
@@ -53,11 +53,12 @@ LoadCraneOperation::LoadCraneOperation(vector<string>& params) {
 void LoadCraneOperation::DoOperation(Ship* ship, Port& port) {
 	try
 	{
-
+		Container container = port.RemoveContainer(this->containerID);
+		ship->insertContainer(row, col, &container);
 	}
-	catch (const std::exception& error)
+	catch (const std::exception & error)
 	{
-
+		throw error;
 	}
 }
 
@@ -71,9 +72,9 @@ UnloadCraneOperation::UnloadCraneOperation(vector<string>& params) {
 	{
 		operation = Operations::unload;
 		containerID = params[1];
-		row = stoi(params[2]);
-		col = stoi(params[3]);
-		height = stoi(params[4]);
+		height = stoi(params[2]);
+		row = stoi(params[3]);
+		col = stoi(params[4]);
 	}
 	catch (const std::exception & error)
 	{
@@ -82,7 +83,19 @@ UnloadCraneOperation::UnloadCraneOperation(vector<string>& params) {
 }
 
 void UnloadCraneOperation::DoOperation(Ship* ship, Port& port) {
-	//TODO: implement
+	try
+	{
+		Container* container = ship->removeContainer(row, col);
+		bool addedContainerToPort = port.AddContainer(*(container));
+		if (!addedContainerToPort)
+		{
+			throw runtime_error("container already in port");
+		}
+	}
+	catch (const std::exception & error)
+	{
+		throw error;
+	}
 }
 
 MoveCraneOperation::MoveCraneOperation(vector<string>& params) {
@@ -96,12 +109,12 @@ MoveCraneOperation::MoveCraneOperation(vector<string>& params) {
 	{
 		operation = Operations::move;
 		containerID = params[1];
-		rowFrom = stoi(params[2]);
-		colFrom = stoi(params[3]);
-		heightFrom = stoi(params[4]);
-		rowTo = stoi(params[5]);
-		colTo = stoi(params[6]);
-		heightTo = stoi(params[7]);
+		heightFrom = stoi(params[2]);
+		rowFrom = stoi(params[3]);
+		colFrom = stoi(params[4]);
+		heightTo = stoi(params[5]);
+		rowTo = stoi(params[6]);
+		colTo = stoi(params[7]);
 	}
 	catch (const std::exception & error)
 	{
@@ -110,7 +123,14 @@ MoveCraneOperation::MoveCraneOperation(vector<string>& params) {
 }
 
 void MoveCraneOperation::DoOperation(Ship* ship, Port& port) {
-	//TODO: implement
+	try
+	{
+		ship->moveContainer(rowFrom, colFrom, rowTo, colTo);
+	}
+	catch (const std::exception& error)
+	{
+		throw error;
+	}
 }
 
 RejectCraneOperation::RejectCraneOperation(vector<string>& params) {
@@ -131,5 +151,17 @@ RejectCraneOperation::RejectCraneOperation(vector<string>& params) {
 }
 
 void RejectCraneOperation::DoOperation(Ship* ship, Port& port) {
-	//TODO: implement
+	//TODO: shouldn't be in ship class
+	//TODO: add GetContainer function in port
+	try
+	{
+		Container container = port.RemoveContainer(containerID);
+		ship->rejectContainer(&container);
+		port.AddContainer(container);
+
+	}
+	catch (const std::exception& error)
+	{
+		throw error;
+	}
 }

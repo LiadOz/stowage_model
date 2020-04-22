@@ -1,6 +1,4 @@
-#ifndef PORT_H
-#define PORT_H
-
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -30,7 +28,6 @@ public:
 	Port(string code, string cargoFilePath = "");
 	bool LoadContainersFromFile(string filePath);
 	bool AddContainer(Container containerToAdd);
-	bool RemoveContainer(Container containerToRemove);
+	Container RemoveContainer(string containerToRemove);
 	static bool validateSeaPortCode(string code);
 };
-#endif /* PORT_H */
