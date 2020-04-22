@@ -29,6 +29,7 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerfor
 	PrepareAlgorithm(shipPath, routePath);
 }
 
+//init algorithm stuff
 void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePath)
 {
 	algorithm->readShipPlan(shipPath);
@@ -36,6 +37,7 @@ void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePat
 
 }
 
+//remove older log files before running the entire program
 void Simulation::RemoveLogFiles(const string& simulationFolder)
 {
 	string errorsFile = simulationFolder + FILE_SEPARATOR + SIMULATION_ERROR_FILE_NAME;
@@ -45,6 +47,7 @@ void Simulation::RemoveLogFiles(const string& simulationFolder)
 	remove(resultsFile.c_str());
 }
 
+//will load all containers from file to the relevant port
 bool Simulation::LoadContainersToPortsInRoute()
 {
 	map<string, list<string>> portsMap = CreatePortsCargoFromFiles();
@@ -57,6 +60,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 		Port& port = ports[i];
 		string portCode = port.getPortCode();
 
+		//check if port doesn't exist
 		if (portsMap.find(portCode) == portsMap.end())
 		{
 			Logger::Instance().logError("Port file doesn't exist");
@@ -66,6 +70,8 @@ bool Simulation::LoadContainersToPortsInRoute()
 		else
 		{
 			auto& filesList = portsMap.find(portCode)->second;
+			
+			//check if port doesn't exist
 			if (filesList.empty())
 			{
 				Logger::Instance().logError("Port file doesn't exist");
@@ -83,6 +89,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 	return true;
 }
 
+//helper function for LoadContainersToPortsInRoute
 map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 {
 	map<string, list<string>> map;
@@ -110,11 +117,14 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 	return map;
 }
 
+//the main function for simulator, will run the sim itself
 void Simulation::RunSimulation()
 {
 	vector<Port>& ports = this->route->getRoute();
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
 	Logger::Instance().setLogType(this->algorithm->getName());
+
+	//go through all the ports and do actions there
 	for (size_t i = 0; i < ports.size(); i++) {
 		try
 		{
@@ -131,6 +141,7 @@ void Simulation::RunSimulation()
 	LogResults();
 }
 
+//read file from algo and try to do the actions
 void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 {
 	ifstream file(filePath);
@@ -176,6 +187,7 @@ void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 	file.close();
 }
 
+//make sure all cargo is in the port
 void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
 {
 	string portID = port.getPortCode();
@@ -190,14 +202,20 @@ void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
 	}
 }
 
+//create a crane operation from the input proviced from one instruction
 CraneOperation* Simulation::CreateOperationFromLine(const string& lineFromFile) {
 
 	vector<string> operationsData;
 	CraneOperation* craneOperation = NULL;
+
+	//get data from line, params may vary
 	operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
+
+	//peak at the (supposed) type of action 
 	string operationString = operationsData.size() ? operationsData[0] : "";
 	Operations operation = CraneOperation::GetOperationType(operationString);
 
+	/*after determining the type of the operation, create the operation*/
 	try
 	{
 		switch (operation)
