@@ -1,6 +1,6 @@
 COMP = g++-8
 #put all your object files here
-OBJS = main.o container.o inventory.o util.o ship.o algorithm.o calculator.o simulation.o ShipRoute.o Port.o CraneOperations.o parser.o
+OBJS = main.o container.o inventory.o util.o ship.o algorithm.o calculator.o simulation.o ship_route.o port.o crane_operations.o parser.o
 #The executabel filename DON'T CHANGE
 EXEC = ex1
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
@@ -27,13 +27,13 @@ calculator.o: calculator.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 simulation.o: simulation.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-ShipRoute.o: ShipRoute.cpp
+ship_route.o: ship_route.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-Port.o: Port.cpp
+port.o: port.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 parser.o: parser.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-CraneOperations.o: CraneOperations.cpp
+crane_operations.o: crane_operations.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:
 	rm -f $(OBJS) $(EXEC)

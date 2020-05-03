@@ -7,7 +7,6 @@
 #include <string>
 #include "inventory.h"
 #include "container.h"
-#include "ShipRoute.h"
 
 #define INVALID_ARG -1
 using std::vector;
