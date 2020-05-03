@@ -19,9 +19,9 @@ public:
     // according to format
     Container(int weight, const string& destination, const string& id);
     friend ostream& operator<<(ostream& out, const Container &c);
-    int GetWeight(){ return weight; }
-    string GetDestination(){ return destination; }
-    string GetId(){ return id; }
+    int getWeight(){ return weight; }
+    string getDestination(){ return destination; }
+    string getId(){ return id; }
 };
 
 #endif /* CONTAINER_H */

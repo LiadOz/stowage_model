@@ -22,8 +22,8 @@ int main() {
 		const auto folderName = entry.path().filename().string();
 		if (entry.is_directory()) {
             string folderPath = SIMULATION_ROOT_FOLDER + folderName+ FILE_SEPARATOR;
-            Logger::Instance().SetFile(folderPath + LOG_FILE);
-            Logger::Instance().SetLogType("General");
+            Logger::Instance().setFile(folderPath + LOG_FILE);
+            Logger::Instance().setLogType("General");
 			Simulation::RemoveLogFiles(entry.path().string());
 			Simulation simulation(folderName, bruteAlgorithm);
 			simulation.RunSimulation();

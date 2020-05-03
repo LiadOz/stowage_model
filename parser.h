@@ -13,13 +13,13 @@ class Parser {
 private:
     std::ifstream readFile;
     bool moreLines = true;
-    void SkipComments();
+    void skipComments();
 public:
     Parser (){};
     Parser (const string& filePath);
-    void LoadFile(const string& filePath);
+    void loadFile(const string& filePath);
     Parser& operator>>(vector<string>& data);
-    bool Good(){return moreLines;}
+    bool good(){return moreLines;}
 };
 
 #endif /* PARSER_H */

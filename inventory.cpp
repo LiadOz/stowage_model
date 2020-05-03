@@ -21,7 +21,7 @@ using std::stoi;
 #define FLOORS 2
 
 // initialize the size of the arrays
-void Inventory::InitFromRow(vector<string>& row){
+void Inventory::initFromRow(vector<string> row){
     size_t depth, x, y;
     try {
         depth = std::stoi(row[PARSING_DEPTH]); 
@@ -40,7 +40,7 @@ void Inventory::InitFromRow(vector<string>& row){
 }
 
 // writes the height of each (x,y)
-void Inventory::ParseRow(vector<string>& row){
+void Inventory::parseRow(vector<string> row){
     size_t floors, x, y;
     try {
         floors = std::stoi(row[FLOORS]); 
@@ -50,71 +50,70 @@ void Inventory::ParseRow(vector<string>& row){
         throw runtime_error("Parsed string instead of int in plan file");
     }
     if(floors > maxFloors){
-        Logger::Instance().LogError("Too much floors in input");
+        Logger::Instance().logError("Too much floors in input");
         floors = maxFloors;
     }
     if(x > heights[0].size() || y > heights.size())
-        Logger::Instance().LogError("Cell outside of range");
+        Logger::Instance().logError("Cell outside of range");
     else heights[y][x] = floors;
 }
 
 Inventory::Inventory(const string& file_path){
     Parser parse;
     try {
-        parse.LoadFile(file_path);
+        parse.loadFile(file_path);
     }catch(runtime_error& e) {
         throw runtime_error("Invalid ship plan file");
     }
 
     bool firstRow = true;
-    while(parse.Good()){
+    while(parse.good()){
         vector<string> row;
         parse>>row;
         if(row.size() < PARSING_WORDS)
             throw runtime_error("Invalid ship plan format");
         // parsing the first row
         if(firstRow){
-            InitFromRow(row);
+            initFromRow(row);
             firstRow = false;
         }
         // parsing each (x,y)
-        else ParseRow(row);
+        else parseRow(row);
     }
 }
 
 // test the range of (x, y) if it's outside throws out_of_range error
-void Inventory::RangeCheck(size_t x, size_t y){
+void Inventory::rangeCheck(size_t x, size_t y){
     if (x >= dimensions.first || y >= dimensions.second)
         throw out_of_range("Attempted to access invalid location");
 }
-bool Inventory::EmptyCoordinate(size_t x, size_t y){
-    RangeCheck(x, y);
+bool Inventory::emptyCoordinate(size_t x, size_t y){
+    rangeCheck(x, y);
     if (storage[y][x].size() == 0) return true;
     return false;
 }
-bool Inventory::FullCoordinate(size_t x, size_t y){
-    RangeCheck(x, y);
+bool Inventory::fullCoordinate(size_t x, size_t y){
+    rangeCheck(x, y);
     if (storage[y][x].size() == heights[y][x]) return true;
     return false;
 }
-bool Inventory::PushContainer(size_t x, size_t y, Container& c){
-    RangeCheck(x, y);
-    if (FullCoordinate(x, y))
+bool Inventory::pushContainer(size_t x, size_t y, Container& c){
+    rangeCheck(x, y);
+    if (fullCoordinate(x, y))
         throw out_of_range("Coordinate is full");
     storage[y][x].push_back(c);
     return true;
 }
-
-Container Inventory::PopContainer(size_t x, size_t y){
-    RangeCheck(x, y);
-    if (EmptyCoordinate(x, y))
+Container Inventory::popContainer(size_t x, size_t y){
+    rangeCheck(x, y);
+    if (emptyCoordinate(x, y))
         throw out_of_range("Coordinate is empty");
     Container c = storage[y][x].back();
     storage[y][x].pop_back();
     return c;
 }
 
-vector<Container> Inventory::GetAllContainers(){
+vector<Container> Inventory::getAllContainers(){
     vector<Container> l;
     for (auto& vv : storage) {
         for (auto& v : vv) {

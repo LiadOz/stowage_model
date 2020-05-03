@@ -13,12 +13,12 @@ ShipRoute::ShipRoute(const string& filePath) {
 	{
 
 		/*if line is a comment - ignore*/
-		if (IsCommentLine(lineFromFile))
+		if (isCommentLine(lineFromFile))
 		{
 			continue;
 		}
 
-		portData = GetDataFromLine(lineFromFile, SHIPROUTE_FILE_NUM_OF_PARAMS);
+		portData = getDataFromLine(lineFromFile, SHIPROUTE_FILE_NUM_OF_PARAMS);
 
         //try to parse the first param to weight & create the object
         try {
@@ -27,7 +27,7 @@ ShipRoute::ShipRoute(const string& filePath) {
             route.push_back(port);
         }
         catch (std::exception& error) {
-            Logger::Instance().LogError(error.what());
+            Logger::Instance().logError(error.what());
         }
 	}
 

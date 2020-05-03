@@ -4,15 +4,15 @@
 using std::stringstream;
 
 Parser::Parser (const string& filePath){
-    LoadFile(filePath);
+    loadFile(filePath);
 }
-void Parser::LoadFile(const string& filePath){
+void Parser::loadFile(const string& filePath){
     readFile.open(filePath);
     if(!readFile.good()) throw std::runtime_error("invalid file");
-    SkipComments();
+    skipComments();
 }
 
-bool IsComment(const string& line) {
+bool isComment(const string& line) {
 
     // ignoring spaces
 	unsigned index = 0;
@@ -30,7 +30,7 @@ bool IsComment(const string& line) {
 	return line[index] == FILE_COMMENT_LINE_CHAR;
 }
 
-void Parser::SkipComments(){
+void Parser::skipComments(){
     string line;
     int curr;
     do {
@@ -39,7 +39,7 @@ void Parser::SkipComments(){
             moreLines = false;
             return;
         }
-    } while (IsComment(line));
+    } while (isComment(line));
     readFile.seekg(curr);
 
 }
@@ -53,6 +53,6 @@ Parser& Parser::operator>>(vector<string>& data){
         getline(ss, word, ',');
         data.push_back(word);
     }
-    SkipComments();
+    skipComments();
     return *this;
 }
