@@ -4,6 +4,7 @@
 #include <sstream>
 #include "inventory.h"
 #include "util.h"
+#include "parser.h"
 
 using std::ifstream;
 using std::stringstream;
@@ -58,17 +59,19 @@ void Inventory::parseRow(vector<string> row){
 }
 
 Inventory::Inventory(const string& file_path){
-    ifstream file(file_path);
-    if(!file.good()){
+    Parser parse;
+    try {
+        parse.loadFile(file_path);
+    }catch(runtime_error& e) {
         throw runtime_error("Invalid ship plan file");
     }
-    string line, data;
+
     bool firstRow = true;
-
-    while(getline(file, line)){
-        if(isCommentLine(line)) continue;
-        vector<string> row = getDataFromLine(line, PARSING_WORDS);
-
+    while(parse.good()){
+        vector<string> row;
+        parse>>row;
+        if(row.size() < PARSING_WORDS)
+            throw runtime_error("Invalid ship plan format");
         // parsing the first row
         if(firstRow){
             initFromRow(row);
@@ -77,8 +80,6 @@ Inventory::Inventory(const string& file_path){
         // parsing each (x,y)
         else parseRow(row);
     }
-
-    file.close();
 }
 
 // test the range of (x, y) if it's outside throws out_of_range error
