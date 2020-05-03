@@ -8,8 +8,8 @@
 #include "algorithm.h"
 #include "ship.h"
 #include "calculator.h"
-#include "craneoperations.h"
-#include "port.h"
+#include "CraneOperations.h"
+#include "Port.h"
 
 using std::map;
 using std::list;
