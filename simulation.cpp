@@ -32,8 +32,8 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerfor
 //init algorithm stuff
 void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePath)
 {
-	algorithm->readShipPlan(shipPath);
-	algorithm->readShipRoute(routePath);
+	algorithm->ReadShipPlan(shipPath);
+	algorithm->ReadShipRoute(routePath);
 
 }
 
@@ -63,7 +63,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 		//check if port doesn't exist
 		if (portsMap.find(portCode) == portsMap.end())
 		{
-			Logger::Instance().logError("Port file doesn't exist");
+			Logger::Instance().LogError("Port file doesn't exist");
 			LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
 		}
 
@@ -74,7 +74,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 			//check if port doesn't exist
 			if (filesList.empty())
 			{
-				Logger::Instance().logError("Port file doesn't exist");
+				Logger::Instance().LogError("Port file doesn't exist");
 				LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
 			}
 
@@ -98,7 +98,7 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 	{
 		string fileName = entry.path().filename().string();
 
-		if (validCargoFile(fileName))
+		if (ValidCargoFile(fileName))
 		{
 			string portCode = fileName.substr(0, 5);
 
@@ -122,14 +122,14 @@ void Simulation::RunSimulation()
 {
 	vector<Port>& ports = this->route->getRoute();
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
-	Logger::Instance().setLogType(this->algorithm->getName());
+	Logger::Instance().SetLogType(this->algorithm->GetName());
 
 	//go through all the ports and do actions there
 	for (size_t i = 0; i < ports.size(); i++) {
 		try
 		{
 			string outputFilePath = outputFolderPath + std::to_string(i);
-			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
+			algorithm->GetInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
 			PerformAlgorithmActions(outputFilePath, ports[i]);
 		}
 		catch (const std::exception & error)
@@ -151,7 +151,7 @@ void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 	{
 
 		/*if line is a comment - ignore*/
-		if (isCommentLine(lineFromFile))
+		if (IsCommentLine(lineFromFile))
 		{
 			continue;
 		}
@@ -191,13 +191,13 @@ void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
 {
 	string portID = port.getPortCode();
-	vector<Container> shipContainers = ship->getShipContainers();
+	vector<Container> shipContainers = ship->GetShipContainers();
 
 	for (size_t i = 0; i < shipContainers.size(); i++)
 	{
-		if (shipContainers[i].getDestination() == portID)
+		if (shipContainers[i].GetDestination() == portID)
 		{
-			LogSimulationErrors("ValidateAllPortCargoUnloaded", "container " + shipContainers[i].getId() + " didn't unload at port " + portID);
+			LogSimulationErrors("ValidateAllPortCargoUnloaded", "container " + shipContainers[i].GetId() + " didn't unload at port " + portID);
 		}
 	}
 }
@@ -209,7 +209,7 @@ CraneOperation* Simulation::CreateOperationFromLine(const string& lineFromFile) 
 	CraneOperation* craneOperation = NULL;
 
 	//get data from line, params may vary
-	operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
+	operationsData = GetDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
 
 	//peak at the (supposed) type of action 
 	string operationString = operationsData.size() ? operationsData[0] : "";
@@ -250,19 +250,19 @@ void Simulation::LogResults()
 {
 	ofstream file;
 	file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
-	file << "algorithm " << algorithm->getName() << " has performed " << actionsPerformedCounter << " actions." << endl;
+	file << "algorithm " << algorithm->GetName() << " has performed " << actionsPerformedCounter << " actions." << endl;
 	file << "the ship successfully delivered " << ship->GetTotalCorrectUnloads() << " cargos. " << endl;
 	file.close();
 }
 
 void Simulation::LogSimulationErrors(const string& funcName, const string& error)
 {
-    Logger::Instance().logError("function" + funcName + ": " + error);
+    Logger::Instance().LogError("function" + funcName + ": " + error);
 }
 
 
 Simulation::~Simulation() {
 	delete this->ship;
 	delete this->route;
-	Logger::Instance().saveFile();
+	Logger::Instance().SaveFile();
 }

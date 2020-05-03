@@ -1,4 +1,4 @@
-algorithm BruteAlgorithm has performed 0 actions.
-the ship successfully delivered 0 cargos. 
-algorithm RejectAlgorithm has performed 0 actions.
-the ship successfully delivered 0 cargos. 
+algorithm BruteAlgorithm has performed 18 actions.
+the ship successfully delivered 4 cargos. 
+algorithm RejectAlgorithm has performed 13 actions.
+the ship successfully delivered 3 cargos. 

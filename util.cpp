@@ -10,13 +10,13 @@ using std::regex_match;
 using std::runtime_error;
 using std::stringstream;
 
-bool validRoute(const string& route){
+bool ValidRoute(const string& route){
     regex r("[A-Z]{5}");
     if(!regex_match(route, r))
         return false;
     return true;
 }
-bool validCargoFile(const string& filename) {
+bool ValidCargoFile(const string& filename) {
 	regex r("[A-Z]{5}_\\d*.cargo_data");
 	if (!regex_match(filename, r))
 		return false;
@@ -32,11 +32,11 @@ Logger& Logger::Instance() {
 }
 
 // currently the logger prints to the screen
-void Logger::logError(const string& message){
+void Logger::LogError(const string& message){
     file << "," << message;
     //std::cout << "Error in " << logType << " : " << message << std::endl;
 }
-void Logger::setLogType(const string& type){
+void Logger::SetLogType(const string& type){
     if(!firstLine)
         file << std::endl;
     firstLine = false;
@@ -44,7 +44,7 @@ void Logger::setLogType(const string& type){
     file << logType;
 }
 
-bool isCommentLine(const string& line) {
+bool IsCommentLine(const string& line) {
 
 	unsigned index = 0;
 	while (index < line.length()) {
@@ -67,7 +67,7 @@ bool isCommentLine(const string& line) {
 //NOTE: not enough time for a pretty solution,
 //unlimitedParams is to bypass not enough params error (for crane operations where you can get different amount of params),
 //should create a new function and delete this logic later
-vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams) {
+vector<string> GetDataFromLine(const string& line, int howManyParams, bool unlimitedParams) {
 
 	vector<string> dataVector;
 	stringstream streamLineFromFile(line);
