@@ -6,6 +6,8 @@
 namespace fs = std::filesystem;
 
 using std::stringstream;
+using std::map;
+using std::endl;
 
 #define FILE_SEPARATOR "/"
 #define SIMULATION_ROOT_FOLDER "./Simulation/"
@@ -22,7 +24,7 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerfor
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
 	folder = folderPath;
-	route = new ShipRoute(routePath);
+	route = createShipRoute(routePath);
 	LoadContainersToPortsInRoute();
 	ship = new Ship(shipPath);
 	algorithm = algo;
@@ -52,7 +54,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 {
 	map<string, list<string>> portsMap = CreatePortsCargoFromFiles();
 
-	vector<Port>& ports = this->route->getRoute();
+	vector<Port>& ports = this->route;
 
 	//last port doesn't need a file, ignore it
 	for (size_t i = 0; i < ports.size() - 1; i++)
@@ -120,7 +122,7 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 //the main function for simulator, will run the sim itself
 void Simulation::RunSimulation()
 {
-	vector<Port>& ports = this->route->getRoute();
+	vector<Port>& ports = this->route;
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
 	Logger::Instance().SetLogType(this->algorithm->GetName());
 
@@ -144,7 +146,7 @@ void Simulation::RunSimulation()
 //read file from algo and try to do the actions
 void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 {
-	ifstream file(filePath);
+    std::ifstream file(filePath);
 	string lineFromFile;
 
 	while (getline(file, lineFromFile))
@@ -240,7 +242,7 @@ CraneOperation* Simulation::CreateOperationFromLine(const string& lineFromFile) 
 	catch (const std::exception & error)
 	{
 		LogSimulationErrors("CreateOperationFromLine", error.what());
-		cout << error.what();
+        std::cout << error.what();
 	}
 
 	return craneOperation;
@@ -263,6 +265,5 @@ void Simulation::LogSimulationErrors(const string& funcName, const string& error
 
 Simulation::~Simulation() {
 	delete this->ship;
-	delete this->route;
-	Logger::Instance().SaveFile();
+	LOG.SaveFile();
 }

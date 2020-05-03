@@ -9,8 +9,7 @@
 #include "ship.h"
 #include "calculator.h"
 #include "crane_operations.h"
-#include "ship_route.h"
-#include "Port.h"
+#include "port.h"
 
 using std::map;
 using std::list;
@@ -19,7 +18,7 @@ class Simulation {
 private:
 	Algorithm* algorithm;
 	Ship* ship;
-	ShipRoute* route;
+    vector<Port> route;
 	string folder; //root folder of the sim, changes per travel
 	int actionsPerformedCounter; //count total actions performed
 	
