@@ -2,9 +2,9 @@
 #define SHIPROUTE_H
 
 #include <vector>
-#include <string>
-#include <fstream>
 #include "port.h"
+#include <fstream>
+#include <string>
 
 using std::vector;
 using std::stringstream;
