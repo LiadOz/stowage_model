@@ -3,7 +3,6 @@
 #include <stdexcept>
 #include "util.h"
 #include <stdexcept>
-#include "parser.h"
 
 using std::stringstream;
 using std::ofstream;
@@ -21,26 +20,27 @@ Port::Port(const string& code, const string& filePathForCargo) {
 
 bool Port::LoadContainersFromFile(const string& filePath) {
 
-    Parser parse;
-    try {
-        parse.loadFile(filePath);
-    }catch(runtime_error& e) {
-        throw runtime_error("Invalid port file");
-    }
+	ifstream file(filePath);
+	string lineFromFile;
+	vector<string> containerData;
 
-	while (parse.good()) {
-        //data members for a container
-        string containerID;
-        int containerWeight;
-        string portDest;
+	//data members for a container
+	string containerID;
+	int containerWeight;
+	string portDest;
 
-        vector<string> containerData;
-		parse>>containerData;
-        if (containerData.size() < PORT_FILE_NUM_OF_PARAMS){
-            Logger::Instance().logError("cargo missing arguments");
-        }
+	while (getline(file, lineFromFile))
+	{
 
-        //try to parse the first param to weight & create the object
+		/*if line is a comment - ignore*/
+		if (isCommentLine(lineFromFile))
+		{
+			continue;
+		}
+
+		containerData = getDataFromLine(lineFromFile, PORT_FILE_NUM_OF_PARAMS);
+
+			//try to parse the first param to weight & create the object
         try {
             containerWeight = stoi(containerData[1]);
             containerID = containerData[0];
@@ -55,6 +55,7 @@ bool Port::LoadContainersFromFile(const string& filePath) {
         }
 	}
 
+	file.close();
 	this->cargoFilePath = filePath;
 
 	return true;

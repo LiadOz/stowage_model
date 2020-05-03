@@ -34,8 +34,6 @@ ex1
 
 # vim files
 .swp
-# gdb
-.gdb_history
 
 # visual studio files
 *.vcxproj.*
