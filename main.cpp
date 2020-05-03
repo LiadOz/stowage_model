@@ -1,8 +1,8 @@
 #include <stdlib.h>
+#include <filesystem>
 #include "algorithm.h"
 #include "util.h"
 #include "simulation.h"
-#include <filesystem>
 
 #define LOG_FILE "simulation.errors"
 #define SIMULATION_ROOT_FOLDER "./Simulation/"

@@ -1,4 +1,13 @@
-#pragma once
+#ifndef CRANEOPERATIONS_H
+#define CRANEOPERATIONS_H
+
+#include <vector>
+#include <string>
+#include "ship.h"
+#include "port.h"
+
+using std::vector;
+using std::string;
 
 #define OPERATION_LOAD "<L>"
 #define OPERATION_UNLOAD "<U>"
@@ -9,14 +18,6 @@
 #define CRANE_OPERATION_UNLOAD_NUM_OF_PARAM 5
 #define CRANE_OPERATION_MOVE_NUM_OF_PARAM 8
 #define CRANE_OPERATION_REJECT_NUM_OF_PARAM 2
-
-#include <vector>
-#include <string>
-#include "ship.h"
-#include "port.h"
-
-using std::vector;
-using std::string;
 
 enum class Operations { undefined, load, unload, move, reject };
 
@@ -80,3 +81,5 @@ public:
 	virtual void DoOperation(Ship* ship, Port& port);
 	virtual ~RejectCraneOperation() {};
 };
+
+#endif /* CRANEOPERATIONS_H */

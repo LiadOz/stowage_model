@@ -1,8 +1,8 @@
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 
-#include <string>
 #include <vector>
+#include <string>
 #include <unordered_set>
 #include "container.h"
 #include "ship.h"
