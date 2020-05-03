@@ -12,7 +12,7 @@ using std::runtime_error;
 
 
 Port::Port(const string& code, const string& filePathForCargo) {
-    if(!validRoute(code)){
+    if(!ValidRoute(code)){
         throw std::runtime_error("Invalid route");
     }
 	seaPortCode = code;
@@ -23,12 +23,12 @@ bool Port::LoadContainersFromFile(const string& filePath) {
 
     Parser parse;
     try {
-        parse.loadFile(filePath);
+        parse.LoadFile(filePath);
     }catch(runtime_error& e) {
         throw runtime_error("Invalid port file");
     }
 
-	while (parse.good()) {
+	while (parse.Good()) {
         //data members for a container
         string containerID;
         int containerWeight;
@@ -37,7 +37,7 @@ bool Port::LoadContainersFromFile(const string& filePath) {
         vector<string> containerData;
 		parse>>containerData;
         if (containerData.size() < PORT_FILE_NUM_OF_PARAMS){
-            Logger::Instance().logError("cargo missing arguments");
+            Logger::Instance().LogError("cargo missing arguments");
         }
 
         //try to parse the first param to weight & create the object
@@ -51,7 +51,7 @@ bool Port::LoadContainersFromFile(const string& filePath) {
             AddContainer(container);
         }
         catch (std::invalid_argument& error) {
-            Logger::Instance().logError(error.what());
+            Logger::Instance().LogError(error.what());
         }
 	}
 
@@ -63,7 +63,7 @@ bool Port::LoadContainersFromFile(const string& filePath) {
 
 bool Port::AddContainer(Container& containerToAdd) {
 	for (Container& container : containers) {
-		if (container.getId() == containerToAdd.getId())
+		if (container.GetId() == containerToAdd.GetId())
 		{
 			return false;
 		}
@@ -77,7 +77,7 @@ Container Port::RemoveContainer(const string& containerToRemove) {
 
 	for (size_t index = 0; index < containers.size(); index++)
 	{
-		if (containers[index].getId() == containerToRemove)
+		if (containers[index].GetId() == containerToRemove)
 		{
 			Container contToReturn = containers[index];
 			containers.erase(containers.begin() + index);

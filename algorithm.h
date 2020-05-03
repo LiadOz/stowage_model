@@ -14,24 +14,24 @@ class Algorithm {
 protected:
     Ship s;
     vector<string> routes;
-    vector<Container> unloadAll(string port);
+    vector<Container> UnloadAll(string port);
 
     // insertes container to the next free location
     // return false if there is no space left
     size_t next_x, next_y;
-    bool insertNextFree(Container c);
+    bool InsertNextFree(Container c);
     // this function is called inside getInstructionsForCargo and detailes
     // the operation each algorithm does polymophically
-    virtual void getPortInstructions(const string& port,
+    virtual void GetPortInstructions(const string& port,
             const string& input_path){(void)port;(void)input_path;};
 public:
     Algorithm (){};
     virtual ~Algorithm (){};
-    void readShipPlan(const string& full_path_and_file_name);
-    void readShipRoute(const string& full_path_and_file_name);
-    void finalDestination();
-    virtual string getName(){return "NOT_DEFINED";};
-    void getInstructionsForCargo(
+    void ReadShipPlan(const string& full_path_and_file_name);
+    void ReadShipRoute(const string& full_path_and_file_name);
+    void FinalDestination();
+    virtual string GetName(){return "NOT_DEFINED";};
+    void GetInstructionsForCargo(
             const string& input_full_path_and_file_name,
             const string& output_full_path_and_file_name);
 };
@@ -40,11 +40,11 @@ public:
 // then loads them back on
 class BruteAlgorithm : public Algorithm {
 protected:
-    virtual void getPortInstructions(const string& port,
+    virtual void GetPortInstructions(const string& port,
             const string& input_path);
 public:
     BruteAlgorithm (){};
-    virtual string getName(){ return "BruteAlgorithm";}
+    virtual string GetName(){ return "BruteAlgorithm";}
     virtual ~BruteAlgorithm(){};
 };
 
@@ -52,11 +52,11 @@ public:
 // to the next route
 class RejectAlgorithm : public Algorithm {
 protected:
-    virtual void getPortInstructions(const string& port,
+    virtual void GetPortInstructions(const string& port,
             const string& input_path);
 public:
     RejectAlgorithm(){};
-    virtual string getName(){ return "RejectAlgorithm";}
+    virtual string GetName(){ return "RejectAlgorithm";}
     virtual ~RejectAlgorithm(){};
 };
 

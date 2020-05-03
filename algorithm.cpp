@@ -5,6 +5,7 @@
 #include <fstream>
 #include <unordered_set>
 #include "util.h"
+#include "parser.h"
 #include "container.h"
 #include "algorithm.h"
 
@@ -24,19 +25,19 @@ using std::pair;
 using std::ifstream;
 using std::stringstream;
 
-void Algorithm::readShipPlan(const string& full_path_and_file_name){
+void Algorithm::ReadShipPlan(const string& full_path_and_file_name){
     s = Ship(full_path_and_file_name); 
 }
 
-void Algorithm::readShipRoute(const string& full_path_and_file_name){
+void Algorithm::ReadShipRoute(const string& full_path_and_file_name){
     vector<string> temp;
     string line;
     ifstream file(full_path_and_file_name);
     if(!file.good()) throw std::runtime_error("Invalid ship route file");
     while(getline(file, line)){
-        if(isCommentLine(line)) continue;
-        if(!validRoute(line)){
-            Logger::Instance().logError("invalid port name " + line);
+        if(IsCommentLine(line)) continue;
+        if(!ValidRoute(line)){
+            Logger::Instance().LogError("invalid port name " + line);
             continue;
         }
         temp.push_back(line);
@@ -48,16 +49,16 @@ void Algorithm::readShipRoute(const string& full_path_and_file_name){
 }
 
 // unloads all cargo to port and frees current port containers
-vector<Container> Algorithm::unloadAll(string port){
-    pair<size_t, size_t> d = s.getStorageDimensions();
+vector<Container> Algorithm::UnloadAll(string port){
+    pair<size_t, size_t> d = s.GetStorageDimensions();
     vector<Container> outside;
     for (size_t i = 0; i < d.second; ++i) {
         for (size_t j = 0; j < d.first; ++j) {
-            while(!s.emptyCoordinate(i, j)){
-                Container c = s.removeContainer(i, j);
+            while(!s.EmptyCoordinate(i, j)){
+                Container c = s.RemoveContainer(i, j);
                 // freeing the port's cargo
                 if (port.compare(UNLOAD_ALL) == 0 || 
-                        c.getDestination().compare(port) == 0);
+                        c.GetDestination().compare(port) == 0);
                 else
                     outside.push_back(c);
             }
@@ -66,11 +67,11 @@ vector<Container> Algorithm::unloadAll(string port){
     return outside;
 }
 
-bool Algorithm::insertNextFree(Container c){
-    pair<size_t, size_t> d = s.getStorageDimensions();
+bool Algorithm::InsertNextFree(Container c){
+    pair<size_t, size_t> d = s.GetStorageDimensions();
     while(next_x < d.first && next_y < d.second){
-        if (!s.fullCoordinate(next_x, next_y)){
-            s.insertContainer(next_x, next_y, c);
+        if (!s.FullCoordinate(next_x, next_y)){
+            s.InsertContainer(next_x, next_y, c);
             return true;
         }
         if (next_x == d.first - 1){
@@ -83,12 +84,12 @@ bool Algorithm::insertNextFree(Container c){
 }
 
 
-void setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
+void SetAwaitingCargo(const string& file_path, vector<Container>& awaiting){
     ifstream file(file_path);
     string line, data;
 
     while(getline(file, line)){
-        if(isCommentLine(line)) continue;
+        if(IsCommentLine(line)) continue;
         vector<string> row;
         stringstream s(line);
 
@@ -102,71 +103,71 @@ void setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
             awaiting.push_back(c);
         }
         catch(std::invalid_argument& e) { 
-                Logger::Instance().logError(e.what());
+                Logger::Instance().LogError(e.what());
         }
     }
 }
 
-void Algorithm::getInstructionsForCargo(
+void Algorithm::GetInstructionsForCargo(
         const string& input_full_path_and_file_name,
         const string& output_full_path_and_file_name){
 
-    s.setLoggerFile(output_full_path_and_file_name);
+    s.SetLoggerFile(output_full_path_and_file_name);
 
     // when reaching final port
     if(routes.size() == 1)
-        unloadAll(UNLOAD_ALL);
+        UnloadAll(UNLOAD_ALL);
     else {
         string currentPort = routes.back();
         routes.pop_back();
-        this->getPortInstructions(currentPort, input_full_path_and_file_name);
+        this->GetPortInstructions(currentPort, input_full_path_and_file_name);
     }
-    s.closeLogFile();
+    s.CloseLogFile();
 }
 
-void BruteAlgorithm::getPortInstructions(const string& port,
+void BruteAlgorithm::GetPortInstructions(const string& port,
         const string& input_path){
 
-    vector<Container> outside = unloadAll(port);
+    vector<Container> outside = UnloadAll(port);
     next_x = next_y = 0;
 
     // inserting all cargos the were removed
     for (Container c : outside)
-        insertNextFree(c);
+        InsertNextFree(c);
 
     // pushing new cargo
     vector<Container> awaiting;
-    setAwaitingCargo(input_path, awaiting);
+    SetAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
-        success = insertNextFree(c);
+        success = InsertNextFree(c);
         if (!success){
-            s.rejectContainer(c);
+            s.RejectContainer(c);
         }
             
     }
 }
 
-void RejectAlgorithm::getPortInstructions(const string& port,
+void RejectAlgorithm::GetPortInstructions(const string& port,
         const string& input_path){
 
-    vector<Container> outside = unloadAll(port);
+    vector<Container> outside = UnloadAll(port);
     next_x = next_y = 0;
 
     // pushing new cargo
     vector<Container> awaiting;
-    setAwaitingCargo(input_path, awaiting);
+    SetAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
-        if (c.getDestination().compare(routes.back()) != 0){
+        if (c.GetDestination().compare(routes.back()) != 0){
             // reject container that is not to the next route
-            s.rejectContainer(c);
+            s.RejectContainer(c);
             continue;
         }
-        success = insertNextFree(c);
+        success = InsertNextFree(c);
         if (!success){
             // reject if there is no more space
-            s.rejectContainer(c);
+            s.RejectContainer(c);
         }
             
     }

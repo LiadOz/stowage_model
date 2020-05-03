@@ -21,12 +21,11 @@ using std::ofstream;
 
 //General commons
 
-int getIthFile(const string& filename);
-bool validRoute(const string& route);
-bool validCargoFile(const string& filename);
-bool isCommentLine(const string& line);
+bool ValidRoute(const string& route);
+bool ValidCargoFile(const string& filename);
+bool IsCommentLine(const string& line);
 // throws exception if got too many arugments
-vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams = false);
+vector<string> GetDataFromLine(const string& line, int howManyParams, bool unlimitedParams = false);
 
 // singleton to log errors 
 // cannot be while the program is runnig
@@ -41,10 +40,10 @@ private:
     bool firstLine = true;
 public:
     static Logger& Instance();
-    void setFile(const string& file_path){ file.open(file_path); firstLine = true;}
-    void saveFile(){file.close();}
-    void logError(const string& message);
-    void setLogType(const string& type);
+    void SetFile(const string& file_path){ file.open(file_path); firstLine = true;}
+    void SaveFile(){file.close();}
+    void LogError(const string& message);
+    void SetLogType(const string& type);
 };
 
 #endif /* UTIL_H */
