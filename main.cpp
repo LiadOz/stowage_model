@@ -11,8 +11,6 @@
 using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
 namespace fs = std::filesystem;
 
-//hi
-
 int main() {
 	
 	Algorithm* bruteAlgorithm = new BruteAlgorithm();
