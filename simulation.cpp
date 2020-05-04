@@ -34,8 +34,8 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerfor
 //init algorithm stuff
 void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePath)
 {
-	algorithm->ReadShipPlan(shipPath);
-	algorithm->ReadShipRoute(routePath);
+	algorithm->readShipPlan(shipPath);
+	algorithm->readShipRoute(routePath);
 
 }
 
@@ -131,7 +131,7 @@ void Simulation::RunSimulation()
 		try
 		{
 			string outputFilePath = outputFolderPath + std::to_string(i);
-			algorithm->GetInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
+			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
 			PerformAlgorithmActions(outputFilePath, ports[i]);
 		}
 		catch (const std::exception & error)
