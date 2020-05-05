@@ -1,9 +1,11 @@
-#pragma once
+#ifndef PORT_H
+#define PORT_H
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+
 #include "container.h"
 
 using std::string;
@@ -31,3 +33,5 @@ public:
 	Container RemoveContainer(const string& containerToRemove);
 	static bool validateSeaPortCode(const string& code);
 };
+
+#endif /* PORT_H */

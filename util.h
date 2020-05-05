@@ -6,6 +6,10 @@
 #include <ostream>
 #include <fstream>
 
+using std::string;
+using std::vector;
+using std::ofstream;
+
 //files special chars defs
 #define FILE_COMMENT_LINE_CHAR '#'
 #define FILE_LINE_SEPARATOR_CHAR ','
@@ -14,12 +18,6 @@
 #define PORT_FILE_NUM_OF_PARAMS 3
 #define SHIPROUTE_FILE_NUM_OF_PARAMS 1
 #define CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS 7
-
-using std::string;
-using std::vector;
-using std::ofstream;
-
-//General commons
 
 bool ValidRoute(const string& route);
 bool ValidCargoFile(const string& filename);

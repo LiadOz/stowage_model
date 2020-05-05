@@ -1,8 +1,9 @@
+#include "util.h"
+
 #include <regex>
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
-#include "util.h"
 #include <sstream>
 
 using std::regex;

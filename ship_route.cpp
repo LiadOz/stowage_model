@@ -1,4 +1,5 @@
 #include "ship_route.h"
+
 #include "util.h"
 
 ShipRoute::ShipRoute(const string& filePath) {

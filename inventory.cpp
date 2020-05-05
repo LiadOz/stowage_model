@@ -1,8 +1,9 @@
+#include "inventory.h"
+
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "inventory.h"
 #include "util.h"
 #include "parser.h"
 

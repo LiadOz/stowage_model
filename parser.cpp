@@ -1,6 +1,8 @@
 #include "parser.h"
+
 #include <iostream>
 #include <sstream>
+
 using std::stringstream;
 
 Parser::Parser (const string& filePath){

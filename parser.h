@@ -1,8 +1,10 @@
 #ifndef PARSER_H
 #define PARSER_H
+
 #include <fstream>
 #include <stdexcept>
 #include <vector>
+
 using std::string;
 using std::vector;
 

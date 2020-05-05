@@ -1,7 +1,10 @@
 #include "simulation.h"
+
 #include <iostream>
 #include <filesystem>
+
 #include "util.h"
+#include "parser.h"
 
 namespace fs = std::filesystem;
 
@@ -55,31 +58,26 @@ bool Simulation::LoadContainersToPortsInRoute()
 	vector<Port>& ports = this->route->getRoute();
 
 	//last port doesn't need a file, ignore it
-	for (size_t i = 0; i < ports.size() - 1; i++)
-	{
+	for (size_t i = 0; i < ports.size() - 1; i++) {
 		Port& port = ports[i];
 		string portCode = port.getPortCode();
 
 		//check if port doesn't exist
-		if (portsMap.find(portCode) == portsMap.end())
-		{
+		if (portsMap.find(portCode) == portsMap.end()) {
 			Logger::Instance().LogError("Port file doesn't exist");
 			LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
 		}
 
-		else
-		{
+		else {
 			auto& filesList = portsMap.find(portCode)->second;
 			
 			//check if port doesn't exist
-			if (filesList.empty())
-			{
+			if (filesList.empty()) {
 				Logger::Instance().LogError("Port file doesn't exist");
 				LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
 			}
 
-			else
-			{
+			else {
 				port.LoadContainersFromFile(folder + SIMULATION_PORTS_FOLDER_NAME + filesList.front());
 				filesList.pop_front();
 			}
@@ -144,19 +142,24 @@ void Simulation::RunSimulation()
 //read file from algo and try to do the actions
 void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 {
-	ifstream file(filePath);
-	string lineFromFile;
+	Parser parser;
+	
+	try	{
+		parser.LoadFile(filePath);
+	}
 
-	while (getline(file, lineFromFile))
+	catch (const std::exception& error) {
+		//TODO: throws in catch
+	}
+
+	while (parser.Good())
 	{
 
-		/*if line is a comment - ignore*/
-		if (IsCommentLine(lineFromFile))
-		{
-			continue;
-		}
+		vector<string> data;
 
-		CraneOperation* craneOperation = CreateOperationFromLine(lineFromFile);
+		parser >> data;
+
+		CraneOperation* craneOperation = CreateOperationFromData(data);
 
 		//check that craneOperation is valid
 
@@ -183,8 +186,6 @@ void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 	}
 
 	ValidateAllPortCargoUnloaded(this->ship, port);
-
-	file.close();
 }
 
 //make sure all cargo is in the port
@@ -203,13 +204,9 @@ void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
 }
 
 //create a crane operation from the input proviced from one instruction
-CraneOperation* Simulation::CreateOperationFromLine(const string& lineFromFile) {
+CraneOperation* Simulation::CreateOperationFromData(const vector<string>& operationsData) {
 
-	vector<string> operationsData;
 	CraneOperation* craneOperation = NULL;
-
-	//get data from line, params may vary
-	operationsData = GetDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
 
 	//peak at the (supposed) type of action 
 	string operationString = operationsData.size() ? operationsData[0] : "";

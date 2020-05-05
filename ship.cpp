@@ -1,5 +1,6 @@
-#include <stdexcept>
 #include "ship.h"
+
+#include <stdexcept>
 
 using std::to_string;
 

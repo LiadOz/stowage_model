@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <vector>
+
 #include "algorithm.h"
 #include "ship.h"
 #include "calculator.h"
@@ -36,7 +37,7 @@ private:
 	void PerformAlgorithmActions(const string& filePath, Port& port);
 
 	//create a crane operation from the input proviced from one instruction
-	CraneOperation* CreateOperationFromLine(const string& line);
+	CraneOperation* CreateOperationFromData(const vector<string>& line);
 
 	//make sure all cargo is in the port
 	void ValidateAllPortCargoUnloaded(Ship* ship, Port& port);

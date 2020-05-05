@@ -40,7 +40,7 @@ private:
 	int col;
 	int height;
 public:
-	LoadCraneOperation(vector<string>& params);
+	LoadCraneOperation(const vector<string>& params);
 	virtual void DoOperation(Ship* ship, Port& port);
 	virtual ~LoadCraneOperation() {};
 };
@@ -52,7 +52,7 @@ private:
 	int col;
 	int height;
 public:
-	UnloadCraneOperation(vector<string>& params);
+	UnloadCraneOperation(const vector<string>& params);
 	virtual void DoOperation(Ship* ship, Port& port);
 	virtual ~UnloadCraneOperation() {};
 };
@@ -67,7 +67,7 @@ private:
 	int colTo;
 	int heightTo;
 public:
-	MoveCraneOperation(vector<string>& params);
+	MoveCraneOperation(const vector<string>& params);
 	virtual void DoOperation(Ship* ship, Port& port);
 	virtual ~MoveCraneOperation() {};
 };
@@ -76,7 +76,7 @@ public:
 class RejectCraneOperation : public CraneOperation {
 private:
 public:
-	RejectCraneOperation(vector<string>& params);
+	RejectCraneOperation(const vector<string>& params);
 	virtual void DoOperation(Ship* ship, Port& port);
 	virtual ~RejectCraneOperation() {};
 };

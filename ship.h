@@ -5,14 +5,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+
 #include "inventory.h"
 #include "container.h"
 
-#define INVALID_ARG -1
 using std::vector;
 using std::string;
 using std::pair;
 using std::ofstream;
+
+#define INVALID_ARG -1
 
 // used to log actions by the ship
 // this is how the algorithm sends actions for the simulations

@@ -29,7 +29,7 @@ Operations CraneOperation::GetOperationType(const string& opStr)
 	}
 }
 
-LoadCraneOperation::LoadCraneOperation(vector<string>& params) {
+LoadCraneOperation::LoadCraneOperation(const vector<string>& params) {
 
 	if (params.size() != CRANE_OPERATION_LOAD_NUM_OF_PARAM)
 	{
@@ -62,7 +62,7 @@ void LoadCraneOperation::DoOperation(Ship* ship, Port& port) {
 	}
 }
 
-UnloadCraneOperation::UnloadCraneOperation(vector<string>& params) {
+UnloadCraneOperation::UnloadCraneOperation(const vector<string>& params) {
 	if (params.size() != CRANE_OPERATION_UNLOAD_NUM_OF_PARAM)
 	{
 		throw runtime_error("different amount of params passed");
@@ -102,7 +102,7 @@ void UnloadCraneOperation::DoOperation(Ship* ship, Port& port) {
 	}
 }
 
-MoveCraneOperation::MoveCraneOperation(vector<string>& params) {
+MoveCraneOperation::MoveCraneOperation(const vector<string>& params) {
 
 	if (params.size() != CRANE_OPERATION_MOVE_NUM_OF_PARAM)
 	{
@@ -138,7 +138,7 @@ void MoveCraneOperation::DoOperation(Ship* ship, Port& port) {
 	}
 }
 
-RejectCraneOperation::RejectCraneOperation(vector<string>& params) {
+RejectCraneOperation::RejectCraneOperation(const vector<string>& params) {
 	if (params.size() != CRANE_OPERATION_REJECT_NUM_OF_PARAM)
 	{
 		throw runtime_error("different amount of params passed");
