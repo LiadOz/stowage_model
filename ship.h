@@ -35,11 +35,11 @@ private:
     size_t decks;
     Inventory storage;
     ShipLogger logger;
-	int totalCorrectUnloads;
+	int totalCorrectUnloads = 0;
 public:
     // when you create a ship you supply the list of plans
-    Ship(): totalCorrectUnloads(0){};
-    Ship(const string& file_path): storage(file_path), totalCorrectUnloads(0){decks = storage.GetNumFloors();}
+    Ship() {};
+    int ReadPlan(const string& file_path);
     // returns the max height of the coordinate
     size_t GetCoordinateHeight(size_t x, size_t y){ return storage.GetCoordinateHeight(x, y);}
     // pushes container to (x1, y1) throws error if cannot be executed

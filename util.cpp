@@ -34,7 +34,7 @@ Logger& Logger::Instance() {
 // currently the logger prints to the screen
 void Logger::LogError(const string& message){
     file << "," << message;
-    //std::cout << "Error in " << logType << " : " << message << std::endl;
+    std::cerr << "Error in " << logType << " : " << message << std::endl;
 }
 void Logger::SetLogType(const string& type){
     if(!firstLine)

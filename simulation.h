@@ -7,7 +7,6 @@
 #include <vector>
 #include "algorithm.h"
 #include "ship.h"
-#include "calculator.h"
 #include "crane_operations.h"
 #include "port.h"
 
@@ -20,7 +19,7 @@ private:
 	Ship* ship;
     vector<Port> route;
 	string folder; //root folder of the sim, changes per travel
-	int actionsPerformedCounter; //count total actions performed
+	int actionsPerformedCounter = 0; //count total actions performed
 	
 	//will load all containers from file to the relevant port
 	map<string, list<string> > CreatePortsCargoFromFiles(); 

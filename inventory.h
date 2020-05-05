@@ -15,6 +15,7 @@ private:
     vector<vector<size_t>> heights;
     vector<vector<vector<Container>>> storage;
     pair<size_t, size_t> dimensions;
+    int errorStatus = 0;
 
     void ParseRow(vector<string>& row);
     void InitFromRow(vector<string>& row);
@@ -22,6 +23,7 @@ private:
 public:
     Inventory(){}
     // initializes from file, throws exception when the file is invalid
+    int ReadPlan(const string& filePath);
     Inventory (const string& file_path);
     bool EmptyCoordinate(size_t x, size_t y);
     bool FullCoordinate(size_t x, size_t y);

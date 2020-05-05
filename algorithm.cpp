@@ -1,11 +1,8 @@
 #include <stdexcept>
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <regex>
-#include <fstream>
-#include <unordered_set>
+#include <cmath>
 #include "util.h"
+#include "exceptions.h"
 #include "parser.h"
 #include "container.h"
 #include "algorithm.h"
@@ -19,35 +16,49 @@
 #define UNLOAD_ALL "ALL"
 
 using std::regex;
-using std::ifstream;
 using std::regex_match;
-using std::unordered_set;
 using std::pair;
-using std::ifstream;
-using std::stringstream;
+using std::runtime_error;
 
 int Algorithm::readShipPlan(const string& full_path_and_file_name){
-    s = Ship(full_path_and_file_name); 
-    //TODO
-    return 0;
+    int errorStatus = 0;
+    try {
+        errorStatus = s.ReadPlan(full_path_and_file_name);
+    }catch(Error& e) {
+        errorVar(errorStatus, e.GetError());
+    }
+    return errorStatus;
 }
 
 int Algorithm::readShipRoute(const string& full_path_and_file_name){
+    int errorStatus = 0;
+    Parser parse;
+    try {
+        parse.LoadFile(full_path_and_file_name);
+    }catch(runtime_error& e) {
+        errorVar(errorStatus, ERROR_BAD_FILE);
+        return errorStatus;
+    }
+
     routes.clear();
-    PARSER(parse, full_path_and_file_name, "Invalid ship rotue file");
     while(parse.Good()){
         vector<string> data;
         parse>>data;
         string line = data[0];
         if(!ValidRoute(line)){
-            LOG.LogError("invalid port name " + line);
+            errorVar(errorStatus, ERROR_BAD_PORT);
+            continue;
+        }
+        if(routes.size() > 0 && line == routes.back()){ // validating no route comes twice back to back
+            errorVar(errorStatus, ERROR_DUPLICATE_PORT);
             continue;
         }
         routes.push_back(line);
     }
+    if (routes.size() == 1) // checking if only one port exists in file
+        errorVar(errorStatus, ERROR_ONE_PORT);
     reverse(routes.begin(), routes.end());
-    //TODO
-    return 0;
+    return errorStatus;
 }
 
 // unloads all cargo to port and frees current port containers
@@ -173,3 +184,4 @@ int RejectAlgorithm::GetPortInstructions(const string& port,
     // TODO
     return 0;
 }
+

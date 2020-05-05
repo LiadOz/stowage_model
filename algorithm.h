@@ -14,15 +14,15 @@ protected:
     Ship s;
     vector<string> routes;
     vector<Container> UnloadAll(string port);
-
-    // insertes container to the next free location
-    // return false if there is no space left
     size_t next_x, next_y;
+    // inserts container to the next free location
+    // return false if there is no space left
     bool InsertNextFree(Container c);
     // this function is called inside getInstructionsForCargo and detailes
     // the operation each algorithm does polymophically
     virtual int GetPortInstructions(
             const string& port, const string& input_path) = 0;
+    // logs errors in the algorithm
 public:
     Algorithm (){};
     virtual ~Algorithm (){};

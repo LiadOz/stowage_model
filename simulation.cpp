@@ -18,15 +18,15 @@ using std::endl;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerformedCounter(0)
-{
+Simulation::Simulation(const string& rootFolder, Algorithm* algo) {
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
 	folder = folderPath;
 	route = createShipRoute(routePath);
 	LoadContainersToPortsInRoute();
-	ship = new Ship(shipPath);
+	ship = new Ship();
+    ship->ReadPlan(shipPath);
 	algorithm = algo;
 	PrepareAlgorithm(shipPath, routePath);
 }
