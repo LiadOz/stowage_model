@@ -1,6 +1,6 @@
 COMP = g++-8
 #put all your object files here
-OBJS = main.o container.o inventory.o util.o ship.o algorithm.o WeightBalanceCalculator.o simulation.o port.o crane_operations.o parser.o AbstractAlgorithm.o exceptions.o
+OBJS = main.o Container.o Inventory.o Util.o Ship.o Algorithm.o WeightBalanceCalculator.o Simulation.o Port.o CraneOperations.o Parser.o AbstractAlgorithm.o Exceptions.o
 #The executabel filename DON'T CHANGE
 EXEC = ex1
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
@@ -13,31 +13,29 @@ $(EXEC): $(OBJS)
 #use g++ -MM main.cpp to see dependencies
 main.o: main.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-container.o: container.cpp 
+Container.o: Container.cpp 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-inventory.o: inventory.cpp 
+Inventory.o: Inventory.cpp 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-ship.o: ship.cpp
+Ship.o: Ship.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-util.o: util.cpp
+Util.o: Util.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 AbstractAlgorithm.o: AbstractAlgorithm.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-algorithm.o: algorithm.cpp
+Algorithm.o: Algorithm.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 WeightBalanceCalculator.o: WeightBalanceCalculator.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-simulation.o: simulation.cpp
+Simulation.o: Simulation.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-port.o: port.cpp
+Port.o: Port.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-parser.o: parser.cpp
+Parser.o: Parser.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-crane_operations.o: crane_operations.cpp
+CraneOperations.o: CraneOperations.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-crane_operations.o: crane_operations.cpp
-	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-exceptions.o: exceptions.cpp
+Exceptions.o: Exceptions.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:
 	rm -f $(OBJS) $(EXEC)
