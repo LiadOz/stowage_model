@@ -90,3 +90,25 @@ Container Port::RemoveContainer(const string& containerToRemove) {
 	throw runtime_error("container not in port");
 	
 }
+
+vector<Port> createShipRoute(const string& filePath){
+    Parser parse;
+    try {
+        parse.LoadFile(filePath);
+    }catch(std::exception& e) {
+        // file does not exist and it is a major error.
+        throw std::runtime_error("Invalid route file");
+    }
+
+    vector<Port> shipRoute;
+    while(parse.Good()){
+        vector<string> data;
+        parse >> data;
+        try {
+            shipRoute.emplace_back(data[0]);
+        }catch(std::exception& e) {
+            LOG.LogError(e.what()); // the port does not exist so we skip
+        }
+    }
+    return shipRoute;
+}

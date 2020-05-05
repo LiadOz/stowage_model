@@ -1,51 +1,64 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include <stdexcept>
 #include <regex>
-#include <fstream>
-#include <unordered_set>
+#include <cmath>
 #include "util.h"
+#include "exceptions.h"
 #include "parser.h"
 #include "container.h"
 #include "algorithm.h"
+#include "parser.h"
 
 #define OUTSIDE_X -1
 #define OUTSIDE_Y -1
 #define PARSING_ID 0
 #define PARSING_WEIGHT 1
 #define PARSING_PORT 2
-#define PARSING_WORDS 3
 #define UNLOAD_ALL "ALL"
 
 using std::regex;
-using std::ifstream;
 using std::regex_match;
-using std::unordered_set;
 using std::pair;
-using std::ifstream;
-using std::stringstream;
+using std::runtime_error;
 
-void Algorithm::ReadShipPlan(const string& full_path_and_file_name){
-    s = Ship(full_path_and_file_name); 
+int Algorithm::readShipPlan(const string& full_path_and_file_name){
+    int errorStatus = 0;
+    try {
+        errorStatus = s.ReadPlan(full_path_and_file_name);
+    }catch(Error& e) {
+        errorVar(errorStatus, e.GetError());
+    }
+    return errorStatus;
 }
 
-void Algorithm::ReadShipRoute(const string& full_path_and_file_name){
-    vector<string> temp;
-    string line;
-    ifstream file(full_path_and_file_name);
-    if(!file.good()) throw std::runtime_error("Invalid ship route file");
-    while(getline(file, line)){
-        if(IsCommentLine(line)) continue;
+int Algorithm::readShipRoute(const string& full_path_and_file_name){
+    int errorStatus = 0;
+    Parser parse;
+    try {
+        parse.LoadFile(full_path_and_file_name);
+    }catch(runtime_error& e) {
+        errorVar(errorStatus, ERROR_BAD_FILE);
+        return errorStatus;
+    }
+
+    routes.clear();
+    while(parse.Good()){
+        vector<string> data;
+        parse>>data;
+        string line = data[0];
         if(!ValidRoute(line)){
-            Logger::Instance().LogError("invalid port name " + line);
+            errorVar(errorStatus, ERROR_BAD_PORT);
             continue;
         }
-        temp.push_back(line);
+        if(routes.size() > 0 && line == routes.back()){ // validating no route comes twice back to back
+            errorVar(errorStatus, ERROR_DUPLICATE_PORT);
+            continue;
+        }
+        routes.push_back(line);
     }
-    while(!temp.empty()){
-        routes.push_back(temp.back());
-        temp.pop_back();
-    }
+    if (routes.size() == 1) // checking if only one port exists in file
+        errorVar(errorStatus, ERROR_ONE_PORT);
+    reverse(routes.begin(), routes.end());
+    return errorStatus;
 }
 
 // unloads all cargo to port and frees current port containers
@@ -85,30 +98,23 @@ bool Algorithm::InsertNextFree(Container c){
 
 
 void SetAwaitingCargo(const string& file_path, vector<Container>& awaiting){
-    ifstream file(file_path);
-    string line, data;
-
-    while(getline(file, line)){
-        if(IsCommentLine(line)) continue;
+    PARSER(parse, file_path, "Invalid port file");
+    while(parse.Good()){
         vector<string> row;
-        stringstream s(line);
-
-        for (int i = 0; i < PARSING_WORDS; ++i) {
-            getline(s, data, ',');
-            row.push_back(data);
-        }
-        
+        parse>>row;
         try {
-            Container c = Container(std::stoi(row[PARSING_WEIGHT]), row[PARSING_PORT], row[PARSING_ID]);
-            awaiting.push_back(c);
+            awaiting.emplace_back(
+                    std::stoi(row[PARSING_WEIGHT]),
+                    row[PARSING_PORT], row[PARSING_ID]
+                    );
         }
         catch(std::invalid_argument& e) { 
-                Logger::Instance().LogError(e.what());
+                LOG.LogError(e.what());
         }
     }
 }
 
-void Algorithm::GetInstructionsForCargo(
+int Algorithm::getInstructionsForCargo(
         const string& input_full_path_and_file_name,
         const string& output_full_path_and_file_name){
 
@@ -123,9 +129,11 @@ void Algorithm::GetInstructionsForCargo(
         this->GetPortInstructions(currentPort, input_full_path_and_file_name);
     }
     s.CloseLogFile();
+    // TODO
+    return 0;
 }
 
-void BruteAlgorithm::GetPortInstructions(const string& port,
+int BruteAlgorithm::GetPortInstructions(const string& port,
         const string& input_path){
 
     vector<Container> outside = UnloadAll(port);
@@ -146,9 +154,11 @@ void BruteAlgorithm::GetPortInstructions(const string& port,
         }
             
     }
+    /* TODO:  <04-05-20, yourname> */
+    return 0;
 }
 
-void RejectAlgorithm::GetPortInstructions(const string& port,
+int RejectAlgorithm::GetPortInstructions(const string& port,
         const string& input_path){
 
     vector<Container> outside = UnloadAll(port);
@@ -171,4 +181,7 @@ void RejectAlgorithm::GetPortInstructions(const string& port,
         }
             
     }
+    // TODO
+    return 0;
 }
+

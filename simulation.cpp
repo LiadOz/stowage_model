@@ -9,6 +9,8 @@
 namespace fs = std::filesystem;
 
 using std::stringstream;
+using std::map;
+using std::endl;
 
 #define FILE_SEPARATOR "/"
 #define SIMULATION_ROOT_FOLDER "./Simulation/"
@@ -19,15 +21,15 @@ using std::stringstream;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerformedCounter(0)
-{
+Simulation::Simulation(const string& rootFolder, Algorithm* algo) {
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
 	folder = folderPath;
-	route = new ShipRoute(routePath);
+	route = createShipRoute(routePath);
 	LoadContainersToPortsInRoute();
-	ship = new Ship(shipPath);
+	ship = new Ship();
+    ship->ReadPlan(shipPath);
 	algorithm = algo;
 	PrepareAlgorithm(shipPath, routePath);
 }
@@ -35,8 +37,8 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo): actionsPerfor
 //init algorithm stuff
 void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePath)
 {
-	algorithm->ReadShipPlan(shipPath);
-	algorithm->ReadShipRoute(routePath);
+	algorithm->readShipPlan(shipPath);
+	algorithm->readShipRoute(routePath);
 
 }
 
@@ -55,7 +57,7 @@ bool Simulation::LoadContainersToPortsInRoute()
 {
 	map<string, list<string>> portsMap = CreatePortsCargoFromFiles();
 
-	vector<Port>& ports = this->route->getRoute();
+	vector<Port>& ports = this->route;
 
 	//last port doesn't need a file, ignore it
 	for (size_t i = 0; i < ports.size() - 1; i++) {
@@ -118,7 +120,7 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 //the main function for simulator, will run the sim itself
 void Simulation::RunSimulation()
 {
-	vector<Port>& ports = this->route->getRoute();
+	vector<Port>& ports = this->route;
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
 	Logger::Instance().SetLogType(this->algorithm->GetName());
 
@@ -127,7 +129,7 @@ void Simulation::RunSimulation()
 		try
 		{
 			string outputFilePath = outputFolderPath + std::to_string(i);
-			algorithm->GetInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
+			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
 			PerformAlgorithmActions(outputFilePath, ports[i]);
 		}
 		catch (const std::exception & error)
@@ -237,7 +239,7 @@ CraneOperation* Simulation::CreateOperationFromData(const vector<string>& operat
 	catch (const std::exception & error)
 	{
 		LogSimulationErrors("CreateOperationFromLine", error.what());
-		cout << error.what();
+        std::cout << error.what();
 	}
 
 	return craneOperation;
@@ -260,6 +262,5 @@ void Simulation::LogSimulationErrors(const string& funcName, const string& error
 
 Simulation::~Simulation() {
 	delete this->ship;
-	delete this->route;
-	Logger::Instance().SaveFile();
+	LOG.SaveFile();
 }

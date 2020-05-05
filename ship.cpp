@@ -4,6 +4,12 @@
 
 using std::to_string;
 
+int Ship::ReadPlan(const string& file_path) { 
+    int errorStatus = storage.ReadPlan(file_path);
+    decks = storage.GetNumFloors();
+    return errorStatus;
+}
+
 void ShipLogger::LogAction(const string& action){
     file << action << std::endl;
     if (logToScreen)

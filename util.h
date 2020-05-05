@@ -25,6 +25,8 @@ bool IsCommentLine(const string& line);
 // throws exception if got too many arugments
 vector<string> GetDataFromLine(const string& line, int howManyParams, bool unlimitedParams = false);
 
+// making the logger easier to start
+#define LOG Logger::Instance()
 // singleton to log errors 
 // cannot be while the program is runnig
 class Logger{

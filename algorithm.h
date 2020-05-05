@@ -3,44 +3,45 @@
 
 #include <string>
 #include <vector>
-#include <unordered_set>
+#include "AbstractAlgorithm.h"
 #include "container.h"
 #include "ship.h"
 
 using std::string;
-using std::unordered_set;
 
-class Algorithm {
+class Algorithm : public AbstractAlgorithm{
 protected:
     Ship s;
     vector<string> routes;
     vector<Container> UnloadAll(string port);
-
-    // insertes container to the next free location
-    // return false if there is no space left
     size_t next_x, next_y;
+    // inserts container to the next free location
+    // return false if there is no space left
     bool InsertNextFree(Container c);
     // this function is called inside getInstructionsForCargo and detailes
     // the operation each algorithm does polymophically
-    virtual void GetPortInstructions(const string& port,
-            const string& input_path){(void)port;(void)input_path;};
+    virtual int GetPortInstructions(
+            const string& port, const string& input_path) = 0;
+    // logs errors in the algorithm
 public:
     Algorithm (){};
     virtual ~Algorithm (){};
-    void ReadShipPlan(const string& full_path_and_file_name);
-    void ReadShipRoute(const string& full_path_and_file_name);
+    virtual int readShipPlan(const string& full_path_and_file_name);
+    virtual int readShipRoute(const string& full_path_and_file_name);
+    virtual int setWeightBalanceCalculator(WeightBalanceCalculator& calculator){
+        (void)calculator;return 0;}
     void FinalDestination();
     virtual string GetName(){return "NOT_DEFINED";};
-    void GetInstructionsForCargo(
-            const string& input_full_path_and_file_name,
-            const string& output_full_path_and_file_name);
+    virtual int getInstructionsForCargo(
+        const std::string& input_full_path_and_file_name,
+        const std::string& output_full_path_and_file_name);
 };
 
 // the brute algorithm moves every container off the ship
 // then loads them back on
 class BruteAlgorithm : public Algorithm {
 protected:
-    virtual void GetPortInstructions(const string& port,
+    virtual int GetPortInstructions(const string& port,
             const string& input_path);
 public:
     BruteAlgorithm (){};
@@ -52,7 +53,7 @@ public:
 // to the next route
 class RejectAlgorithm : public Algorithm {
 protected:
-    virtual void GetPortInstructions(const string& port,
+    virtual int GetPortInstructions(const string& port,
             const string& input_path);
 public:
     RejectAlgorithm(){};
