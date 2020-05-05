@@ -1,3 +1,3 @@
 General
-BruteAlgorithm,functionPerformAlgorithmActions: std::exception,functionPerformAlgorithmActions: std::exception
-RejectAlgorithm,functionPerformAlgorithmActions: std::exception,functionPerformAlgorithmActions: std::exception
+BruteAlgorithm,functionPerformAlgorithmActions: container already in port,functionPerformAlgorithmActions: container already in port
+RejectAlgorithm,functionPerformAlgorithmActions: container already in port,functionPerformAlgorithmActions: container already in port
