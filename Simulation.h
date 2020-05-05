@@ -1,14 +1,14 @@
-#ifndef SIMULATION_H
-#define SIMULATION_H
+#pragma once
 
 #include <map>
 #include <list>
 #include <string>
 #include <vector>
-#include "algorithm.h"
-#include "ship.h"
+
+#include "Algorithm.h"
+#include "Ship.h"
 #include "CraneOperations.h"
-#include "port.h"
+#include "Port.h"
 
 using std::map;
 using std::list;
@@ -22,38 +22,37 @@ private:
 	int actionsPerformedCounter = 0; //count total actions performed
 	
 	//will load all containers from file to the relevant port
-	map<string, list<string> > CreatePortsCargoFromFiles(); 
+	map<string, list<string> > createPortsCargoFromFiles(); 
 	
 	//init algorithm stuff
-	void PrepareAlgorithm(const string& shipPath, const string& routePath);
+	void prepareAlgorithm(const string& shipPath, const string& routePath);
 	
 	//will load all containers from file to the relevant port
-	bool LoadContainersToPortsInRoute();
+	bool loadContainersToPortsInRoute();
 
 	//read file from algo and try to do the actions
-	void PerformAlgorithmActions(const string& filePath, Port& port);
+	void performAlgorithmActions(const string& filePath, Port& port);
 
 	//create a crane operation from the input proviced from one instruction
-	CraneOperation* CreateOperationFromLine(const string& line);
+	CraneOperation* createOperationFromLine(const string& line);
 
 	//make sure all cargo is in the port
-	void ValidateAllPortCargoUnloaded(Ship* ship, Port& port);
+	void validateAllPortCargoUnloaded(Ship* ship, Port& port);
 
 	//log the results 
-	void LogResults();
+	void logResults();
 
 	//log simulation errors
-	void LogSimulationErrors(const string& funcName, const string& error);
-public:
+	void logSimulationErrors(const string& funcName, const string& error);
 
+public:
 	//constructor
 	Simulation(const string& rootFolder, Algorithm* alg);
 
 	//remove older log files before running the entire program
-	static void RemoveLogFiles(const string& simulationFolder);
+	static void removeLogFiles(const string& simulationFolder);
 
 	//the main function for simulator, will run the sim itself
-	void RunSimulation();
+	void runSimulation();
 	~Simulation();
 };
-#endif /* SIMULATION_H */

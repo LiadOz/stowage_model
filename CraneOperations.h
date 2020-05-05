@@ -1,5 +1,11 @@
 #pragma once
 
+#include <vector>
+#include <string>
+
+#include "Ship.h"
+#include "Port.h"
+
 #define OPERATION_LOAD "<L>"
 #define OPERATION_UNLOAD "<U>"
 #define OPERATION_MOVE "<M>"
@@ -9,11 +15,6 @@
 #define CRANE_OPERATION_UNLOAD_NUM_OF_PARAM 5
 #define CRANE_OPERATION_MOVE_NUM_OF_PARAM 8
 #define CRANE_OPERATION_REJECT_NUM_OF_PARAM 2
-
-#include <vector>
-#include <string>
-#include "ship.h"
-#include "port.h"
 
 using std::vector;
 using std::string;
@@ -26,11 +27,11 @@ protected:
 	Operations operation;
 	string containerID;
 public:
-	virtual void DoOperation(Ship* ship, Port& port) = 0;
-	static Operations GetOperationType(const string& str);
+	virtual void doOperation(Ship* ship, Port& port) = 0;
+	static Operations getOperationType(const string& str);
 	CraneOperation() { operation = Operations::undefined; containerID = ""; };
 	virtual ~CraneOperation() {};
-	Operations GetOperation() { return operation; }
+	Operations getOperation() { return operation; }
 };
 
 //the operation to load a cargo from the port to the ship
@@ -41,7 +42,7 @@ private:
 	int height;
 public:
 	LoadCraneOperation(const vector<string>& params);
-	virtual void DoOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship* ship, Port& port);
 	virtual ~LoadCraneOperation() {};
 };
 
@@ -53,7 +54,7 @@ private:
 	int height;
 public:
 	UnloadCraneOperation(const vector<string>& params);
-	virtual void DoOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship* ship, Port& port);
 	virtual ~UnloadCraneOperation() {};
 };
 
@@ -68,7 +69,7 @@ private:
 	int heightTo;
 public:
 	MoveCraneOperation(const vector<string>& params);
-	virtual void DoOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship* ship, Port& port);
 	virtual ~MoveCraneOperation() {};
 };
 
@@ -77,6 +78,6 @@ class RejectCraneOperation : public CraneOperation {
 private:
 public:
 	RejectCraneOperation(const vector<string>& params);
-	virtual void DoOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship* ship, Port& port);
 	virtual ~RejectCraneOperation() {};
 };

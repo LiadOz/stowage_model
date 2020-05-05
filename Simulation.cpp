@@ -1,7 +1,9 @@
-#include "simulation.h"
+#include "Simulation.h"
+
 #include <iostream>
 #include <filesystem>
-#include "util.h"
+
+#include "Util.h"
 
 namespace fs = std::filesystem;
 
@@ -24,15 +26,15 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo) {
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
 	folder = folderPath;
 	route = createShipRoute(routePath);
-	LoadContainersToPortsInRoute();
+	loadContainersToPortsInRoute();
 	ship = new Ship();
-    ship->ReadPlan(shipPath);
+    ship->readPlan(shipPath);
 	algorithm = algo;
-	PrepareAlgorithm(shipPath, routePath);
+	prepareAlgorithm(shipPath, routePath);
 }
 
 //init algorithm stuff
-void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePath)
+void Simulation::prepareAlgorithm(const string& shipPath, const string& routePath)
 {
 	algorithm->readShipPlan(shipPath);
 	algorithm->readShipRoute(routePath);
@@ -40,7 +42,7 @@ void Simulation::PrepareAlgorithm(const string& shipPath, const string& routePat
 }
 
 //remove older log files before running the entire program
-void Simulation::RemoveLogFiles(const string& simulationFolder)
+void Simulation::removeLogFiles(const string& simulationFolder)
 {
 	string errorsFile = simulationFolder + FILE_SEPARATOR + SIMULATION_ERROR_FILE_NAME;
 	string resultsFile = simulationFolder + FILE_SEPARATOR + SIMULATION_RESULTS_FILE_NAME;
@@ -50,9 +52,9 @@ void Simulation::RemoveLogFiles(const string& simulationFolder)
 }
 
 //will load all containers from file to the relevant port
-bool Simulation::LoadContainersToPortsInRoute()
+bool Simulation::loadContainersToPortsInRoute()
 {
-	map<string, list<string>> portsMap = CreatePortsCargoFromFiles();
+	map<string, list<string>> portsMap = createPortsCargoFromFiles();
 
 	vector<Port>& ports = this->route;
 
@@ -65,8 +67,8 @@ bool Simulation::LoadContainersToPortsInRoute()
 		//check if port doesn't exist
 		if (portsMap.find(portCode) == portsMap.end())
 		{
-			Logger::Instance().LogError("Port file doesn't exist");
-			LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
+			Logger::Instance().logError("Port file doesn't exist");
+			logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
 		}
 
 		else
@@ -76,13 +78,13 @@ bool Simulation::LoadContainersToPortsInRoute()
 			//check if port doesn't exist
 			if (filesList.empty())
 			{
-				Logger::Instance().LogError("Port file doesn't exist");
-				LogSimulationErrors("LoadContainersToPortsInRoute", "Port file doesn't exist");
+				Logger::Instance().logError("Port file doesn't exist");
+				logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
 			}
 
 			else
 			{
-				port.LoadContainersFromFile(folder + SIMULATION_PORTS_FOLDER_NAME + filesList.front());
+				port.loadContainersFromFile(folder + SIMULATION_PORTS_FOLDER_NAME + filesList.front());
 				filesList.pop_front();
 			}
 		}
@@ -91,8 +93,8 @@ bool Simulation::LoadContainersToPortsInRoute()
 	return true;
 }
 
-//helper function for LoadContainersToPortsInRoute
-map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
+//helper function for loadContainersToPortsInRoute
+map<string, list<string>> Simulation::createPortsCargoFromFiles()
 {
 	map<string, list<string>> map;
 
@@ -100,7 +102,7 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 	{
 		string fileName = entry.path().filename().string();
 
-		if (ValidCargoFile(fileName))
+		if (validCargoFile(fileName))
 		{
 			string portCode = fileName.substr(0, 5);
 
@@ -120,11 +122,11 @@ map<string, list<string>> Simulation::CreatePortsCargoFromFiles()
 }
 
 //the main function for simulator, will run the sim itself
-void Simulation::RunSimulation()
+void Simulation::runSimulation()
 {
 	vector<Port>& ports = this->route;
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
-	Logger::Instance().SetLogType(this->algorithm->GetName());
+	Logger::Instance().setLogType(this->algorithm->getName());
 
 	//go through all the ports and do actions there
 	for (size_t i = 0; i < ports.size(); i++) {
@@ -132,19 +134,19 @@ void Simulation::RunSimulation()
 		{
 			string outputFilePath = outputFolderPath + std::to_string(i);
 			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
-			PerformAlgorithmActions(outputFilePath, ports[i]);
+			performAlgorithmActions(outputFilePath, ports[i]);
 		}
 		catch (const std::exception & error)
 		{
-			LogSimulationErrors("RunSimulation", error.what());
+			logSimulationErrors("runSimulation", error.what());
 		}
 	}
 
-	LogResults();
+	logResults();
 }
 
 //read file from algo and try to do the actions
-void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
+void Simulation::performAlgorithmActions(const string& filePath, Port& port)
 {
     std::ifstream file(filePath);
 	string lineFromFile;
@@ -153,18 +155,18 @@ void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 	{
 
 		/*if line is a comment - ignore*/
-		if (IsCommentLine(lineFromFile))
+		if (isCommentLine(lineFromFile))
 		{
 			continue;
 		}
 
-		CraneOperation* craneOperation = CreateOperationFromLine(lineFromFile);
+		CraneOperation* craneOperation = createOperationFromLine(lineFromFile);
 
 		//check that craneOperation is valid
 
 		if (craneOperation == NULL)
 		{
-			LogSimulationErrors("PerformAlgorithmActions", "craneOperation is null");
+			logSimulationErrors("performAlgorithmActions", "craneOperation is null");
 		}
 
 		//operation format is valid
@@ -172,50 +174,50 @@ void Simulation::PerformAlgorithmActions(const string& filePath, Port& port)
 		{
 			try
 			{
-				craneOperation->DoOperation(ship, port);
+				craneOperation->doOperation(ship, port);
 				actionsPerformedCounter++;
 			}
 			catch (const std::exception & error)
 			{
-				LogSimulationErrors("PerformAlgorithmActions", error.what());
+				logSimulationErrors("performAlgorithmActions", error.what());
 			}
 		}
 
 		delete craneOperation;
 	}
 
-	ValidateAllPortCargoUnloaded(this->ship, port);
+	validateAllPortCargoUnloaded(this->ship, port);
 
 	file.close();
 }
 
 //make sure all cargo is in the port
-void Simulation::ValidateAllPortCargoUnloaded(Ship* ship, Port& port)
+void Simulation::validateAllPortCargoUnloaded(Ship* ship, Port& port)
 {
 	string portID = port.getPortCode();
-	vector<Container> shipContainers = ship->GetShipContainers();
+	vector<Container> shipContainers = ship->getShipContainers();
 
 	for (size_t i = 0; i < shipContainers.size(); i++)
 	{
-		if (shipContainers[i].GetDestination() == portID)
+		if (shipContainers[i].getDestination() == portID)
 		{
-			LogSimulationErrors("ValidateAllPortCargoUnloaded", "container " + shipContainers[i].GetId() + " didn't unload at port " + portID);
+			logSimulationErrors("validateAllPortCargoUnloaded", "container " + shipContainers[i].getId() + " didn't unload at port " + portID);
 		}
 	}
 }
 
 //create a crane operation from the input proviced from one instruction
-CraneOperation* Simulation::CreateOperationFromLine(const string& lineFromFile) {
+CraneOperation* Simulation::createOperationFromLine(const string& lineFromFile) {
 
 	vector<string> operationsData;
 	CraneOperation* craneOperation = NULL;
 
 	//get data from line, params may vary
-	operationsData = GetDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
+	operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
 
 	//peak at the (supposed) type of action 
 	string operationString = operationsData.size() ? operationsData[0] : "";
-	Operations operation = CraneOperation::GetOperationType(operationString);
+	Operations operation = CraneOperation::getOperationType(operationString);
 
 	/*after determining the type of the operation, create the operation*/
 	try
@@ -235,35 +237,35 @@ CraneOperation* Simulation::CreateOperationFromLine(const string& lineFromFile) 
 			craneOperation = new RejectCraneOperation(operationsData);
 			break;
 		default:
-			LogSimulationErrors("CreateOperationFromLine", "invalid operation enum type");
+			logSimulationErrors("createOperationFromLine", "invalid operation enum type");
 			break;
 		}
 	}
 	catch (const std::exception & error)
 	{
-		LogSimulationErrors("CreateOperationFromLine", error.what());
+		logSimulationErrors("createOperationFromLine", error.what());
         std::cout << error.what();
 	}
 
 	return craneOperation;
 }
 
-void Simulation::LogResults()
+void Simulation::logResults()
 {
 	ofstream file;
 	file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
-	file << "algorithm " << algorithm->GetName() << " has performed " << actionsPerformedCounter << " actions." << endl;
-	file << "the ship successfully delivered " << ship->GetTotalCorrectUnloads() << " cargos. " << endl;
+	file << "algorithm " << algorithm->getName() << " has performed " << actionsPerformedCounter << " actions." << endl;
+	file << "the ship successfully delivered " << ship->getTotalCorrectUnloads() << " cargos. " << endl;
 	file.close();
 }
 
-void Simulation::LogSimulationErrors(const string& funcName, const string& error)
+void Simulation::logSimulationErrors(const string& funcName, const string& error)
 {
-    Logger::Instance().LogError("function" + funcName + ": " + error);
+    Logger::Instance().logError("function" + funcName + ": " + error);
 }
 
 
 Simulation::~Simulation() {
 	delete this->ship;
-	LOG.SaveFile();
+	LOG.saveFile();
 }

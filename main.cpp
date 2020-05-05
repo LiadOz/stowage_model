@@ -1,8 +1,9 @@
 #include <stdlib.h>
-#include "algorithm.h"
-#include "util.h"
-#include "simulation.h"
 #include <filesystem>
+
+#include "Simulation.h"
+#include "Algorithm.h"
+#include "Util.h"
 
 #define LOG_FILE "simulation.errors"
 #define SIMULATION_ROOT_FOLDER "./Simulation/"
@@ -22,13 +23,13 @@ int main() {
 		const auto folderName = entry.path().filename().string();
 		if (entry.is_directory()) {
             string folderPath = SIMULATION_ROOT_FOLDER + folderName+ FILE_SEPARATOR;
-            Logger::Instance().SetFile(folderPath + LOG_FILE);
-            Logger::Instance().SetLogType("General");
-			Simulation::RemoveLogFiles(entry.path().string());
+            Logger::Instance().setFile(folderPath + LOG_FILE);
+            Logger::Instance().setLogType("General");
+			Simulation::removeLogFiles(entry.path().string());
 			Simulation simulation(folderName, bruteAlgorithm);
-			simulation.RunSimulation();
+			simulation.runSimulation();
 			Simulation simulation2(folderName, rejectAlgorithm);
-			simulation2.RunSimulation();
+			simulation2.runSimulation();
 		}
 	}
 

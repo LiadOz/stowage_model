@@ -1,15 +1,18 @@
+#include "container.h"
+
 #include <regex>
 #include <stdexcept>
 #include <cmath>
-#include "container.h"
-#include "util.h"
-#define CONTAINER_REGEX "[A-Z]{3}[U,J,Z]\\d{6}\\d"
-#define ID_NUMBER_OF_LETTERS 4
+
+#include "Util.h"
 
 using std::endl;
 using std::regex;
 using std::regex_match;
 using std::pow;
+
+#define CONTAINER_REGEX "[A-Z]{3}[U,J,Z]\\d{6}\\d"
+#define ID_NUMBER_OF_LETTERS 4
 
 // retruns letter mapping according to ISO 6346
 int LetterMapping(char c){
@@ -40,7 +43,7 @@ bool ValidContainer(const string& id){
 Container::Container(int weight, const string& destination, const string& id){
     if(!ValidContainer(id))
         throw std::invalid_argument("invalid id " + id);
-    if(!ValidRoute(destination))
+    if(!validRoute(destination))
         throw std::invalid_argument("invalid destination " + destination);
     this->weight = weight;
     this->destination = destination;

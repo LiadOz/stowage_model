@@ -1,30 +1,30 @@
-#include "port.h"
+#include "Port.h"
 
 #include <stdexcept>
 
-#include "util.h"
-#include "parser.h"
+#include "Util.h"
+#include "Parser.h"
 
 using std::runtime_error;
 
 Port::Port(const string& code, const string& filePathForCargo) {
-    if(!ValidRoute(code)){
+    if(!validRoute(code)){
         throw std::runtime_error("Invalid route");
     }
 	seaPortCode = code;
 	cargoFilePath = filePathForCargo;
 }
 
-bool Port::LoadContainersFromFile(const string& filePath) {
+bool Port::loadContainersFromFile(const string& filePath) {
 
     Parser parse;
     try {
-        parse.LoadFile(filePath);
+        parse.loadFile(filePath);
     }catch(runtime_error& e) {
         throw runtime_error("Invalid port file");
     }
 
-	while (parse.Good()) {
+	while (parse.good()) {
         //data members for a container
         string containerID;
         int containerWeight;
@@ -33,7 +33,7 @@ bool Port::LoadContainersFromFile(const string& filePath) {
         vector<string> containerData;
 		parse>>containerData;
         if (containerData.size() < PORT_FILE_NUM_OF_PARAMS){
-            Logger::Instance().LogError("cargo missing arguments");
+            Logger::Instance().logError("cargo missing arguments");
         }
 
         //try to parse the first param to weight & create the object
@@ -44,10 +44,10 @@ bool Port::LoadContainersFromFile(const string& filePath) {
 
             Container container(containerWeight, portDest, containerID);
 
-            AddContainer(container);
+            addContainer(container);
         }
         catch (std::invalid_argument& error) {
-            Logger::Instance().LogError(error.what());
+            Logger::Instance().logError(error.what());
         }
 	}
 
@@ -57,9 +57,9 @@ bool Port::LoadContainersFromFile(const string& filePath) {
 }
 
 
-bool Port::AddContainer(Container& containerToAdd) {
+bool Port::addContainer(Container& containerToAdd) {
 	for (Container& container : containers) {
-		if (container.GetId() == containerToAdd.GetId())
+		if (container.getId() == containerToAdd.getId())
 		{
 			return false;
 		}
@@ -69,11 +69,11 @@ bool Port::AddContainer(Container& containerToAdd) {
 	return true;
 }
 
-Container Port::RemoveContainer(const string& containerToRemove) {
+Container Port::removeContainer(const string& containerToRemove) {
 
 	for (size_t index = 0; index < containers.size(); index++)
 	{
-		if (containers[index].GetId() == containerToRemove)
+		if (containers[index].getId() == containerToRemove)
 		{
 			Container contToReturn = containers[index];
 			containers.erase(containers.begin() + index);
@@ -89,13 +89,13 @@ Container Port::RemoveContainer(const string& containerToRemove) {
 vector<Port> createShipRoute(const string& filePath){
     PARSER(parse, filePath, "Invalid route file");
     vector<Port> shipRoute;
-    while(parse.Good()){
+    while(parse.good()){
         vector<string> data;
         parse >> data;
         try {
             shipRoute.emplace_back(data[0]);
         }catch(std::exception& e) {
-            LOG.LogError(e.what()); // the port does not exist so we skip
+            LOG.logError(e.what()); // the port does not exist so we skip
         }
     }
     return shipRoute;

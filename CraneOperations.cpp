@@ -1,4 +1,5 @@
 #include "CraneOperations.h"
+
 #include <iostream>
 #include <stdexcept>
 
@@ -6,7 +7,7 @@ using std::runtime_error;
 using std::stringstream;
 using std::stoi;
 
-Operations CraneOperation::GetOperationType(const string& opStr)
+Operations CraneOperation::getOperationType(const string& opStr)
 {
 	if (opStr == OPERATION_LOAD)
 	{
@@ -50,11 +51,11 @@ LoadCraneOperation::LoadCraneOperation(const vector<string>& params) {
 	}
 }
 
-void LoadCraneOperation::DoOperation(Ship* ship, Port& port) {
+void LoadCraneOperation::doOperation(Ship* ship, Port& port) {
 	try
 	{
-		Container container = port.RemoveContainer(this->containerID);
-		ship->InsertContainer(row, col, container);
+		Container container = port.removeContainer(this->containerID);
+		ship->insertContainer(row, col, container);
 	}
 	catch (const std::exception & error)
 	{
@@ -82,18 +83,18 @@ UnloadCraneOperation::UnloadCraneOperation(const vector<string>& params) {
 	}
 }
 
-void UnloadCraneOperation::DoOperation(Ship* ship, Port& port) {
+void UnloadCraneOperation::doOperation(Ship* ship, Port& port) {
 	try
 	{
-		Container container = ship->RemoveContainer(row, col);
-		bool addedContainerToPort = port.AddContainer(container);
+		Container container = ship->removeContainer(row, col);
+		bool addedContainerToPort = port.addContainer(container);
 		if (!addedContainerToPort)
 		{
 			throw runtime_error("container already in port");
 		}
-		if (container.GetDestination() == port.getPortCode())
+		if (container.getDestination() == port.getPortCode())
 		{
-			ship->UnloadedCargoAtCorrectPort();
+			ship->unloadedCargoAtCorrectPort();
 		}
 	}
 	catch (const std::exception & error)
@@ -126,11 +127,11 @@ MoveCraneOperation::MoveCraneOperation(const vector<string>& params) {
 	}
 }
 
-void MoveCraneOperation::DoOperation(Ship* ship, Port& port) {
+void MoveCraneOperation::doOperation(Ship* ship, Port& port) {
 	try
 	{
         (void)port;
-		ship->MoveContainer(rowFrom, colFrom, rowTo, colTo);
+		ship->moveContainer(rowFrom, colFrom, rowTo, colTo);
 	}
 	catch (const std::exception& error)
 	{
@@ -155,13 +156,13 @@ RejectCraneOperation::RejectCraneOperation(const vector<string>& params) {
 	}
 }
 
-void RejectCraneOperation::DoOperation(Ship* ship, Port& port) {
+void RejectCraneOperation::doOperation(Ship* ship, Port& port) {
 	//TODO: shouldn't be in ship class (change in exec2), and add GetContainer function in port
 	try
 	{
-		Container container = port.RemoveContainer(containerID);
-		ship->RejectContainer(container);
-		port.AddContainer(container);
+		Container container = port.removeContainer(containerID);
+		ship->rejectContainer(container);
+		port.addContainer(container);
 
 	}
 	catch (const std::exception& error)

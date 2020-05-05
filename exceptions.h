@@ -1,5 +1,4 @@
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+#pragma once 
 
 #include <string>
 #include <stdexcept>
@@ -16,12 +15,13 @@
 #define ERROR_ONE_PORT          8
 
 using std::string;
+
 class Error : public std::runtime_error{
 private:
     int errorCode = 0;
 public:
     Error(const string& message, int code): runtime_error(message), errorCode(code){}
-    int GetError(){ return errorCode;}
+    int getError(){ return errorCode;}
     virtual ~Error (){}
 };
 
@@ -37,5 +37,3 @@ public:
 };
 
 inline void errorVar(int& e, int code){ e |= (int)std::pow(2, code);}
-
-#endif /* EXCEPTIONS_H */

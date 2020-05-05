@@ -1,4 +1,4 @@
-#include "util.h"
+#include "Util.h"
 
 #include <regex>
 #include <iostream>
@@ -11,13 +11,13 @@ using std::regex_match;
 using std::runtime_error;
 using std::stringstream;
 
-bool ValidRoute(const string& route){
+bool validRoute(const string& route){
     regex r("[A-Z]{5}");
     if(!regex_match(route, r))
         return false;
     return true;
 }
-bool ValidCargoFile(const string& filename) {
+bool validCargoFile(const string& filename) {
 	regex r("[A-Z]{5}_\\d*.cargo_data");
 	if (!regex_match(filename, r))
 		return false;
@@ -33,11 +33,11 @@ Logger& Logger::Instance() {
 }
 
 // currently the logger prints to the screen
-void Logger::LogError(const string& message){
+void Logger::logError(const string& message){
     file << "," << message;
     std::cerr << "Error in " << logType << " : " << message << std::endl;
 }
-void Logger::SetLogType(const string& type){
+void Logger::setLogType(const string& type){
     if(!firstLine)
         file << std::endl;
     firstLine = false;
@@ -45,7 +45,7 @@ void Logger::SetLogType(const string& type){
     file << logType;
 }
 
-bool IsCommentLine(const string& line) {
+bool isCommentLine(const string& line) {
 
 	unsigned index = 0;
 	while (index < line.length()) {
@@ -68,7 +68,7 @@ bool IsCommentLine(const string& line) {
 //NOTE: not enough time for a pretty solution,
 //unlimitedParams is to bypass not enough params error (for crane operations where you can get different amount of params),
 //should create a new function and delete this logic later
-vector<string> GetDataFromLine(const string& line, int howManyParams, bool unlimitedParams) {
+vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams) {
 
 	vector<string> dataVector;
 	stringstream streamLineFromFile(line);

@@ -1,15 +1,17 @@
-#include "parser.h"
+#include "Parser.h"
+
 #include <iostream>
 #include <sstream>
+
 using std::stringstream;
 
 Parser::Parser (const string& filePath){
-    LoadFile(filePath);
+    loadFile(filePath);
 }
-void Parser::LoadFile(const string& filePath){
+void Parser::loadFile(const string& filePath){
     readFile.open(filePath);
     if(!readFile.good()) throw std::runtime_error("invalid file");
-    SkipComments();
+    skipComments();
 }
 
 bool IsComment(const string& line) {
@@ -30,7 +32,7 @@ bool IsComment(const string& line) {
 	return line[index] == FILE_COMMENT_LINE_CHAR;
 }
 
-void Parser::SkipComments(){
+void Parser::skipComments(){
     string line;
     int curr;
     do {
@@ -53,6 +55,6 @@ Parser& Parser::operator>>(vector<string>& data){
         getline(ss, word, ',');
         data.push_back(word);
     }
-    SkipComments();
+    skipComments();
     return *this;
 }
