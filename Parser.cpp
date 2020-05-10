@@ -11,6 +11,7 @@ Parser::Parser (const string& filePath){
 void Parser::loadFile(const string& filePath){
     readFile.open(filePath);
     if(!readFile.good()) throw std::runtime_error("invalid file");
+    moreLines = true;
     skipComments();
 }
 

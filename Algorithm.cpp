@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <regex>
 #include <cmath>
+#include <unordered_set>
 
 #include "Util.h"
 #include "Exceptions.h"
@@ -22,8 +23,10 @@ using std::runtime_error;
 #define PARSING_PORT 2
 #define UNLOAD_ALL "ALL"
 
+// TODO: add error number 18 !!!!!!!!!!!!!!!!!!!!!!!!!!
+
 int Algorithm::readShipPlan(const string& full_path_and_file_name){
-    int errorStatus = 0;
+    errorStatus = 0;
     try {
         errorStatus = s.readPlan(full_path_and_file_name);
     }catch(Error& e) {
@@ -33,7 +36,7 @@ int Algorithm::readShipPlan(const string& full_path_and_file_name){
 }
 
 int Algorithm::readShipRoute(const string& full_path_and_file_name){
-    int errorStatus = 0;
+    errorStatus = 0;
     Parser parse;
     try {
         parse.loadFile(full_path_and_file_name);
@@ -86,6 +89,10 @@ vector<Container> Algorithm::unloadAll(string port){
 bool Algorithm::insertNextFree(Container c){
     pair<size_t, size_t> d = s.getStorageDimensions();
     while(next_x < d.first && next_y < d.second){
+        if (s.idOnShip(c.getId())){
+            errorVar(errorStatus, ERROR_ID_ON_SHIP);
+            return true;
+        }
         if (!s.fullCoordinate(next_x, next_y)){
             s.insertContainer(next_x, next_y, c);
             return true;
@@ -99,50 +106,57 @@ bool Algorithm::insertNextFree(Container c){
     return false;
 }
 
-
-int setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
-    int errorStatus = 0;
+void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
+    std::unordered_set<string> cargoIds;
     Parser parse;
     try {
         parse.loadFile(file_path);
     }catch(std::runtime_error& e) {
-
+        errorVar(errorStatus, ERROR_BAD_CARGO_FILE);
     }
     while(parse.good()){
         vector<string> row;
         parse>>row;
         try {
-            awaiting.emplace_back(row);
+            Container c(row);
+            if(cargoIds.find(c.getId()) != cargoIds.end())
+                throw NonFatalError("Id " + c.getId() + " already at port", ERROR_DUPLICATE_PORT_ID); 
+            awaiting.push_back(c);
+            cargoIds.insert(c.getId());
         }
         catch(NonFatalError& e) { 
             errorVar(errorStatus, e.getError());
         }
     }
-    return errorStatus;
 }
 
 int Algorithm::getInstructionsForCargo(
         const string& input_full_path_and_file_name,
         const string& output_full_path_and_file_name){
 
+    errorStatus = 0;
     s.setLoggerFile(output_full_path_and_file_name);
 
     // when reaching final port
-    if(routes.size() == 1)
+    if(routes.size() == 1){
+        vector<Container> awaiting;
+        if (awaiting.size())
+            errorVar(errorStatus, ERROR_BAD_LAST_PORT);
         unloadAll(UNLOAD_ALL);
+    }
     else {
         string currentPort = routes.back();
         routes.pop_back();
-        this->getPortInstructions(currentPort, input_full_path_and_file_name);
+        vector<Container> awaiting;
+        setAwaitingCargo(input_full_path_and_file_name, awaiting);
+        this->getPortInstructions(currentPort, awaiting);
     }
     s.closeLogFile();
-    // TODO
-    return 0;
+    return errorStatus;
 }
 
-int BruteAlgorithm::getPortInstructions(const string& port,
-        const string& input_path){
-
+void BruteAlgorithm::getPortInstructions(const string& port,
+        vector<Container>& awaiting){
     vector<Container> outside = unloadAll(port);
     next_x = next_y = 0;
 
@@ -151,8 +165,6 @@ int BruteAlgorithm::getPortInstructions(const string& port,
         insertNextFree(c);
 
     // pushing new cargo
-    vector<Container> awaiting;
-    setAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
         success = insertNextFree(c);
@@ -161,19 +173,15 @@ int BruteAlgorithm::getPortInstructions(const string& port,
         }
             
     }
-    /* TODO:  <04-05-20, yourname> */
-    return 0;
 }
 
-int RejectAlgorithm::getPortInstructions(const string& port,
-        const string& input_path){
+void RejectAlgorithm::getPortInstructions(const string& port,
+        vector<Container>& awaiting){
 
     vector<Container> outside = unloadAll(port);
     next_x = next_y = 0;
 
     // pushing new cargo
-    vector<Container> awaiting;
-    setAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
         if (c.getDestination().compare(routes.back()) != 0){
@@ -188,7 +196,4 @@ int RejectAlgorithm::getPortInstructions(const string& port,
         }
             
     }
-    // TODO
-    return 0;
 }
-

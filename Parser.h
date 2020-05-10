@@ -19,7 +19,7 @@ using std::vector;
 class Parser {
 private:
     std::ifstream readFile;
-    bool moreLines = true;
+    bool moreLines = false;
     void skipComments();
 public:
     Parser (){};

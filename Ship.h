@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <unordered_set>
 
 #include "Inventory.h"
 #include "Container.h"
@@ -12,6 +13,7 @@ using std::vector;
 using std::string;
 using std::pair;
 using std::ofstream;
+using std::unordered_set;
 
 #define INVALID_ARG -1
 
@@ -37,12 +39,14 @@ private:
     Inventory storage;
     ShipLogger logger;
 	int totalCorrectUnloads = 0;
+    unordered_set<string> idList;
 public:
     // when you create a ship you supply the list of plans
     Ship() {};
     int readPlan(const string& file_path);
     // returns the max height of the coordinate
     size_t getCoordinateHeight(size_t x, size_t y){ return storage.getCoordinateHeight(x, y);}
+    bool idOnShip(string id){ return idList.find(id) != idList.end();}
     // pushes container to (x1, y1) throws error if cannot be executed
     void insertContainer(size_t x, size_t y, Container& c); // insertes container to (x,y)
     // move container from (x1, y1) to (x2, y2) throws error if cannot be executed

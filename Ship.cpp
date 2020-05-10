@@ -1,6 +1,6 @@
 #include "Ship.h"
 
-#include <stdexcept>
+#include "Exceptions.h"
 
 using std::to_string;
 
@@ -15,6 +15,7 @@ void ShipLogger::logAction(const string& action){
     if (logToScreen)
         std::cout << "(ship logger): " << action << std::endl;
 }
+
 void Ship::insertContainer(size_t x, size_t y, Container& c){
     // TODO: add calculator check
     storage.pushContainer(x, y, c);
@@ -22,6 +23,7 @@ void Ship::insertContainer(size_t x, size_t y, Container& c){
             to_string(getCoordinateHeight(x, y)) + 
             "," + to_string(x) + "," + to_string(y)
             );
+    idList.insert(c.getId());
 }
 
 Container Ship::removeContainer(size_t x, size_t y){
@@ -31,6 +33,7 @@ Container Ship::removeContainer(size_t x, size_t y){
     logger.logAction("<U>," + c.getId() + "," +
             to_string(h) + "," + to_string(x) + "," + to_string(y)
             );
+    idList.erase(c.getId());
     return c;
 }
 

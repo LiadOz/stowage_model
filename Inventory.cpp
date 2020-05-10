@@ -71,7 +71,7 @@ void Inventory::parseRow(vector<string>& row){
         if((int)heights[y][x] == floors)
             errorVar(errorStatus, ERROR_BAD_FORMAT);
         else
-            errorVar(errorStatus, ERROR_XY_EXCEEDED);
+            errorVar(errorStatus, ERROR_XY_DUPLICATE);
         return;
     }
     else heights[y][x] = floors;

@@ -15,14 +15,17 @@ protected:
     Ship s;
     vector<string> routes;
     vector<Container> unloadAll(string port);
+    int errorStatus = 0;
     size_t next_x, next_y;
     // inserts container to the next free location
     // return false if there is no space left
     bool insertNextFree(Container c);
     // this function is called inside getInstructionsForCargo and detailes
     // the operation each algorithm does polymophically
-    virtual int getPortInstructions(
-            const string& port, const string& input_path) = 0;
+    virtual void getPortInstructions(
+            const string& port, vector<Container>& awaiting) = 0;
+    // prepares the cargo in port
+    void setAwaitingCargo(const string& file_path, vector<Container>& awaiting);
     // logs errors in the algorithm
 public:
     Algorithm (){};
@@ -42,8 +45,8 @@ public:
 // then loads them back on
 class BruteAlgorithm : public Algorithm {
 protected:
-    virtual int getPortInstructions(const string& port,
-            const string& input_path);
+    virtual void getPortInstructions(
+            const string& port, vector<Container>& awaiting);
 public:
     BruteAlgorithm (){};
     virtual string getName(){ return "BruteAlgorithm";}
@@ -54,8 +57,8 @@ public:
 // to the next route
 class RejectAlgorithm : public Algorithm {
 protected:
-    virtual int getPortInstructions(const string& port,
-            const string& input_path);
+    virtual void getPortInstructions(
+            const string& port, vector<Container>& awaiting);
 public:
     RejectAlgorithm(){};
     virtual string getName(){ return "RejectAlgorithm";}
