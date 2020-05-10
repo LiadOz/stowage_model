@@ -53,6 +53,11 @@ Parser& Parser::operator>>(vector<string>& data){
     while(ss.good()){
         string word;
         getline(ss, word, ',');
+
+        // trimming the words
+        word.erase(0, word.find_first_not_of(' '));
+        word.erase(word.find_last_not_of(' ')+1);
+
         data.push_back(word);
     }
     skipComments();
