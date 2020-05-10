@@ -144,3 +144,8 @@ vector<Container> Inventory::getAllContainers(){
     }
     return l;
 }
+
+size_t Inventory::getCoordinateHeight(size_t x, size_t y){ 
+    rangeCheck(x, y);
+    return storage[y][x].size();
+}
