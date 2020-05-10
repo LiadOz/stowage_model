@@ -38,8 +38,7 @@ int Algorithm::readShipRoute(const string& full_path_and_file_name){
     try {
         parse.loadFile(full_path_and_file_name);
     }catch(runtime_error& e) {
-        errorVar(errorStatus, ERROR_BAD_FILE);
-        return errorStatus;
+        throw FatalError("Bad route file", ERROR_BAD_ROUTE_FILE);
     }
 
     routes.clear();
@@ -59,6 +58,8 @@ int Algorithm::readShipRoute(const string& full_path_and_file_name){
     }
     if (routes.size() == 1) // checking if only one port exists in file
         errorVar(errorStatus, ERROR_ONE_PORT);
+    if (routes.size() == 0) // checking if only one port exists in file
+        throw FatalError("Bad route file", ERROR_BAD_ROUTE_FILE);
     reverse(routes.begin(), routes.end());
     return errorStatus;
 }
@@ -99,21 +100,25 @@ bool Algorithm::insertNextFree(Container c){
 }
 
 
-void SetAwaitingCargo(const string& file_path, vector<Container>& awaiting){
-    PARSER(parse, file_path, "Invalid port file");
+int setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
+    int errorStatus = 0;
+    Parser parse;
+    try {
+        parse.loadFile(file_path);
+    }catch(std::runtime_error& e) {
+
+    }
     while(parse.good()){
         vector<string> row;
         parse>>row;
         try {
-            awaiting.emplace_back(
-                    std::stoi(row[PARSING_WEIGHT]),
-                    row[PARSING_PORT], row[PARSING_ID]
-                    );
+            awaiting.emplace_back(row);
         }
-        catch(std::invalid_argument& e) { 
-                LOG.logError(e.what());
+        catch(NonFatalError& e) { 
+            errorVar(errorStatus, e.getError());
         }
     }
+    return errorStatus;
 }
 
 int Algorithm::getInstructionsForCargo(
@@ -147,7 +152,7 @@ int BruteAlgorithm::getPortInstructions(const string& port,
 
     // pushing new cargo
     vector<Container> awaiting;
-    SetAwaitingCargo(input_path, awaiting);
+    setAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
         success = insertNextFree(c);
@@ -168,7 +173,7 @@ int RejectAlgorithm::getPortInstructions(const string& port,
 
     // pushing new cargo
     vector<Container> awaiting;
-    SetAwaitingCargo(input_path, awaiting);
+    setAwaitingCargo(input_path, awaiting);
     bool success;
     for (auto c : awaiting) {
         if (c.getDestination().compare(routes.back()) != 0){

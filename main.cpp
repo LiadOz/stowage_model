@@ -36,10 +36,6 @@ int main() {
     delete bruteAlgorithm;
     delete rejectAlgorithm;
 
-    /*
-    Algorithm& b = *(new BruteAlgorithm());
-    int me = b.readShipPlan("invalid.plan");
-    std::cout << me << std::endl;
-    */
 	return EXIT_SUCCESS;
 }
+

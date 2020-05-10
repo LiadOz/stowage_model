@@ -46,7 +46,7 @@ bool Port::loadContainersFromFile(const string& filePath) {
 
             addContainer(container);
         }
-        catch (std::invalid_argument& error) {
+        catch (std::runtime_error& error) {
             Logger::Instance().logError(error.what());
         }
 	}
