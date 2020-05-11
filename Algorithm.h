@@ -6,20 +6,24 @@
 #include <vector>
 
 #include "Container.h"
+#include "WeightBalanceCalculator.h"
 #include "Ship.h"
 
 using std::string;
 
 class Algorithm : public AbstractAlgorithm{
 protected:
+    enum InsertStatus { SUCCSESS, IMPOSSIBLE, ERROR, FULL };
     Ship s;
+    WeightBalanceCalculator calc;
     vector<string> routes;
     vector<Container> unloadAll(string port);
     int errorStatus = 0;
     size_t next_x, next_y;
     // inserts container to the next free location
-    // return false if there is no space left
-    bool insertNextFree(Container c);
+    InsertStatus insertNextFree(Container c);
+    // inserts container to place which has the most space above it
+    InsertStatus insertBiggestDepth(Container c);
     // this function is called inside getInstructionsForCargo and detailes
     // the operation each algorithm does polymophically
     virtual void getPortInstructions(

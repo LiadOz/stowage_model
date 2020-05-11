@@ -11,6 +11,7 @@
 #include "Container.h"
 #include "Parser.h"
 
+using std::max;
 using std::regex;
 using std::regex_match;
 using std::pair;
@@ -61,7 +62,7 @@ int Algorithm::readShipRoute(const string& full_path_and_file_name){
     }
     if (routes.size() == 1) // checking if only one port exists in file
         errorVar(errorStatus, ERROR_ONE_PORT);
-    if (routes.size() == 0) // checking if only one port exists in file
+    if (routes.size() == 0) // checking if no port exists in file
         throw FatalError("Bad route file", ERROR_BAD_ROUTE_FILE);
     reverse(routes.begin(), routes.end());
     return errorStatus;
@@ -86,16 +87,12 @@ vector<Container> Algorithm::unloadAll(string port){
     return outside;
 }
 
-bool Algorithm::insertNextFree(Container c){
+Algorithm::InsertStatus Algorithm::insertNextFree(Container c){
     pair<size_t, size_t> d = s.getStorageDimensions();
     while(next_x < d.first && next_y < d.second){
-        if (s.idOnShip(c.getId())){
-            errorVar(errorStatus, ERROR_ID_ON_SHIP);
-            return true;
-        }
         if (!s.fullCoordinate(next_x, next_y)){
             s.insertContainer(next_x, next_y, c);
-            return true;
+            return SUCCSESS;
         }
         if (next_x == d.first - 1){
             next_y++;
@@ -103,7 +100,28 @@ bool Algorithm::insertNextFree(Container c){
         }
         else next_x++;
     }
-    return false;
+    return FULL;
+}
+Algorithm::InsertStatus Algorithm::insertBiggestDepth(Container c){
+    auto d = s.getStorageDimensions();
+    auto maxDepth = s.getNumFloors();
+
+    for (size_t i = 0; i < d.first; ++i)
+        for (size_t j = 0; j < d.second; ++j)
+            maxDepth = max(maxDepth, s.getCoordinateDepth(i, j));
+
+    if (maxDepth == s.getNumFloors())
+        return FULL;
+
+    for (size_t i = 0; i < d.first; ++i)
+        for (size_t j = 0; j < d.second; ++j)
+            if (s.getCoordinateDepth(i, j) == maxDepth && 
+                    calc.tryOperation((char)Action::LOAD, c.getWeight(), i, j)
+                    == WeightBalanceCalculator::APPROVED){
+                s.insertContainer(i, j, c);
+                return SUCCSESS;
+            }
+    return IMPOSSIBLE;
 }
 
 void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
@@ -121,6 +139,9 @@ void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awa
             Container c(row);
             if(cargoIds.find(c.getId()) != cargoIds.end())
                 throw NonFatalError("Id " + c.getId() + " already at port", ERROR_DUPLICATE_PORT_ID); 
+            if (s.idOnShip(c.getId())){
+                throw NonFatalError("Id " + c.getId() + " already on ship", ERROR_ID_ON_SHIP); 
+        }
             awaiting.push_back(c);
             cargoIds.insert(c.getId());
         }
@@ -160,15 +181,14 @@ void BruteAlgorithm::getPortInstructions(const string& port,
     vector<Container> outside = unloadAll(port);
     next_x = next_y = 0;
 
-    // inserting all cargos the were removed
+    // inserting all cargos that were removed
     for (Container c : outside)
         insertNextFree(c);
 
     // pushing new cargo
-    bool success;
     for (auto c : awaiting) {
-        success = insertNextFree(c);
-        if (!success){
+        InsertStatus stat = insertNextFree(c);
+        if (stat == FULL){
             s.rejectContainer(c);
         }
             
@@ -182,15 +202,14 @@ void RejectAlgorithm::getPortInstructions(const string& port,
     next_x = next_y = 0;
 
     // pushing new cargo
-    bool success;
     for (auto c : awaiting) {
         if (c.getDestination().compare(routes.back()) != 0){
             // reject container that is not to the next route
             s.rejectContainer(c);
             continue;
         }
-        success = insertNextFree(c);
-        if (!success){
+        InsertStatus stat = insertNextFree(c);
+        if (stat == FULL){
             // reject if there is no more space
             s.rejectContainer(c);
         }

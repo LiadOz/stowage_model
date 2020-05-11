@@ -149,3 +149,8 @@ size_t Inventory::getCoordinateHeight(size_t x, size_t y){
     rangeCheck(x, y);
     return storage[y][x].size();
 }
+
+size_t Inventory::getCoordinateDepth(size_t x, size_t y){ 
+    rangeCheck(x, y);
+    return maxFloors - storage[y][x].size();
+}

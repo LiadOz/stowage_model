@@ -44,7 +44,9 @@ public:
     // when you create a ship you supply the list of plans
     Ship() {};
     int readPlan(const string& file_path);
-    // returns the max height of the coordinate
+    size_t getNumFloors(){ return decks;}
+    // returns the depth of the coordinate
+    size_t getCoordinateDepth(size_t x, size_t y){ return storage.getCoordinateDepth(x, y);}
     size_t getCoordinateHeight(size_t x, size_t y){ return storage.getCoordinateHeight(x, y);}
     bool idOnShip(string id){ return idList.find(id) != idList.end();}
     // pushes container to (x1, y1) throws error if cannot be executed
