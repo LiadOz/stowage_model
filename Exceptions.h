@@ -4,15 +4,27 @@
 #include <stdexcept>
 #include <cmath>
 
+// ship plan errors
 #define ERROR_FLOOR_OVERFLOW    0
 #define ERROR_XY_EXCEEDED       1
 #define ERROR_BAD_FORMAT        2
-#define ERROR_BAD_PLAN_FILE     3
-#define ERROR_XY_DUPLICATE      4
+#define ERROR_BAD_PLAN_FILE     3 // critical
+#define ERROR_XY_DUPLICATE      4 // critical
+// port file errors
 #define ERROR_DUPLICATE_PORT    5
 #define ERROR_BAD_PORT          6
-#define ERROR_BAD_FILE          7
-#define ERROR_ONE_PORT          8
+#define ERROR_BAD_ROUTE_FILE    7 // critical
+#define ERROR_ONE_PORT          8 // critical
+// container errors
+#define ERROR_DUPLICATE_PORT_ID 10
+#define ERROR_ID_ON_SHIP        11
+#define ERROR_BAD_WEIGHT        12
+#define ERROR_BAD_CARGO_PORT    13
+#define ERROR_CANT_READ_ID      14
+#define ERROR_BAD_ID_FORMAT     15
+#define ERROR_BAD_CARGO_FILE    16
+#define ERROR_BAD_LAST_PORT     17
+#define ERROR_TOO_MUCH_CARGO    18
 
 using std::string;
 

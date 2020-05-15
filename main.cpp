@@ -12,8 +12,8 @@
 using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
 namespace fs = std::filesystem;
 
-int main() {
-	
+int main(int argc, char** argv) {
+
 	Algorithm* bruteAlgorithm = new BruteAlgorithm();
 	Algorithm* rejectAlgorithm = new RejectAlgorithm();
 
@@ -22,9 +22,9 @@ int main() {
 	for (const auto& entry : fs::directory_iterator(pathToShow)) {
 		const auto folderName = entry.path().filename().string();
 		if (entry.is_directory()) {
-            string folderPath = SIMULATION_ROOT_FOLDER + folderName+ FILE_SEPARATOR;
-            Logger::Instance().setFile(folderPath + LOG_FILE);
-            Logger::Instance().setLogType("General");
+			string folderPath = SIMULATION_ROOT_FOLDER + folderName + FILE_SEPARATOR;
+			Logger::Instance().setFile(folderPath + LOG_FILE);
+			Logger::Instance().setLogType("General");
 			Simulation::removeLogFiles(entry.path().string());
 			Simulation simulation(folderName, bruteAlgorithm);
 			simulation.runSimulation();
@@ -33,13 +33,16 @@ int main() {
 		}
 	}
 
-    delete bruteAlgorithm;
-    delete rejectAlgorithm;
+	delete bruteAlgorithm;
+	delete rejectAlgorithm;
 
-    /*
-    Algorithm& b = *(new BruteAlgorithm());
-    int me = b.readShipPlan("invalid.plan");
-    std::cout << me << std::endl;
-    */
+	printf("\n\n\n\n");
+	for (size_t i = 0; i < argc; i++)
+	{
+		printf("%s\n", argv[i]);
+	}
+
+
 	return EXIT_SUCCESS;
 }
+

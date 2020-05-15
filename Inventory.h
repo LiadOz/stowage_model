@@ -33,7 +33,7 @@ public:
     // pops container from (x,y) throws error if out of bounds or cannot pop more
     Container popContainer(size_t x, size_t y);
     size_t getNumFloors(){ return maxFloors;}
-    size_t getCoordinateHeight(size_t x, size_t y){ return storage[y][x].size();}
+    size_t getCoordinateHeight(size_t x, size_t y);
     pair<size_t, size_t> getDimensions(){ return dimensions; }
     vector<Container> getAllContainers();
 };
