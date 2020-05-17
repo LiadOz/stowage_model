@@ -35,6 +35,8 @@ public:
     size_t getNumFloors(){ return maxFloors;}
     size_t getCoordinateHeight(size_t x, size_t y);
     size_t getCoordinateDepth(size_t x, size_t y);
+    // used to find if a certain coordinate has a container with specific destinaion if it doesn't -1 is returned else it returns the number of containers above it.
+    int getContainerDestinationLevel(size_t x, size_t y, const string& port);
     pair<size_t, size_t> getDimensions(){ return dimensions; }
     vector<Container> getAllContainers();
 };

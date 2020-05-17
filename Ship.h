@@ -63,6 +63,8 @@ public:
     bool fullCoordinate(size_t x, size_t y){return storage.fullCoordinate(x, y);}
     pair<size_t, size_t> getStorageDimensions(){ return storage.getDimensions(); }
     vector<Container> getShipContainers() {return storage.getAllContainers();}
+    // used to find if a certain coordinate has a container with specific destinaion if it doesn't -1 is returned else it returns the number of containers above it.
+    int getContainerDestinationLevel(size_t x, size_t y, const string& port){return storage.getContainerDestinationLevel(x, y, port);}
 
     void setLoggerFile(const string& file_path){logger.setLogFile(file_path);}
     void setLogToScreen(bool flag){ logger.setLogToScreen(flag);}

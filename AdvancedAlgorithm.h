@@ -13,7 +13,7 @@ private:
     // in a good way if the bottom's priority is bigger then the upper's
     void setPriority();
     Algorithm::InsertStatus loadAwaiting(vector<Container>& awaiting);
-    void unloadCurrent();
+    void unloadOpen(const string& port);
 protected:
     virtual void getPortInstructions(
             const string& port, vector<Container>& awaiting);

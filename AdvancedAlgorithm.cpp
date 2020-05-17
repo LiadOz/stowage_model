@@ -15,7 +15,8 @@ void AdvancedAlgorithm::setPriority(){
 
 
 Algorithm::InsertStatus AdvancedAlgorithm::loadAwaiting(vector<Container>& awaiting){
-    vector<Container> tryAgain;
+    vector<Container> tryAgain; // used to hold container rejected by calculator
+
     for (Container& c : awaiting) {
         InsertStatus stat = insertBiggestDepth(c);
         if (stat == IMPOSSIBLE) { // due to calculator
@@ -35,12 +36,20 @@ Algorithm::InsertStatus AdvancedAlgorithm::loadAwaiting(vector<Container>& await
     }
     return SUCCSESS; // since there is no calc then you can always fully load the ship
 }
-void AdvancedAlgorithm::unloadCurrent(){
+
+void AdvancedAlgorithm::unloadOpen(const string& port){
+    pair<size_t, size_t> d = s.getStorageDimensions();
+    for (size_t i = 0; i < d.first; ++i){
+        for (size_t j = 0; j < d.second; ++j){
+            while (s.getContainerDestinationLevel(i, j, port) == 0)
+                s.removeContainer(i, j);
+        }
+    }
 }
+
 
 void AdvancedAlgorithm::getPortInstructions(
         const string& port, vector<Container>& awaiting){
-    (void)port;
     setPriority();
     std::sort(awaiting.begin(), awaiting.end(),
             [this](Container& a, Container& b){
@@ -48,11 +57,7 @@ void AdvancedAlgorithm::getPortInstructions(
             cargoPriority.at(b.getDestination());
             });
     // now the ones at the start should be at the bottom
-    unloadCurrent();
+    unloadOpen(port);
     if(loadAwaiting(awaiting) == FULL)
         errorVar(errorStatus, ERROR_TOO_MUCH_CARGO);
-    for (auto i : awaiting) {
-        std::cout << i << std::endl;
-    }
-    std::cout << "--------------------------" << port  << std::endl;
 }

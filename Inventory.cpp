@@ -154,3 +154,14 @@ size_t Inventory::getCoordinateDepth(size_t x, size_t y){
     rangeCheck(x, y);
     return maxFloors - storage[y][x].size();
 }
+
+int Inventory::getContainerDestinationLevel(size_t x, size_t y, const string& port){
+    rangeCheck(x, y);
+    int ret = 0;
+    for (auto it = storage[y][x].end(); it >= storage[y][x].begin(); --it){
+        if ((*it).getDestination() == port)
+            return ret;
+        ret++;
+    }
+    return -1;
+}
