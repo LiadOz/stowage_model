@@ -149,6 +149,7 @@ size_t Inventory::getCoordinateHeight(size_t x, size_t y){
     rangeCheck(x, y);
     return storage[y][x].size();
 }
+<<<<<<< HEAD
 
 size_t Inventory::getCoordinateDepth(size_t x, size_t y){ 
     rangeCheck(x, y);
@@ -165,3 +166,5 @@ int Inventory::getContainerDestinationLevel(size_t x, size_t y, const string& po
     }
     return -1;
 }
+=======
+>>>>>>> origin/new-matan

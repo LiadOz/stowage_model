@@ -126,6 +126,7 @@ Algorithm::InsertStatus Algorithm::insertBiggestDepth(Container c){
 
 void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
     std::unordered_set<string> cargoIds;
+
     Parser parse;
     try {
         parse.loadFile(file_path);
