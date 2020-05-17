@@ -25,6 +25,9 @@ using std::stringstream;
 #define COMMAND_LINE_OUTPUT "-output"
 #define COMMAND_LINE_DEFAULT_FOLDER "/"
 
+//files extensions
+#define DYNAMIC_FILE_EXTENSION ".so"
+
 bool validRoute(const string& route);
 bool validCargoFile(const string& filename);
 bool isCommentLine(const string& line);

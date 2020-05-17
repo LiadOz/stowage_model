@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
 
 	int errorStatus = 0;
 	string algorithmPath, travelPath, outputPath;
+	vector<AbstractAlgorithm> algorithms;
 
 	try {
 		getCommandLineParameters(argc, argv) >> algorithmPath >> travelPath >> outputPath;
@@ -29,6 +30,23 @@ int main(int argc, char** argv) {
 		Algorithm* rejectAlgorithm = new RejectAlgorithm();
 
 		const fs::path travelFolder{ travelPath };
+		const fs::path algorithmsFolder { algorithmPath };
+
+		for (const auto& entry: fs::directory_iterator(algorithmsFolder)) {
+			if (entry.path().filename().extension() == DYNAMIC_FILE_EXTENSION) {
+				//todo: register algo and add to algo vectors
+			}
+		}
+
+		for (const AbstractAlgorithm& algorithm : algorithms) {
+			
+			//TODO: log algorithm loaded or something
+			for (const auto& entry : travelFolder) {
+				//todo: continue here
+			}
+
+			
+		}
 
 		for (const auto& entry : fs::directory_iterator(travelFolder)) {
 			const auto folderName = entry.path().filename().string();
