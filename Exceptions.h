@@ -28,24 +28,26 @@
 
 using std::string;
 
-class Error : public std::runtime_error{
+class Error : public std::runtime_error {
 private:
-    int errorCode = 0;
+	int errorCode = 0;
 public:
-    Error(const string& message, int code): runtime_error(message), errorCode(code){}
-    int getError(){ return errorCode;}
-    virtual ~Error (){}
+	Error(const string& message, int code) : runtime_error(message), errorCode(code) {}
+	Error(const string& message) : runtime_error(message) {}
+	int getError() { return errorCode; }
+	virtual ~Error() {}
 };
 
-class FatalError: public Error {
+class FatalError : public Error {
 public:
-    FatalError(const string& m, int code): Error(m,code){};
-    virtual ~FatalError(){}
+	FatalError(const string& m, int code) : Error(m, code) {};
+	FatalError(const string& m) : Error(m) {};
+	virtual ~FatalError() {}
 };
-class NonFatalError: public Error {
+class NonFatalError : public Error {
 public:
-    NonFatalError(const string& m, int code): Error(m,code){};
-    virtual ~NonFatalError(){}
+	NonFatalError(const string& m, int code) : Error(m, code) {};
+	virtual ~NonFatalError() {}
 };
 
-inline void errorVar(int& e, int code){ e |= (int)std::pow(2, code);}
+inline void errorVar(int& e, int code) { e |= (int)std::pow(2, code); }
