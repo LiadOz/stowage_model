@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "Ship.h"
+#include "../common/Ship.h"
 #include "Port.h"
 
 #define OPERATION_LOAD "<L>"

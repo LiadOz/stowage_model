@@ -1,17 +1,22 @@
 COMP = g++-8
 #put all your object files here
-OBJS = main.o Container.o Inventory.o Util.o Ship.o Algorithm.o WeightBalanceCalculator.o Simulation.o Port.o CraneOperations.o Parser.o AbstractAlgorithm.o Exceptions.o AdvancedAlgorithm.o
+#OBJS = main.o Container.o Inventory.o Util.o Ship.o Algorithm.o WeightBalanceCalculator.o Simulation.o Port.o CraneOperations.o Parser.o AbstractAlgorithm.o Exceptions.o AdvancedAlgorithm.o
+OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o
 #The executabel filename DON'T CHANGE
-EXEC = ex1
+EXEC = simulator
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
 #CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -pedantic-errors -DNDEBUG
-CPP_LINK_FLAG = -lstdc++fs
+CPP_LINK_FLAG = -lstdc++fs -export-dynamic -ldl
 
 $(EXEC): $(OBJS)
 	$(COMP) $(OBJS) $(CPP_LINK_FLAG) -o $@
 #a rule for building a simple c++ source file
 #use g++ -MM main.cpp to see dependencies
 main.o: main.cpp
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+AlgorithmRegistrar.o: AlgorithmRegistrar.cpp
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+AlgorithmRegistration.o: AlgorithmRegistration.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 Container.o: Container.cpp 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp

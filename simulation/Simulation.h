@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "Algorithm.h"
-#include "Ship.h"
+#include "../algorithm/Algorithm.h"
+#include "../common/Ship.h"
 #include "CraneOperations.h"
 #include "Port.h"
 
