@@ -4,19 +4,21 @@
 #include <list>
 #include <string>
 #include <vector>
+#include <memory>
 
-#include "../algorithm/Algorithm.h"
 #include "../common/Ship.h"
+#include "../interfaces/AbstractAlgorithm.h"
 #include "CraneOperations.h"
 #include "Port.h"
 
 using std::map;
 using std::list;
+using std::unique_ptr;
 
 class Simulation {
 private:
-	Algorithm* algorithm;
 	Ship* ship;
+    unique_ptr<AbstractAlgorithm> algorithm;
     vector<Port> route;
 	string folder; //root folder of the sim, changes per travel
 	int actionsPerformedCounter = 0; //count total actions performed
@@ -47,7 +49,7 @@ private:
 
 public:
 	//constructor
-	Simulation(const string& rootFolder, Algorithm* alg);
+	Simulation(const string& rootFolder, unique_ptr<AbstractAlgorithm> alg);
 
 	//remove older log files before running the entire program
 	static void removeLogFiles(const string& simulationFolder);

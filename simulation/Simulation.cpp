@@ -3,7 +3,7 @@
 #include <iostream>
 #include <filesystem>
 
-#include "Util.h"
+#include "../common/Util.h"
 
 namespace fs = std::filesystem;
 
@@ -20,7 +20,7 @@ using std::endl;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(const string& rootFolder, Algorithm* algo) {
+Simulation::Simulation(const string& rootFolder, unique_ptr<AbstractAlgorithm> algo) {
 	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
 	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
 	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
@@ -29,7 +29,7 @@ Simulation::Simulation(const string& rootFolder, Algorithm* algo) {
 	loadContainersToPortsInRoute();
 	ship = new Ship();
     ship->readPlan(shipPath);
-	algorithm = algo;
+	algorithm = std::move(algo);
 	prepareAlgorithm(shipPath, routePath);
 }
 
@@ -126,7 +126,7 @@ void Simulation::runSimulation()
 {
 	vector<Port>& ports = this->route;
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
-	Logger::Instance().setLogType(this->algorithm->getName());
+	Logger::Instance().setLogType("needed to create names for algs!!");
 
 	//go through all the ports and do actions there
 	for (size_t i = 0; i < ports.size(); i++) {
@@ -254,7 +254,7 @@ void Simulation::logResults()
 {
 	ofstream file;
 	file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
-	file << "algorithm " << algorithm->getName() << " has performed " << actionsPerformedCounter << " actions." << endl;
+	file << "algorithm " << "need to get a name" << " has performed " << actionsPerformedCounter << " actions." << endl;
 	file << "the ship successfully delivered " << ship->getTotalCorrectUnloads() << " cargos. " << endl;
 	file.close();
 }

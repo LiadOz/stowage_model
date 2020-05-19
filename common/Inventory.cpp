@@ -75,6 +75,7 @@ void Inventory::parseRow(vector<string>& row){
         return;
     }
     else heights[y][x] = floors;
+    maxCapacity += heights[y][x];
 }
 
 int Inventory::readPlan(const string& file_path){
@@ -113,7 +114,7 @@ bool Inventory::emptyCoordinate(size_t x, size_t y){
 }
 bool Inventory::fullCoordinate(size_t x, size_t y){
     rangeCheck(x, y);
-    if (storage[y][x].size() == heights[y][x] - 1) return true;
+    if (storage[y][x].size() == heights[y][x]) return true;
     return false;
 }
 bool Inventory::pushContainer(size_t x, size_t y, Container& c){
@@ -121,6 +122,7 @@ bool Inventory::pushContainer(size_t x, size_t y, Container& c){
     if (fullCoordinate(x, y))
         throw out_of_range("Coordinate is full");
     storage[y][x].push_back(c);
+    currentCapacity++;
     return true;
 }
 
@@ -130,6 +132,7 @@ Container Inventory::popContainer(size_t x, size_t y){
         throw out_of_range("Coordinate is empty");
     Container c = storage[y][x].back();
     storage[y][x].pop_back();
+    currentCapacity--;
     return c;
 }
 
@@ -150,15 +153,17 @@ size_t Inventory::getCoordinateHeight(size_t x, size_t y){
     return storage[y][x].size();
 }
 
-size_t Inventory::getCoordinateDepth(size_t x, size_t y){ 
+int Inventory::getCoordinateDepth(size_t x, size_t y){ 
     rangeCheck(x, y);
-    return maxFloors - storage[y][x].size();
+    return heights[y][x] - storage[y][x].size();
 }
 
 int Inventory::getContainerDestinationLevel(size_t x, size_t y, const string& port){
     rangeCheck(x, y);
+    if (storage[y][x].size() == 0)
+        return -1;
     int ret = 0;
-    for (auto it = storage[y][x].end(); it >= storage[y][x].begin(); --it){
+    for (auto it = storage[y][x].end()-1; it >= storage[y][x].begin(); --it){
         if ((*it).getDestination() == port)
             return ret;
         ret++;

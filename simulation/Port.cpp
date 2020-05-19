@@ -2,8 +2,8 @@
 
 #include <stdexcept>
 
-#include "Util.h"
-#include "Parser.h"
+#include "../common/Util.h"
+#include "../common/Parser.h"
 
 using std::runtime_error;
 
