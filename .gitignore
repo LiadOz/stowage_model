@@ -41,3 +41,9 @@ ex1
 *.vcxproj.*
 Debug
 *.vcxproj
+
+# visual studio code
+.vscode
+
+Simulation/*/simulation.errors
+Simulation/*/Instructions/*
