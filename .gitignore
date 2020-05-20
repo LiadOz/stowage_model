@@ -41,3 +41,8 @@ ex1
 *.vcxproj.*
 Debug
 *.vcxproj
+./simulation/simulator
+*.so
+*.old
+*.zip
+./simulation/Simulation/
