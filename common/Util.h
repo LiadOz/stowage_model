@@ -4,11 +4,13 @@
 #include <vector>
 #include <ostream>
 #include <fstream>
+#include <memory>
 
 using std::string;
 using std::vector;
 using std::ofstream;
 using std::stringstream;
+using std::shared_ptr;
 
 //files special chars defs
 #define FILE_COMMENT_LINE_CHAR '#'
@@ -24,9 +26,6 @@ using std::stringstream;
 #define COMMAND_LINE_TRAVEL "-travel_path"
 #define COMMAND_LINE_OUTPUT "-output"
 #define COMMAND_LINE_DEFAULT_FOLDER "/"
-
-//files extensions
-#define DYNAMIC_FILE_EXTENSION ".so"
 
 bool validRoute(const string& route);
 bool validCargoFile(const string& filename);
@@ -44,7 +43,6 @@ private:
     Logger(){};
     Logger(Logger const&);
     Logger& operator=(Logger const&);
-    static Logger* instance_p;
     string logType;
     ofstream file;
     bool firstLine = true;

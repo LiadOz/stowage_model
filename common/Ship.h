@@ -46,8 +46,8 @@ public:
     int readPlan(const string& file_path);
     size_t getNumFloors(){ return decks;}
     // returns the depth of the coordinate
-    size_t getCoordinateDepth(size_t x, size_t y){ return storage.getCoordinateDepth(x, y);}
-    size_t getCoordinateHeight(size_t x, size_t y){ return storage.getCoordinateHeight(x, y);}
+    int getCoordinateDepth(size_t x, size_t y){ return storage.getCoordinateDepth(x, y);}
+    int getCoordinateHeight(size_t x, size_t y){ return storage.getCoordinateHeight(x, y);}
     bool idOnShip(string id){ return idList.find(id) != idList.end();}
     // pushes container to (x1, y1) throws error if cannot be executed
     void insertContainer(size_t x, size_t y, Container& c); // insertes container to (x,y)
@@ -63,6 +63,7 @@ public:
     bool fullCoordinate(size_t x, size_t y){return storage.fullCoordinate(x, y);}
     pair<size_t, size_t> getStorageDimensions(){ return storage.getDimensions(); }
     vector<Container> getShipContainers() {return storage.getAllContainers();}
+    vector<Container> getCoordinateContainers(int x, int y){ return storage.getCoordinateContainers(x, y); }
     // used to find if a certain coordinate has a container with specific destinaion if it doesn't -1 is returned else it returns the number of containers above it.
     int getContainerDestinationLevel(size_t x, size_t y, const string& port){return storage.getContainerDestinationLevel(x, y, port);}
 
@@ -72,4 +73,5 @@ public:
 
 	void unloadedCargoAtCorrectPort() { totalCorrectUnloads++; }
 	int getTotalCorrectUnloads() { return totalCorrectUnloads; }
+    int freeSpaces() {return storage.freeSpaces();}
 };

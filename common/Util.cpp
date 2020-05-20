@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <sstream>
 
-#include "Exceptions.h"
+#include "exceptions.h"
 
 namespace fs = std::filesystem;
 
@@ -29,12 +29,9 @@ bool validCargoFile(const string& filename) {
 	return true;
 }
 
-Logger* Logger::instance_p = nullptr;
 Logger& Logger::Instance() {
-	if (!instance_p) {   // Only allow one instance of class to be generated.
-		instance_p = new Logger;
-	}
-	return *instance_p;
+    static Logger instance;
+	return instance;
 }
 
 // currently the logger prints to the screen

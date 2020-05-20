@@ -87,7 +87,7 @@ vector<Container> Algorithm::unloadAll(string port){
     return outside;
 }
 
-Algorithm::InsertStatus Algorithm::insertNextFree(Container c){
+Algorithm::InsertStatus Algorithm::insertNextFree(Container& c){
     pair<size_t, size_t> d = s.getStorageDimensions();
     while(next_x < d.first && next_y < d.second){
         if (!s.fullCoordinate(next_x, next_y)){
@@ -102,16 +102,15 @@ Algorithm::InsertStatus Algorithm::insertNextFree(Container c){
     }
     return FULL;
 }
-Algorithm::InsertStatus Algorithm::insertBiggestDepth(Container c){
+Algorithm::InsertStatus Algorithm::insertBiggestDepth(Container& c){
     auto d = s.getStorageDimensions();
-    auto maxDepth = s.getNumFloors();
+    int maxDepth = 0;
+    if (s.freeSpaces() == 0)
+        return FULL;
 
     for (size_t i = 0; i < d.first; ++i)
         for (size_t j = 0; j < d.second; ++j)
-            maxDepth = max(maxDepth, s.getCoordinateDepth(i, j));
-
-    if (maxDepth == s.getNumFloors())
-        return FULL;
+            maxDepth = max(maxDepth, (int)s.getCoordinateDepth(i, j));
 
     for (size_t i = 0; i < d.first; ++i)
         for (size_t j = 0; j < d.second; ++j)
@@ -122,6 +121,13 @@ Algorithm::InsertStatus Algorithm::insertBiggestDepth(Container c){
                 return SUCCSESS;
             }
     return IMPOSSIBLE;
+}
+
+bool Algorithm::validDestination(const string& destination){
+    for (auto& x : routes)
+        if (x == destination)
+            return true;
+    return false;
 }
 
 void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
@@ -138,6 +144,8 @@ void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awa
         parse>>row;
         try {
             Container c(row);
+            if (!validDestination(c.getDestination()))
+                throw NonFatalError("Id " + c.getId() + " route is invalid", ERROR_BAD_CARGO_PORT); 
             if(cargoIds.find(c.getId()) != cargoIds.end())
                 throw NonFatalError("Id " + c.getId() + " already at port", ERROR_DUPLICATE_PORT_ID); 
             if (s.idOnShip(c.getId())){

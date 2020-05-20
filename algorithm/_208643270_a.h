@@ -8,6 +8,5 @@ protected:
             const string& port, vector<Container>& awaiting);
 public:
     _208643270_a (){};
-    virtual string getName(){ return "_208643270_a";}
     virtual ~_208643270_a(){};
 };
