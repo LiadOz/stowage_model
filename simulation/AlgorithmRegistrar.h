@@ -23,6 +23,7 @@ class AlgorithmRegistrar
 
 	// Algorithm factories
 	std::vector<AlgorithmFactory> _factories;
+    std::vector<std::string> _names;
 
 	// iteration over factories
 	typedef decltype(_factories)::const_iterator const_iterator;
@@ -58,4 +59,9 @@ public:
         // Returns:
         //   true if given shared object's algorithm was registered successfully, false oterwise
         bool loadAlgorithmFromFile(const char *file_path, std::string& error);
+
+        // uses the factory iterator to get algorithm name
+        std::string getAlgorithmName(int index){
+            return _names[index];
+        }
 };

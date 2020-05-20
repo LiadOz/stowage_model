@@ -1,2 +1,0 @@
-algorithm need to get a name has performed 2 actions.
-the ship successfully delivered 0 cargos. 

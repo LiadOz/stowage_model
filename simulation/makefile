@@ -1,4 +1,4 @@
-COMP = g++-8
+COMP = g++-9
 #put all your object files here
 #OBJS = main.o Container.o Inventory.o Util.o Ship.o Algorithm.o WeightBalanceCalculator.o Simulation.o Port.o CraneOperations.o Parser.o AbstractAlgorithm.o Exceptions.o AdvancedAlgorithm.o
 OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o
@@ -28,5 +28,4 @@ Port.o: Port.cpp
 CraneOperations.o: CraneOperations.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:
-	rm -f ../common/*.o
 	rm -f $(OBJS) $(EXEC)

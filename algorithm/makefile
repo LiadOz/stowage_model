@@ -1,4 +1,4 @@
-COMP = g++-8
+COMP = g++-9
 
 OBJS = _208643270_a.o Algorithm.o _208643270_a.o
 EXEC = algtest

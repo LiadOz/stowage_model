@@ -1,20 +1,22 @@
 #include <iostream>
 #include <stdlib.h>
 #include "AlgorithmRegistrar.h"
-#include "../common/Container.h"
 #include <memory>
 
 int load() {
 
-    auto& registrar = AlgorithmRegistrar::getInstance(); {
-        std::string error;
-        if (!registrar.loadAlgorithmFromFile("../algorithm/_208643270_b.so", error)) {
-            std::cerr << error << '\n'; 
-                return EXIT_FAILURE;
-        }
+    auto& registrar = AlgorithmRegistrar::getInstance();
+    std::string error;
+    if (!registrar.loadAlgorithmFromFile("../algorithm/_208643270_b.so", error)) {
+        std::cerr << error << '\n'; 
+            return EXIT_FAILURE;
+    }
+    if (!registrar.loadAlgorithmFromFile("../algorithm/_208643270_a.so", error)) {
+        std::cerr << error << '\n'; 
+            return EXIT_FAILURE;
     }
     
-    	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 #include <stdlib.h>
 #include <filesystem>
@@ -34,7 +36,6 @@ namespace fs = std::filesystem;
 
 int main(int argc, char** argv) {
     load();
-    Ship s;
 
 	string algorithmPath, travelPath, outputPath;
     auto& registrar = AlgorithmRegistrar::getInstance();
@@ -49,13 +50,15 @@ int main(int argc, char** argv) {
 		for (const auto& entry : fs::directory_iterator(travelFolder)) {
 			const auto folderName = entry.path().filename().string();
 			if (entry.is_directory()) {
+                Logger::Instance().setFile(entry.path().string() + LOG_FILE);
+                Logger::Instance().setLogType("General");
+                Simulation::removeLogFiles(entry.path().string());
                 for (auto algo_iter = registrar.begin(); algo_iter != registrar.end(); ++algo_iter) {	
-                    Logger::Instance().setFile(entry.path().string() + LOG_FILE);
-                    Logger::Instance().setLogType("General");
-                    Simulation::removeLogFiles(entry.path().string());
                     auto algo = (*algo_iter)();
+                    std::string algName = registrar.getAlgorithmName(algo_iter - registrar.begin());
+                    std::cout << "running " << algName << std::endl;
                     //algo = std::unique_ptr<_208643270_a>(new _208643270_a());
-                    Simulation simulation(folderName, std::move(algo));
+                    Simulation simulation(folderName, std::move(algo), algName);
                     simulation.runSimulation();
                 }	
 			}
@@ -66,6 +69,7 @@ int main(int argc, char** argv) {
 		//TODO: log error
         std::cout << "hasdfasdf" << std::endl;
         std::cout << ferror.what() << std::endl;
+        return EXIT_FAILURE;
 	}
 
 	return EXIT_SUCCESS;

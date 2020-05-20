@@ -1,4 +1,4 @@
-COMP = g++-8
+COMP = g++-9
 OBJS = Container.o Inventory.o Util.o Ship.o WeightBalanceCalculator.o Parser.o Exceptions.o
 #The executabel filename DON'T CHANGE
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC

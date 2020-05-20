@@ -41,6 +41,3 @@ ex1
 *.vcxproj.*
 Debug
 *.vcxproj
-
-Simulation/*/simulation.errors
-Simulation/*/Instructions/*

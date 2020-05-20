@@ -4,11 +4,13 @@
 #include <vector>
 #include <ostream>
 #include <fstream>
+#include <memory>
 
 using std::string;
 using std::vector;
 using std::ofstream;
 using std::stringstream;
+using std::shared_ptr;
 
 //files special chars defs
 #define FILE_COMMENT_LINE_CHAR '#'
@@ -41,7 +43,6 @@ private:
     Logger(){};
     Logger(Logger const&);
     Logger& operator=(Logger const&);
-    static Logger* instance_p;
     string logType;
     ofstream file;
     bool firstLine = true;

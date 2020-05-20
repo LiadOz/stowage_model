@@ -18,6 +18,7 @@ using std::unique_ptr;
 class Simulation {
 private:
 	Ship* ship;
+    string algName;
     unique_ptr<AbstractAlgorithm> algorithm;
     vector<Port> route;
 	string folder; //root folder of the sim, changes per travel
@@ -49,7 +50,7 @@ private:
 
 public:
 	//constructor
-	Simulation(const string& rootFolder, unique_ptr<AbstractAlgorithm> alg);
+	Simulation(const string& rootFolder, unique_ptr<AbstractAlgorithm> alg, const string& algName);
 
 	//remove older log files before running the entire program
 	static void removeLogFiles(const string& simulationFolder);
