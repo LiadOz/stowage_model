@@ -1,8 +1,0 @@
-# num_floors, x_dim, y_dim
-3,2,2
-# X, Y, actual number for floors in (X, Y)
-# here only number apply
-0,0,3
-1,0,0
-1,1,1
-# coordinates that are not shown count as 0 floors
