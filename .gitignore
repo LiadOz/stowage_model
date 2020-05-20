@@ -45,4 +45,6 @@ Debug
 *.so
 *.old
 *.zip
+./simulation/Simulation/*
 ./simulation/Simulation/
+./simulation/Simulation

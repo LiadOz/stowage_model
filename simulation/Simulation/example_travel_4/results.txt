@@ -1,4 +1,4 @@
-algorithm _208643270_b.so has performed 0 actions.
-the ship successfully delivered 0 cargos. 
-algorithm _208643270_a.so has performed 0 actions.
-the ship successfully delivered 0 cargos. 
+algorithm _208643270_b.so has performed 49 actions.
+the ship successfully delivered 22 cargos. 
+algorithm _208643270_a.so has performed 83 actions.
+the ship successfully delivered 22 cargos. 
