@@ -1,4 +1,7 @@
+# simulation/Simulation
+**/Instructions/*
 ex1
+results.txt
 # Prerequisites
 *.d
 
@@ -45,6 +48,3 @@ Debug
 *.so
 *.old
 *.zip
-./simulation/Simulation/*
-./simulation/Simulation/
-./simulation/Simulation
