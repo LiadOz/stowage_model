@@ -48,4 +48,3 @@ Debug
 ./simulation/simulator
 *.so
 *.old
-*.zip
