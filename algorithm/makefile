@@ -1,4 +1,7 @@
 COMP = g++-9
+ifdef STOWAGE # used to complie on my computer
+	COMP = g++-9
+endif
 
 OBJS = _208643270_a.o Algorithm.o _208643270_a.o
 EXEC = algtest

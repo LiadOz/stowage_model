@@ -1,6 +1,8 @@
 COMP = g++-9
-#put all your object files here
-#OBJS = main.o Container.o Inventory.o Util.o Ship.o Algorithm.o WeightBalanceCalculator.o Simulation.o Port.o CraneOperations.o Parser.o AbstractAlgorithm.o Exceptions.o AdvancedAlgorithm.o
+ifdef STOWAGE # used to complie on my computer
+	COMP = g++-9
+endif
+
 OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o
 COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/WeightBalanceCalculator.o
 #The executabel filename DON'T CHANGE

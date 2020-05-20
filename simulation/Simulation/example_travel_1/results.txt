@@ -1,0 +1,4 @@
+algorithm _208643270_b.so has performed 5 actions.
+the ship successfully delivered 1 cargos. 
+algorithm _208643270_a.so has performed 9 actions.
+the ship successfully delivered 1 cargos. 

@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <sstream>
 
-#include "exceptions.h"
+#include "Exceptions.h"
 
 namespace fs = std::filesystem;
 
