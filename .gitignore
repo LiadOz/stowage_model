@@ -1,5 +1,6 @@
 # simulation/Simulation
 **/Instructions/*
+simulator
 #!/Instructions
 ex1
 results.txt
@@ -45,6 +46,5 @@ results.txt
 *.vcxproj.*
 Debug
 *.vcxproj
-./simulation/simulator
 *.so
 *.old

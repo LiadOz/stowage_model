@@ -1,4 +1,4 @@
-COMP = g++-9
+COMP = g++-9.3.0
 ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
