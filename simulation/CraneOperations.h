@@ -6,10 +6,10 @@
 #include "../common/Ship.h"
 #include "Port.h"
 
-#define OPERATION_LOAD "<L>"
-#define OPERATION_UNLOAD "<U>"
-#define OPERATION_MOVE "<M>"
-#define OPERATION_REJECT "<R>"
+#define OPERATION_LOAD "L"
+#define OPERATION_UNLOAD "U"
+#define OPERATION_MOVE "M"
+#define OPERATION_REJECT "R"
 
 #define CRANE_OPERATION_LOAD_NUM_OF_PARAM 5
 #define CRANE_OPERATION_UNLOAD_NUM_OF_PARAM 5

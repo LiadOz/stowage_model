@@ -1,4 +1,9 @@
+# simulation/Simulation
+**/Instructions/*
+simulator
+#!/Instructions
 ex1
+results.txt
 # Prerequisites
 *.d
 
@@ -43,8 +48,11 @@ Debug
 *.vcxproj
 
 #visual studio code
-
 simulation/.vscode
 common/.vscode
 algorithm/.vscode
 interfaces/.vscode
+
+*.so
+*.old
+!/compiled/*

@@ -12,7 +12,6 @@ namespace fs = std::filesystem;
 
 void AlgorithmRegistrar::DlCloser::operator()(void *dlhandle) const noexcept 
 {
-	std::cout << "Closing dl\n";
 	dlclose(dlhandle);
 }
 
@@ -47,7 +46,6 @@ bool AlgorithmRegistrar::loadAlgorithmFromFile(const char *file_path, std::strin
         return true;
     }
 
-    // On error - TODO: need to handle other cases..
     const char *dlopen_error = dlerror();
     error = dlopen_error ? dlopen_error : "Failed to open shared object!";
     return false;

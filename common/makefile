@@ -1,4 +1,11 @@
-COMP = g++-9
+COMP = g++-9.3.0
+ifdef STOWAGE # used to complie on my computer
+	COMP = g++-9
+endif
+
+OBJS = Container.o Inventory.o Util.o Ship.o WeightBalanceCalculator.o Parser.o Exceptions.o
+#The executabel filename DON'T CHANGE
+CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
 OBJS = Container.o Inventory.o Util.o Ship.o WeightBalanceCalculator.o Parser.o Exceptions.o
 #The executabel filename DON'T CHANGE
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC
