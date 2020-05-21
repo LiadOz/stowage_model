@@ -41,3 +41,10 @@ ex1
 *.vcxproj.*
 Debug
 *.vcxproj
+
+#visual studio code
+
+simulation/.vscode
+common/.vscode
+algorithm/.vscode
+interfaces/.vscode

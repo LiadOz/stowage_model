@@ -1,5 +1,6 @@
 #include "Util.h"
 
+#include <stdlib.h>
 #include <regex>
 #include <iostream>
 #include <filesystem>
@@ -7,39 +8,47 @@
 #include <stdexcept>
 #include <sstream>
 
-#include "exceptions.h"
+#include "Exceptions.h"
 
 namespace fs = std::filesystem;
 
+using std::cerr;
+using std::cout;
+using std::endl;
 using std::regex;
 using std::regex_match;
 using std::runtime_error;
 using std::stringstream;
 
-bool validRoute(const string& route) {
+bool validRoute(const string &route)
+{
 	regex r("[A-Z]{5}");
 	if (!regex_match(route, r))
 		return false;
 	return true;
 }
-bool validCargoFile(const string& filename) {
+bool validCargoFile(const string &filename)
+{
 	regex r("[A-Z]{5}_\\d*.cargo_data");
 	if (!regex_match(filename, r))
 		return false;
 	return true;
 }
 
-Logger& Logger::Instance() {
-    static Logger instance;
+Logger &Logger::Instance()
+{
+	static Logger instance;
 	return instance;
 }
 
 // currently the logger prints to the screen
-void Logger::logError(const string& message) {
+void Logger::logError(const string &message)
+{
 	file << "," << message;
 	std::cerr << "Error in " << logType << " : " << message << std::endl;
 }
-void Logger::setLogType(const string& type) {
+void Logger::setLogType(const string &type)
+{
 	if (!firstLine)
 		file << std::endl;
 	firstLine = false;
@@ -47,10 +56,12 @@ void Logger::setLogType(const string& type) {
 	file << logType;
 }
 
-bool isCommentLine(const string& line) {
+bool isCommentLine(const string &line)
+{
 
 	unsigned index = 0;
-	while (index < line.length()) {
+	while (index < line.length())
+	{
 		if (isspace(line[index]))
 			index++;
 		else
@@ -70,14 +81,17 @@ bool isCommentLine(const string& line) {
 //NOTE: not enough time for a pretty solution,
 //unlimitedParams is to bypass not enough params error (for crane operations where you can get different amount of params),
 //should create a new function and delete this logic later
-vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams) {
+vector<string> getDataFromLine(const string &line, int howManyParams, bool unlimitedParams)
+{
 
 	vector<string> dataVector;
 	stringstream streamLineFromFile(line);
 	string data;
 
-	for (int i = 0; i < howManyParams; i++) {
-		if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR)) {
+	for (int i = 0; i < howManyParams; i++)
+	{
+		if (getline(streamLineFromFile, data, FILE_LINE_SEPARATOR_CHAR))
+		{
 			//get rid of whitespace
 			stringstream dataStream(data);
 			dataStream >> data;
@@ -97,11 +111,14 @@ vector<string> getDataFromLine(const string& line, int howManyParams, bool unlim
 	return dataVector;
 }
 
-string getCommandLineParameterByName(int argc, char** argv, string paramName) {
+string getCommandLineParameterByName(int argc, char **argv, string paramName)
+{
 
 	//we don't need to check last param, as nothing will follow afterwards
-	for (int i = 0; i < argc - 1; i++) {
-		if (argv[i] == paramName) {
+	for (int i = 0; i < argc - 1; i++)
+	{
+		if (argv[i] == paramName)
+		{
 
 			//check if next param is a flag, aka requested param was empty
 			if (argv[i + 1][0] == '-')
@@ -109,32 +126,80 @@ string getCommandLineParameterByName(int argc, char** argv, string paramName) {
 				return "";
 			}
 
-			//return param
-			return argv[i + 1];
+			//return param, if it starts with dot remove it
+			string paramVal = argv[i + 1];
+			return paramVal[0] != '.' ? paramVal : paramVal.substr(1);
 		}
 	}
 
 	return "";
 }
 
-stringstream getCommandLineParameters(int argc, char** argv) {
+void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathStr, string &travelPathStr)
+{
+	string defaultPath = fs::current_path().string();
 
-	string temp;
+	path algorithmPath{defaultPath + COMMAND_LINE_FOLDER_SEPARATOR + algorithmPathStr};
+	path outputPath{defaultPath + COMMAND_LINE_FOLDER_SEPARATOR + outputPathStr};
+	path travelPath{defaultPath + COMMAND_LINE_FOLDER_SEPARATOR + travelPathStr};
+
+	if (!fs::exists(algorithmPath))
+	{
+		//todo: log in err file as well
+		cerr << "Provided algorithm directory doesn't exist. using root folder for algorithms instead." << endl;
+		algorithmPathStr = defaultPath;
+	}
+	else{
+		algorithmPathStr = algorithmPath.string();
+	}
+
+	if (!fs::exists(travelPath)) {
+		throw FatalError("travel path is invalid.");
+	}
+	else {
+		travelPathStr = travelPath.string();
+	}
+
+	try	{
+		fs::create_directory(outputPath);
+		outputPathStr = outputPath.string();
+	}
+
+	catch (std::filesystem::filesystem_error fs_error) {
+		//todo: log in err file as well
+		cerr << fs_error.what() << endl;
+		cerr << "using root folder for output instead." << endl;
+		outputPathStr = defaultPath;
+	}
+}
+
+stringstream getCommandLineParameters(int argc, char **argv)
+{
 	string algorithmPath;
 	string travelPath;
 	string outputPath;
-	string defaultPath = fs::current_path().string();
 
-	temp = getCommandLineParameterByName(argc, argv, COMMAND_LINE_TRAVEL);
-	
+	travelPath = getCommandLineParameterByName(argc, argv, COMMAND_LINE_TRAVEL);
+
 	//if no travel_path argument passed, throw fatal error
-	if (!temp.size()) {
+	if (!travelPath.size())
+	{
 		throw FatalError("Missing -travel_path argument");
 	}
 
-	travelPath = defaultPath + COMMAND_LINE_DEFAULT_FOLDER + temp;
-	algorithmPath = defaultPath + COMMAND_LINE_DEFAULT_FOLDER + getCommandLineParameterByName(argc, argv, COMMAND_LINE_ALGORITHM);
-	outputPath = defaultPath + COMMAND_LINE_DEFAULT_FOLDER + getCommandLineParameterByName(argc, argv, COMMAND_LINE_OUTPUT);
+	algorithmPath = getCommandLineParameterByName(argc, argv, COMMAND_LINE_ALGORITHM);
+	outputPath = getCommandLineParameterByName(argc, argv, COMMAND_LINE_OUTPUT);
+
+	//will change all relative paths to full paths
+	try
+	{
+		validateAndChangeDirectories(algorithmPath, outputPath, travelPath);
+	}
+
+	catch (const FatalError ferror)
+	{
+		throw ferror;
+	}
 
 	stringstream ss("");
 	ss << algorithmPath << " " << travelPath << " " << outputPath;
