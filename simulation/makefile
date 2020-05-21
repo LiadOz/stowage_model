@@ -30,4 +30,5 @@ Port.o: Port.cpp
 CraneOperations.o: CraneOperations.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:
+	rm -f ../common/.o
 	rm -f $(OBJS) $(EXEC)

@@ -7,6 +7,16 @@ int load() {
 
     auto& registrar = AlgorithmRegistrar::getInstance();
     std::string error;
+    /*
+    if (!registrar.loadAlgorithmFromFile("../_313263204_a.so", error)) {
+        std::cerr << error << '\n'; 
+            return EXIT_FAILURE;
+    }
+    if (!registrar.loadAlgorithmFromFile("../_313263204_b.so", error)) {
+        std::cerr << error << '\n'; 
+            return EXIT_FAILURE;
+    }
+    */
     if (!registrar.loadAlgorithmFromFile("../algorithm/_208643270_b.so", error)) {
         std::cerr << error << '\n'; 
             return EXIT_FAILURE;
