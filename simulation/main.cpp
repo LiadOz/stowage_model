@@ -1,18 +1,16 @@
-#include <iostream>
 #include <stdlib.h>
-#include <memory>
-#include <stdlib.h>
+
 #include <filesystem>
+#include <iostream>
+#include <memory>
 #include <sstream>
 
-#include "Simulation.h"
-
-#include "AlgorithmRegistrar.h"
-
-#include "../interfaces/AbstractAlgorithm.h"
-#include "../common/Util.h"
 #include "../common/Exceptions.h"
+#include "../common/Util.h"
+#include "../interfaces/AbstractAlgorithm.h"
 #include "./Results.h"
+#include "AlgorithmRegistrar.h"
+#include "Simulation.h"
 
 #define LOG_FILE "simulation.errors"
 #define FILE_SEPARATOR "/"
@@ -27,29 +25,8 @@ using std::endl;
 
 namespace fs = std::filesystem;
 
-int load()
-{
-
-	auto &registrar = AlgorithmRegistrar::getInstance();
-	string error;
-	//TODO: change to param path
-	if (!registrar.loadAlgorithmFromFile("../algorithm/_208643270_b.so", error))
-	{
-		std::cerr << error << '\n';
-		return EXIT_FAILURE;
-	}
-	//TODO: change to param path
-	if (!registrar.loadAlgorithmFromFile("../algorithm/_208643270_a.so", error))
-	{
-		std::cerr << error << '\n';
-		return EXIT_FAILURE;
-	}
-
-	return EXIT_SUCCESS;
-}
-
-void loadAlgorithms(const path& algFolder){
-	auto &registrar = AlgorithmRegistrar::getInstance();
+void loadAlgorithms(const path &algFolder) {
+    auto &registrar = AlgorithmRegistrar::getInstance();
     for (const auto &entry : fs::directory_iterator(algFolder)) {
         if (entry.path().filename().extension() == DYNAMIC_FILE_EXTENSION) {
             string error;
@@ -61,50 +38,60 @@ void loadAlgorithms(const path& algFolder){
 }
 
 int main(int argc, char **argv) {
-
     string algorithmDirStr, travelDirStr, outputDirStr;
-	try { //get command line arguments
-		getCommandLineParameters(argc, argv) >> algorithmDirStr >> travelDirStr >> outputDirStr;
-	}
-	catch (const FatalError &ferror)
-	{
-		//TODO: log error
-		std::cout << ferror.what() << endl
-				  << "Exiting..." << endl;
-		return EXIT_FAILURE;
-	}
     Results r;
-    for (const auto& entry : fs::directory_iterator(travelDirStr))
-        if (entry.is_directory()) r.addTravel(entry.path().filename().string());
-    loadAlgorithms(algorithmDirStr);
-	auto& registrar = AlgorithmRegistrar::getInstance();
-    for (auto algo_iter = registrar.begin(); 
-            algo_iter != registrar.end(); ++algo_iter) {
-        std::string algName = 
-            registrar.getAlgorithmName( algo_iter - registrar.begin());
+    auto &registrar = AlgorithmRegistrar::getInstance();
+
+    try {
+        //get command line arguments
+        getCommandLineParameters(argc, argv) >> algorithmDirStr >> travelDirStr >> outputDirStr;
+    }
+
+    catch (const FatalError &ferror) {
+        //TODO: log error
+        std::cout << ferror.what() << endl
+                  << "Exiting..." << endl;
+        return EXIT_FAILURE;
+    }
+
+    //create paths from strings
+    const path algorithmPath{algorithmDirStr};
+    const path travelPath{travelDirStr};
+    const path outputPath{outputDirStr};
+
+    for (const auto &entry : fs::directory_iterator(travelPath))
+        if (entry.is_directory()) {
+            r.addTravel(entry.path().filename().string());
+        }
+
+    loadAlgorithms(algorithmPath);
+
+    for (auto algo_iter = registrar.begin();
+         algo_iter != registrar.end(); ++algo_iter) {
+        std::string algName =
+            registrar.getAlgorithmName(algo_iter - registrar.begin());
 
         r.startRecordingAlg(algName);
 
-        for (const auto& entry : fs::directory_iterator(travelDirStr)){
-            if (!entry.is_directory()) continue;
-                //Logger::Instance().setFile(entry.path().string() + LOG_FILE);
-                //Logger::Instance().setLogType("General");
+        for (const auto &entry : fs::directory_iterator(travelPath)) {
+            if (!entry.is_directory())
+                continue;
+            //Logger::Instance().setFile(entry.path().string() + LOG_FILE);
+            //Logger::Instance().setLogType("General");
             auto algo = (*algo_iter)();
-            Simulation simulation(
-                    entry.path().string(), std::move(algo), algName);
+            string travelName = entry.path().filename().string();
+            Simulation simulation(outputPath.string(), travelPath.string(), travelName, algName, std::move(algo));
             simulation.runSimulation();
             r.addAlgResult(1);
-
         }
     }
     r.writeToFile("this");
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
 
-
-    // manual check
-    /*
+// manual check
+/*
     auto algo = (*registrar.begin())();
     std::string algName = registrar.getAlgorithmName(0);
     string folderName = "./Simulation/example_travel_4";
@@ -112,7 +99,7 @@ int main(int argc, char **argv) {
     Simulation simulation(folderName, std::move(algo), algName);
     simulation.runSimulation();
     */
-        /*
+/*
 		//create paths from strings
 		const path algorithmPath{algorithmDirStr};
 		const path travelPath{travelDirStr};
@@ -161,4 +148,3 @@ int main(int argc, char **argv) {
 		//delete bruteAlgorithm;
 		//delete rejectAlgorithm;
 */
-

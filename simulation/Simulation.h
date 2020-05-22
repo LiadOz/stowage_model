@@ -23,13 +23,14 @@ private:
     unique_ptr<AbstractAlgorithm> algorithm;
     vector<Port> route;
 	string folder; //root folder of the sim, changes per travel
+	string outputFolder;
 	int actionsPerformedCounter = 0; //count total actions performed
 	
 	//will load all containers from file to the relevant port
 	map<string, list<string> > createPortsCargoFromFiles(); 
 	
 	//init algorithm stuff
-	void prepareAlgorithm(const string& shipPath, const string& routePath);
+	void prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory);
 	
 	//will load all containers from file to the relevant port
 	bool loadContainersToPortsInRoute();
@@ -51,7 +52,7 @@ private:
 
 public:
 	//constructor
-	Simulation(const string& travelFolder, unique_ptr<AbstractAlgorithm> alg, const string& algName);
+	Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> alg);
 
 	//remove older log files before running the entire program
 	static void removeLogFiles(const string& simulationFolder);
