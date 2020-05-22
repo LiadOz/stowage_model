@@ -54,12 +54,11 @@ private:
     Logger(Logger const&);
     Logger& operator=(Logger const&);
     string logType;
-    ofstream file;
+    string filePath;
     bool firstLine = true;
 public:
     static Logger& Instance();
-    void setFile(const string& file_path){ file.open(file_path); firstLine = true;}
-    void saveFile(){file.close();}
+    void setFile(const string& file_path){filePath=file_path; firstLine = true;}
     void logError(const string& message);
     void setLogType(const string& type);
 };

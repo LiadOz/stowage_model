@@ -57,6 +57,6 @@ public:
 	static void removeLogFiles(const string& simulationFolder);
 
 	//the main function for simulator, will run the sim itself
-	void runSimulation();
+	int runSimulation();
 	~Simulation();
 };

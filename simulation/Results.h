@@ -11,6 +11,9 @@ class Results {
 private:
     vector<string> travels;
     vector<pair<string, vector<int>>> algResults;
+
+    void sumResults();
+    void sortResults();
 public:
     Results(){};
     void writeToFile(const string& outputFile);

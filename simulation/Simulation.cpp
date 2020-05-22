@@ -28,7 +28,8 @@ Simulation::Simulation(const string& travelFolder, unique_ptr<AbstractAlgorithm>
     folder = travelFolder + FILE_SEPARATOR;
 	string shipPath = getFileWithExt(folder, PLAN_EXT);
 	string routePath = getFileWithExt(folder, ROUTE_EXT);
-	route = createShipRoute(routePath);
+    // TODO: check if route and ship plan files and inside content are valid
+    route = createShipRoute(routePath);
 	loadContainersToPortsInRoute();
     ship.readPlan(shipPath);
 	algorithm = std::move(algo);
@@ -125,11 +126,10 @@ map<string, list<string>> Simulation::createPortsCargoFromFiles()
 }
 
 //the main function for simulator, will run the sim itself
-void Simulation::runSimulation()
+int Simulation::runSimulation()
 {
 	vector<Port>& ports = this->route;
 	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
-	Logger::Instance().setLogType(algName);
 
 	//go through all the ports and do actions there
 	for (size_t i = 0; i < ports.size(); i++) {
@@ -146,6 +146,7 @@ void Simulation::runSimulation()
 	}
 
 	logResults();
+    return actionsPerformedCounter;
 }
 
 //read file from algo and try to do the actions
@@ -269,5 +270,4 @@ void Simulation::logSimulationErrors(const string& funcName, const string& error
 
 
 Simulation::~Simulation() {
-	LOG.saveFile();
 }
