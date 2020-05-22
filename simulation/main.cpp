@@ -12,6 +12,7 @@
 #include "../interfaces/AbstractAlgorithm.h"
 #include "../common/Util.h"
 #include "../common/Exceptions.h"
+#include "./Results.h"
 
 #define LOG_FILE "simulation.errors"
 #define FILE_SEPARATOR "/"
@@ -72,14 +73,34 @@ int main(int argc, char **argv) {
 				  << "Exiting..." << endl;
 		return EXIT_FAILURE;
 	}
+    Results r;
+    for (const auto& entry : fs::directory_iterator(travelDirStr))
+        if (entry.is_directory()) r.addTravel(entry.path().filename().string());
+    loadAlgorithms(algorithmDirStr);
 	auto& registrar = AlgorithmRegistrar::getInstance();
-    for (auto algo_iter = registrar.begin(); algo_iter != registrar.end(); ++algo_iter) {
-        auto algo = (*algo_iter)();
-        std::string algName = registrar.getAlgorithmName(algo_iter - registrar.begin());
-        //algo = std::unique_ptr<_208643270_a>(new _208643270_a());
-        Simulation simulation("./Simulation/example_travel_3", std::move(algo), algName);
-        simulation.runSimulation();
+    for (auto algo_iter = registrar.begin(); 
+            algo_iter != registrar.end(); ++algo_iter) {
+        std::string algName = 
+            registrar.getAlgorithmName( algo_iter - registrar.begin());
+
+        r.startRecordingAlg(algName);
+
+        for (const auto& entry : fs::directory_iterator(travelDirStr)){
+            if (!entry.is_directory()) continue;
+                //Logger::Instance().setFile(entry.path().string() + LOG_FILE);
+                //Logger::Instance().setLogType("General");
+            auto algo = (*algo_iter)();
+            Simulation simulation(
+                    entry.path().string(), std::move(algo), algName);
+            simulation.runSimulation();
+            r.addAlgResult(1);
+
+        }
     }
+    r.writeToFile("this");
+
+	return EXIT_SUCCESS;
+}
 
 
     // manual check
@@ -141,5 +162,3 @@ int main(int argc, char **argv) {
 		//delete rejectAlgorithm;
 */
 
-	return EXIT_SUCCESS;
-}

@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "Exceptions.h"
+#define DYNAMIC_FILE_EXTENSION ".so"
 
 namespace fs = std::filesystem;
 
