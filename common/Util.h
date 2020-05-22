@@ -5,12 +5,16 @@
 #include <ostream>
 #include <fstream>
 #include <memory>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 using std::string;
 using std::vector;
 using std::ofstream;
 using std::stringstream;
 using std::shared_ptr;
+using fs::path;
 
 //files special chars defs
 #define FILE_COMMENT_LINE_CHAR '#'
@@ -25,7 +29,10 @@ using std::shared_ptr;
 #define COMMAND_LINE_ALGORITHM "-algorithm_path"
 #define COMMAND_LINE_TRAVEL "-travel_path"
 #define COMMAND_LINE_OUTPUT "-output"
-#define COMMAND_LINE_DEFAULT_FOLDER "/"
+#define COMMAND_LINE_FOLDER_SEPARATOR "/"
+
+//files extensions
+#define DYNAMIC_FILE_EXTENSION ".so"
 
 bool validRoute(const string& route);
 bool validCargoFile(const string& filename);
@@ -33,6 +40,7 @@ bool isCommentLine(const string& line);
 // throws exception if got too many arugments
 vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams = false);
 stringstream getCommandLineParameters(int argc, char** argv);
+bool isDirectoriesExists(const path& algorithmPath,const path& travelPath);
 
 // making the logger easier to start
 #define LOG Logger::Instance()

@@ -46,7 +46,13 @@ results.txt
 *.vcxproj.*
 Debug
 *.vcxproj
+
+#visual studio code
+simulation/.vscode
+common/.vscode
+algorithm/.vscode
+interfaces/.vscode
+
 *.so
 *.old
-
 !/compiled/*
