@@ -115,23 +115,27 @@ map<string, list<string>> Simulation::createPortsCargoFromFiles() {
 }
 
 //the main function for simulator, will run the sim itself
-void Simulation::runSimulation() {
-    vector<Port>& ports = this->route;
-    string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
-    Logger::Instance().setLogType(algName);
+int Simulation::runSimulation()
+{
+	vector<Port>& ports = this->route;
+	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
 
-    //go through all the ports and do actions there
-    for (size_t i = 0; i < ports.size(); i++) {
-        try {
-            string outputFilePath = outputFolderPath + std::to_string(i);
-            algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
-            performAlgorithmActions(outputFilePath, ports[i]);
-        } catch (const std::exception& error) {
-            logSimulationErrors("runSimulation", error.what());
-        }
-    }
+	//go through all the ports and do actions there
+	for (size_t i = 0; i < ports.size(); i++) {
+		try
+		{
+			string outputFilePath = outputFolderPath + std::to_string(i);
+			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
+			performAlgorithmActions(outputFilePath, ports[i]);
+		}
+		catch (const std::exception & error)
+		{
+			logSimulationErrors("runSimulation", error.what());
+		}
+	}
 
-    logResults();
+	logResults();
+    return actionsPerformedCounter;
 }
 
 //read file from algo and try to do the actions
@@ -235,5 +239,4 @@ void Simulation::logSimulationErrors(const string& funcName, const string& error
 }
 
 Simulation::~Simulation() {
-    LOG.saveFile();
 }

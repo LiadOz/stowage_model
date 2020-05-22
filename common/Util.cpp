@@ -43,18 +43,23 @@ Logger &Logger::Instance()
 }
 
 // currently the logger prints to the screen
-void Logger::logError(const string &message)
-{
+
+void Logger::logError(const string &message) {
+    ofstream file;
+    file.open(filePath, std::ios::out | std::ios::app);
 	file << "," << message;
+    file.close();
 	std::cerr << "Error in " << logType << " : " << message << std::endl;
 }
-void Logger::setLogType(const string &type)
-{
+void Logger::setLogType(const string &type) {
+    ofstream file;
+    file.open(filePath, std::ios::out | std::ios::app);
 	if (!firstLine)
 		file << std::endl;
 	firstLine = false;
 	logType = type;
 	file << logType;
+    file.close();
 }
 
 bool isCommentLine(const string &line)

@@ -56,3 +56,5 @@ interfaces/.vscode
 *.so
 *.old
 !/compiled/*
+*.errors
+*.results
