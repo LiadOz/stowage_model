@@ -15,9 +15,10 @@ using std::map;
 using std::list;
 using std::unique_ptr;
 
+// simulates an algorithm travel pair
 class Simulation {
 private:
-	Ship* ship;
+	Ship ship;
     string algName;
     unique_ptr<AbstractAlgorithm> algorithm;
     vector<Port> route;
@@ -40,7 +41,7 @@ private:
 	CraneOperation* createOperationFromLine(const string& line);
 
 	//make sure all cargo is in the port
-	void validateAllPortCargoUnloaded(Ship* ship, Port& port);
+	void validateAllPortCargoUnloaded(Ship& ship, Port& port);
 
 	//log the results 
 	void logResults();
@@ -50,7 +51,7 @@ private:
 
 public:
 	//constructor
-	Simulation(const string& rootFolder, unique_ptr<AbstractAlgorithm> alg, const string& algName);
+	Simulation(const string& travelFolder, unique_ptr<AbstractAlgorithm> alg, const string& algName);
 
 	//remove older log files before running the entire program
 	static void removeLogFiles(const string& simulationFolder);

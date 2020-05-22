@@ -165,7 +165,7 @@ void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathSt
 		outputPathStr = outputPath.string();
 	}
 
-	catch (std::filesystem::filesystem_error fs_error) {
+	catch (std::filesystem::filesystem_error& fs_error) {
 		//todo: log in err file as well
 		cerr << fs_error.what() << endl;
 		cerr << "using root folder for output instead." << endl;
@@ -196,7 +196,7 @@ stringstream getCommandLineParameters(int argc, char **argv)
 		validateAndChangeDirectories(algorithmPath, outputPath, travelPath);
 	}
 
-	catch (const FatalError ferror)
+	catch (FatalError& ferror)
 	{
 		throw ferror;
 	}
@@ -205,4 +205,11 @@ stringstream getCommandLineParameters(int argc, char **argv)
 	ss << algorithmPath << " " << travelPath << " " << outputPath;
 
 	return ss;
+}
+
+string getFileWithExt(const string& folder, const string& ext){
+    for (const auto &entry : fs::directory_iterator(folder))
+        if (entry.path().filename().extension() == ext)
+            return entry.path().string();
+    return "";
 }

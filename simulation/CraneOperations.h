@@ -27,7 +27,7 @@ protected:
 	Operations operation;
 	string containerID;
 public:
-	virtual void doOperation(Ship* ship, Port& port) = 0;
+	virtual void doOperation(Ship& ship, Port& port) = 0;
 	static Operations getOperationType(const string& str);
 	CraneOperation() { operation = Operations::undefined; containerID = ""; };
 	virtual ~CraneOperation() {};
@@ -42,7 +42,7 @@ private:
 	int height;
 public:
 	LoadCraneOperation(const vector<string>& params);
-	virtual void doOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship& ship, Port& port);
 	virtual ~LoadCraneOperation() {};
 };
 
@@ -54,7 +54,7 @@ private:
 	int height;
 public:
 	UnloadCraneOperation(const vector<string>& params);
-	virtual void doOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship& ship, Port& port);
 	virtual ~UnloadCraneOperation() {};
 };
 
@@ -69,7 +69,7 @@ private:
 	int heightTo;
 public:
 	MoveCraneOperation(const vector<string>& params);
-	virtual void doOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship& ship, Port& port);
 	virtual ~MoveCraneOperation() {};
 };
 
@@ -78,6 +78,6 @@ class RejectCraneOperation : public CraneOperation {
 private:
 public:
 	RejectCraneOperation(const vector<string>& params);
-	virtual void doOperation(Ship* ship, Port& port);
+	virtual void doOperation(Ship& ship, Port& port);
 	virtual ~RejectCraneOperation() {};
 };

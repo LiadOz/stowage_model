@@ -51,11 +51,11 @@ LoadCraneOperation::LoadCraneOperation(const vector<string>& params) {
 	}
 }
 
-void LoadCraneOperation::doOperation(Ship* ship, Port& port) {
+void LoadCraneOperation::doOperation(Ship& ship, Port& port) {
 	try
 	{
 		Container container = port.removeContainer(this->containerID);
-		ship->insertContainer(row, col, container);
+		ship.insertContainer(row, col, container);
 	}
 	catch (const std::exception & error)
 	{
@@ -83,10 +83,10 @@ UnloadCraneOperation::UnloadCraneOperation(const vector<string>& params) {
 	}
 }
 
-void UnloadCraneOperation::doOperation(Ship* ship, Port& port) {
+void UnloadCraneOperation::doOperation(Ship& ship, Port& port) {
 	try
 	{
-		Container container = ship->removeContainer(row, col);
+		Container container = ship.removeContainer(row, col);
 		bool addedContainerToPort = port.addContainer(container);
 		if (!addedContainerToPort)
 		{
@@ -94,7 +94,7 @@ void UnloadCraneOperation::doOperation(Ship* ship, Port& port) {
 		}
 		if (container.getDestination() == port.getPortCode())
 		{
-			ship->unloadedCargoAtCorrectPort();
+			ship.unloadedCargoAtCorrectPort();
 		}
 	}
 	catch (const std::exception & error)
@@ -127,11 +127,11 @@ MoveCraneOperation::MoveCraneOperation(const vector<string>& params) {
 	}
 }
 
-void MoveCraneOperation::doOperation(Ship* ship, Port& port) {
+void MoveCraneOperation::doOperation(Ship& ship, Port& port) {
 	try
 	{
         (void)port;
-		ship->moveContainer(rowFrom, colFrom, rowTo, colTo);
+		ship.moveContainer(rowFrom, colFrom, rowTo, colTo);
 	}
 	catch (const std::exception& error)
 	{
@@ -156,12 +156,12 @@ RejectCraneOperation::RejectCraneOperation(const vector<string>& params) {
 	}
 }
 
-void RejectCraneOperation::doOperation(Ship* ship, Port& port) {
+void RejectCraneOperation::doOperation(Ship& ship, Port& port) {
 	//TODO: shouldn't be in ship class (change in exec2), and add GetContainer function in port
 	try
 	{
 		Container container = port.removeContainer(containerID);
-		ship->rejectContainer(container);
+		ship.rejectContainer(container);
 		port.addContainer(container);
 
 	}

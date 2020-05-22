@@ -58,7 +58,7 @@ public:
         //   error - On failure, it will be filled with a Human-readable error message.
         // Returns:
         //   true if given shared object's algorithm was registered successfully, false oterwise
-        bool loadAlgorithmFromFile(const char *file_path, std::string& error);
+        bool loadAlgorithmFromFile(const std::string& file_path, std::string& error);
 
         // uses the factory iterator to get algorithm name
         std::string getAlgorithmName(int index){

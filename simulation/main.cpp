@@ -47,14 +47,18 @@ int load()
 	return EXIT_SUCCESS;
 }
 
-int main(int argc, char **argv)
-{
-	string algorithmDirStr, travelDirStr, outputDirStr;
-	vector<AbstractAlgorithm> algorithms;
+int main(int argc, char **argv) {
+    load();
+    (void)argc;(void)argv;
 	auto &registrar = AlgorithmRegistrar::getInstance();
-
-	try
-	{
+    auto algo = (*registrar.begin())();
+    std::string algName = registrar.getAlgorithmName(0);
+    string folderName = "./Simulation/example_travel_4";
+    std::cout << "running " << algName << std::endl;
+    Simulation simulation(folderName, std::move(algo), algName);
+    simulation.runSimulation();
+    /*
+	try {
 		//get command line arguments
 		getCommandLineParameters(argc, argv) >> algorithmDirStr >> travelDirStr >> outputDirStr;
 
@@ -69,7 +73,12 @@ int main(int argc, char **argv)
 		{
 			if (entry.path().filename().extension() == DYNAMIC_FILE_EXTENSION)
 			{
-				//todo: register algo and add to algo vectors
+                string error;
+                // TODO log
+                if (!registrar.loadAlgorithmFromFile(entry.path().string(), error)) {
+                    std::cerr << error << '\n';
+                    return EXIT_FAILURE;
+                }
 			}
 		}
 
@@ -79,6 +88,8 @@ int main(int argc, char **argv)
 			//TODO: log algorithm loaded or something
 			for (const auto &entry : travelPath)
 			{
+                (void)entry;
+                (void)algorithm;
 				//todo: continue here
 			}
 		}
@@ -119,6 +130,7 @@ int main(int argc, char **argv)
 				  << "Exiting..." << endl;
 		return EXIT_FAILURE;
 	}
+*/
 
 	return EXIT_SUCCESS;
 }

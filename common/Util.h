@@ -41,6 +41,8 @@ bool isCommentLine(const string& line);
 vector<string> getDataFromLine(const string& line, int howManyParams, bool unlimitedParams = false);
 stringstream getCommandLineParameters(int argc, char** argv);
 bool isDirectoriesExists(const path& algorithmPath,const path& travelPath);
+// returns path to file with certian extension
+string getFileWithExt(const string& folder, const string& ext);
 
 // making the logger easier to start
 #define LOG Logger::Instance()

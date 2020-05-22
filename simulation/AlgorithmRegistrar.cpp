@@ -28,12 +28,12 @@ AlgorithmRegistrar::~AlgorithmRegistrar()
 	_handles.clear();
 }
 
-bool AlgorithmRegistrar::loadAlgorithmFromFile(const char *file_path, std::string& error) {
+bool AlgorithmRegistrar::loadAlgorithmFromFile(const std::string& file_path, std::string& error) {
 
     auto currentAlgs = _factories.size();
     std::string filename = fs::path(file_path).filename();
     // Try to load given module
-    DlHandler algo_handle(dlopen(file_path, RTLD_LAZY));
+    DlHandler algo_handle(dlopen(file_path.c_str(), RTLD_LAZY));
 
     // Check if dlopen succeeded
     if (algo_handle != nullptr) {

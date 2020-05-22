@@ -15,20 +15,22 @@ using std::endl;
 #define SIMULATION_ROOT_FOLDER "./Simulation/"
 #define SIMULATION_SHIP_FILE_NAME "sample.plan"
 #define SIMULATION_ROUTE_FILE_NAME "ports"
-#define SIMULATION_PORTS_FOLDER_NAME "portsCargo/"
 #define SIMULATION_CARGO_INSTRUCTIONS_FOLDER "Instructions/"
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(const string& rootFolder, unique_ptr<AbstractAlgorithm> algo, const string& algName) {
-	string folderPath = SIMULATION_ROOT_FOLDER + rootFolder + FILE_SEPARATOR;
-	string shipPath = folderPath + SIMULATION_SHIP_FILE_NAME;
-	string routePath = folderPath + SIMULATION_ROUTE_FILE_NAME;
-	folder = folderPath;
+
+#define CARGO_EXT   ".cargo_data"
+#define PLAN_EXT    ".ship_plan"
+#define ROUTE_EXT   ".route"
+
+Simulation::Simulation(const string& travelFolder, unique_ptr<AbstractAlgorithm> algo, const string& algName) {
+    folder = travelFolder + FILE_SEPARATOR;
+	string shipPath = getFileWithExt(folder, PLAN_EXT);
+	string routePath = getFileWithExt(folder, ROUTE_EXT);
 	route = createShipRoute(routePath);
 	loadContainersToPortsInRoute();
-    ship = new Ship();
-    ship->readPlan(shipPath);
+    ship.readPlan(shipPath);
 	algorithm = std::move(algo);
     this->algName = algName;
 	prepareAlgorithm(shipPath, routePath);
@@ -85,7 +87,7 @@ bool Simulation::loadContainersToPortsInRoute()
 
 			else
 			{
-				port.loadContainersFromFile(folder + SIMULATION_PORTS_FOLDER_NAME + filesList.front());
+				port.loadContainersFromFile(folder + filesList.front());
 				filesList.pop_front();
 			}
 		}
@@ -99,7 +101,7 @@ map<string, list<string>> Simulation::createPortsCargoFromFiles()
 {
 	map<string, list<string>> map;
 
-	for (const auto& entry : fs::directory_iterator(folder + SIMULATION_PORTS_FOLDER_NAME))
+	for (const auto& entry : fs::directory_iterator(folder))
 	{
 		string fileName = entry.path().filename().string();
 
@@ -193,10 +195,10 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port)
 }
 
 //make sure all cargo is in the port
-void Simulation::validateAllPortCargoUnloaded(Ship* ship, Port& port)
+void Simulation::validateAllPortCargoUnloaded(Ship& ship, Port& port)
 {
 	string portID = port.getPortCode();
-	vector<Container> shipContainers = ship->getShipContainers();
+	vector<Container> shipContainers = ship.getShipContainers();
 
 	for (size_t i = 0; i < shipContainers.size(); i++)
 	{
@@ -256,7 +258,7 @@ void Simulation::logResults()
 	ofstream file;
 	file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
 	file << "algorithm " << algName << " has performed " << actionsPerformedCounter << " actions." << endl;
-	file << "the ship successfully delivered " << ship->getTotalCorrectUnloads() << " cargos. " << endl;
+	file << "the ship successfully delivered " << ship.getTotalCorrectUnloads() << " cargos. " << endl;
 	file.close();
 }
 
@@ -267,6 +269,5 @@ void Simulation::logSimulationErrors(const string& funcName, const string& error
 
 
 Simulation::~Simulation() {
-	delete this->ship;
 	LOG.saveFile();
 }

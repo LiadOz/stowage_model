@@ -7,7 +7,7 @@ OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o C
 COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/WeightBalanceCalculator.o
 #The executabel filename DON'T CHANGE
 EXEC = simulator
-CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
+CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC
 #CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -pedantic-errors -DNDEBUG
 CPP_LINK_FLAG = -lstdc++fs -export-dynamic -ldl
 
