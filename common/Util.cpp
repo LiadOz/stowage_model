@@ -133,27 +133,27 @@ string getCommandLineParameterByName(int argc, char **argv, string paramName) {
 
 void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathStr, string &travelPathStr) {
 
-    path algorithmPath{fs::canonical(algorithmPathStr)};
-    path outputPath{fs::canonical(outputPathStr)};
-    path travelPath{fs::canonical(travelPathStr)};
+    path algorithmPath{algorithmPathStr};
+    path outputPath{outputPathStr};
+    path travelPath{travelPathStr};
 
     if (!fs::exists(algorithmPath)) {
         //todo: log in err file as well
         cerr << "Provided algorithm directory doesn't exist. using root folder for algorithms instead." << endl;
         algorithmPathStr = fs::current_path();
     } else {
-        algorithmPathStr = algorithmPath.string();
+        algorithmPathStr = fs::canonical(algorithmPath).string();
     }
 
     if (!fs::exists(travelPath)) {
         throw FatalError("travel path is invalid.");
     } else {
-        travelPathStr = travelPath.string();
+        travelPathStr = fs::canonical(travelPath).string();
     }
 
     try {
         fs::create_directory(outputPath);
-        outputPathStr = outputPath.string();
+        outputPathStr =  fs::canonical(outputPath.string());
     }
 
     catch (std::filesystem::filesystem_error &fs_error) {
