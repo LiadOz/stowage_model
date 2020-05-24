@@ -87,7 +87,6 @@ bool Simulation::loadContainersToPortsInRoute() {
         }
 
         else {
-            
             auto& filesList = portsMap.find(portCode)->second;
             bool foundFile = false;
 
@@ -136,14 +135,28 @@ map<string, list<string>> Simulation::createPortsCargoFromFiles() {
 //the main function for simulator, will run the sim itself
 int Simulation::runSimulation() {
     vector<Port>& ports = this->route;
-    string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
+
+    map<string, int> portsEncountermentsMap;
 
     //go through all the ports and do actions there
     for (size_t i = 0; i < ports.size(); i++) {
         try {
-            string outputFilePath = outputFolderPath + std::to_string(i);
-            algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
-            performAlgorithmActions(outputFilePath, ports[i]);
+            Port& port = ports[i];
+            string portCode = port.getPortCode();
+
+            //count how many times we've visited each port so we can get the currect file
+            if (portsEncountermentsMap.find(portCode) == portsEncountermentsMap.end()) {
+                portsEncountermentsMap.insert(std::make_pair(portCode, 1));
+            } else {
+                int numOfTimes = portsEncountermentsMap.find(portCode)->second;
+                portsEncountermentsMap.find(portCode)->second = numOfTimes + 1;
+            }
+
+            string instructionsFileName = portCode + '_' + std::to_string(portsEncountermentsMap.find(portCode)->second) + string(CARGO_EXT);
+
+            string outputFilePath = this->outputFolder + "/" + instructionsFileName;
+            algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
+            performAlgorithmActions(outputFilePath, port);
         } catch (const std::exception& error) {
             logSimulationErrors("runSimulation", error.what());
         }
@@ -181,7 +194,6 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
                 logSimulationErrors("performAlgorithmActions", error.what());
             }
         }
-
     }
 
     validateAllPortCargoUnloaded(this->ship, port);

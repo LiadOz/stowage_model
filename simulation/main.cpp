@@ -54,8 +54,8 @@ int main(int argc, char** argv) {
     const path travelPath{travelDirStr};
     const path outputPath{outputDirStr};
 
-    remove((outputDirStr + LOG_FILE).c_str());
-    LOG.setFile(outputDirStr + LOG_FILE);
+    remove((outputDirStr + '/' + LOG_FILE).c_str());
+    LOG.setFile(outputDirStr + '/' + LOG_FILE);
     LOG.setLogType("General");
 
     Results r;  // registring travels in results
