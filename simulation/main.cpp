@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
             }
         }
     }
-    r.writeToFile(RESULTS_FILE);
+    r.writeToFile(travelPath.string() + '/' + RESULTS_FILE);
 
     return EXIT_SUCCESS;
 }
