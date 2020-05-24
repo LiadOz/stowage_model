@@ -37,7 +37,7 @@ Simulation::Simulation(const string& outputDirectory, const string& travelDirect
         ship.readPlan(shipPath);
         this->algName = algorithmName;
         this->outputFolder = simOutputDirectory;
-        prepareAlgorithm(shipPath, routePath, simOutputDirectory);
+        prepareAlgorithm(shipPath, routePath);
     }
 
     catch (const FatalError& ferror) {
@@ -46,10 +46,9 @@ Simulation::Simulation(const string& outputDirectory, const string& travelDirect
 }
 
 //init algorithm stuff
-void Simulation::prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory) {
+void Simulation::prepareAlgorithm(const string& shipPath, const string& routePath) {
     algorithm->readShipPlan(shipPath);
     algorithm->readShipRoute(routePath);
-    fs::create_directory(outputDirectory);
 }
 
 //remove older log files before running the entire program
