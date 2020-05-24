@@ -84,7 +84,7 @@ bool Simulation::loadContainersToPortsInRoute() {
 
         //check if port doesn't exist
         if (portsMap.find(portCode) == portsMap.end()) {
-            logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
+            // logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
         }
 
         else {
