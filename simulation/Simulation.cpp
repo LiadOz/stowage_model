@@ -3,8 +3,6 @@
 #include <filesystem>
 #include <iostream>
 
-#include "../interfaces/WeightBalanceCalculator.h"
-
 #include "../common/Exceptions.h"
 #include "../common/Util.h"
 
@@ -39,6 +37,8 @@ Simulation::Simulation(const string& outputDirectory, const string& travelDirect
         ship.readPlan(shipPath);
         this->algName = algorithmName;
         this->outputFolder = simOutputDirectory;
+        wbCalculator = WeightBalanceCalculator();
+        wbCalculator.readShipPlan("ain't_nobody_got_time_for_that");
         prepareAlgorithm(shipPath, routePath, simOutputDirectory);
     }
 
@@ -188,7 +188,14 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
         //operation format is valid
         else {
             try {
-                craneOperation->doOperation(ship, port);
+                //NOTE: THIS IS NOT A REAL IMPLEMENTATION. TO BE USED FOR REAL IN EX3.
+                if (this->wbCalculator.tryOperation('N',0,0,0) == WeightBalanceCalculator::BalanceStatus::APPROVED){
+                    craneOperation->doOperation(ship, port);
+                }
+
+                else{
+                    //oh no operation is not approved! but it will never reach this part in ex2.
+                }
 
 
                 if (craneOperation->getOperation() != Operations::reject) {
