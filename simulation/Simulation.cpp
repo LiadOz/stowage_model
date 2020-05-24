@@ -237,7 +237,7 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
         std::cout << error.what();
     }
 
-    return std::move(craneOperation);
+    return craneOperation;
 }
 
 void Simulation::logResults() {
