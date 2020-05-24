@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <iostream>
 
-#include "../interfaces/WeightBalanceCalculator.h"
+#include "../common/WeightBalanceCalculator.h"
 
 #include "../common/Exceptions.h"
 #include "../common/Util.h"
@@ -39,7 +39,7 @@ Simulation::Simulation(const string& outputDirectory, const string& travelDirect
         ship.readPlan(shipPath);
         this->algName = algorithmName;
         this->outputFolder = simOutputDirectory;
-        prepareAlgorithm(shipPath, routePath);
+        prepareAlgorithm(shipPath, routePath, simOutputDirectory);
     }
 
     catch (const FatalError& ferror) {
@@ -48,9 +48,10 @@ Simulation::Simulation(const string& outputDirectory, const string& travelDirect
 }
 
 //init algorithm stuff
-void Simulation::prepareAlgorithm(const string& shipPath, const string& routePath) {
+void Simulation::prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory) {
     algorithm->readShipPlan(shipPath);
     algorithm->readShipRoute(routePath);
+    fs::create_directory(outputDirectory);
 }
 
 //remove older log files before running the entire program
@@ -257,11 +258,7 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
 }
 
 void Simulation::logResults() {
-    ofstream file;
-    file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
-    file << "algorithm " << algName << " has performed " << actionsPerformedCounter << " actions." << endl;
-    file << "the ship successfully delivered " << ship.getTotalCorrectUnloads() << " cargos. " << endl;
-    file.close();
+    // currently does nothing
 }
 
 void Simulation::logSimulationErrors(const string& funcName, const string& error) {

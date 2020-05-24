@@ -51,6 +51,7 @@ void Logger::logError(const string &message) {
     file << "," << message;
     file.close();
     std::cerr << "Error in " << logType << " : " << message << std::endl;
+    logged = true;
 }
 void Logger::setLogType(const string &type) {
     ofstream file;
@@ -61,6 +62,9 @@ void Logger::setLogType(const string &type) {
     logType = type;
     file << logType;
     file.close();
+}
+Logger::~Logger(){
+    if (!logged) remove(filePath.c_str());
 }
 
 bool isCommentLine(const string &line) {
