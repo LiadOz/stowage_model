@@ -234,7 +234,7 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
         }
     } catch (const std::exception& error) {
         logSimulationErrors("createOperationFromLine", error.what());
-        std::cout << error.what();
+        std::cerr << error.what();
     }
 
     return craneOperation;
@@ -249,7 +249,7 @@ void Simulation::logResults() {
 }
 
 void Simulation::logSimulationErrors(const string& funcName, const string& error) {
-    Logger::Instance().logError("function" + funcName + ": " + error);
+    LOG.logError("function" + funcName + ": " + error);
 }
 
 Simulation::~Simulation() {
