@@ -1,36 +1,40 @@
 #pragma once
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 #include "../common/Container.h"
 
 using std::string;
 using std::vector;
 
-class Port
-{
-private:
-	string seaPortCode;
-	vector<Container> containers;
-	string cargoFilePath;
 
-public:
-	string getPortCode() {
-		return seaPortCode;
-	}
 
-	string getCargoFilePath() {
-		return cargoFilePath;
-	}
+#define EMPTY_FILE "emptyFile.txt"  //for when there's no file for creating a port
 
-	Port(const string& code, const string& cargoFilePath = "");
-	bool loadContainersFromFile(const string& filePath);
-	bool addContainer(Container& containerToAdd);
-	Container removeContainer(const string& containerToRemove);
-	static bool validateSeaPortCode(const string& code);
+class Port {
+   private:
+    string seaPortCode;
+    vector<Container> containers;
+    string cargoFilePath;
+
+   public:
+    string getPortCode() {
+        return seaPortCode;
+    }
+
+    string getCargoFilePath() {
+        return cargoFilePath;
+    }
+
+    Port(const string& code, const string& cargoFilePath = std::filesystem::current_path().string() + '/' + EMPTY_FILE);
+    bool loadContainersFromFile(const string& filePath);
+    bool addContainer(Container& containerToAdd);
+    Container removeContainer(const string& containerToRemove);
+    static bool validateSeaPortCode(const string& code);
 };
 
 vector<Port> createShipRoute(const string& filePath);

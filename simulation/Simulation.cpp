@@ -82,7 +82,6 @@ bool Simulation::loadContainersToPortsInRoute() {
 
         //check if port doesn't exist
         if (portsMap.find(portCode) == portsMap.end()) {
-            LOG.logError("Port file doesn't exist");
             logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
         }
 
@@ -99,7 +98,6 @@ bool Simulation::loadContainersToPortsInRoute() {
 
             //check if port doesn't exist
             if (!foundFile) {
-                LOG.logError("Port file doesn't exist");
                 logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
             }
         }
@@ -189,7 +187,12 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
         else {
             try {
                 craneOperation->doOperation(ship, port);
-                actionsPerformedCounter++;
+
+
+                if (craneOperation->getOperation() != Operations::reject) {
+                    actionsPerformedCounter++;
+                }
+
             } catch (const std::exception& error) {
                 logSimulationErrors("performAlgorithmActions", error.what());
             }
@@ -261,7 +264,7 @@ void Simulation::logResults() {
 }
 
 void Simulation::logSimulationErrors(const string& funcName, const string& error) {
-    LOG.logError("function" + funcName + ": " + error);
+    LOG.logError("function " + funcName + ": " + error);
 }
 
 Simulation::~Simulation() {
