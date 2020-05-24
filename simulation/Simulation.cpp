@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <iostream>
 
+#include "../interfaces/WeightBalanceCalculator.h"
+
 #include "../common/Exceptions.h"
 #include "../common/Util.h"
 
@@ -149,7 +151,7 @@ int Simulation::runSimulation() {
                 portsEncountermentsMap.find(portCode)->second = numOfTimes + 1;
             }
 
-            string instructionsFileName = portCode + '_' + std::to_string(portsEncountermentsMap.find(portCode)->second) + string(CARGO_EXT);
+            string instructionsFileName = portCode + '_' + std::to_string(portsEncountermentsMap.find(portCode)->second) + string(CRANE_INSTRUCTIONS_EXT);
 
             string outputFilePath = this->outputFolder + "/" + instructionsFileName;
             algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
