@@ -39,7 +39,7 @@ private:
 	void performAlgorithmActions(const string& filePath, Port& port);
 
 	//create a crane operation from the input proviced from one instruction
-	CraneOperation* createOperationFromLine(const string& line);
+	unique_ptr<CraneOperation> createOperationFromLine(const string& line);
 
 	//make sure all cargo is in the port
 	void validateAllPortCargoUnloaded(Ship& ship, Port& port);

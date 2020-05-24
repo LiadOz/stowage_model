@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <iostream>
 
+#include "../common/Exceptions.h"
 #include "../common/Util.h"
 
 namespace fs = std::filesystem;
@@ -26,16 +27,22 @@ using std::stringstream;
 
 Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> algo) {
     folder = travelDirectory + FILE_SEPARATOR + travelName + FILE_SEPARATOR;
-    string shipPath = getFileWithExt(folder, PLAN_EXT);
-    string routePath = getFileWithExt(folder, ROUTE_EXT);
-	string simOutputDirectory = outputDirectory + FILE_SEPARATOR + algorithmName + "_" + travelName;
-    algorithm = std::move(algo);
-    route = createShipRoute(routePath);
-    loadContainersToPortsInRoute();
-    ship.readPlan(shipPath);
-    this->algName = algorithmName;
-	this->outputFolder = simOutputDirectory;
-    prepareAlgorithm(shipPath, routePath, simOutputDirectory);
+    try {
+        string shipPath = getFileWithExt(folder, PLAN_EXT);
+        string routePath = getFileWithExt(folder, ROUTE_EXT);
+        string simOutputDirectory = outputDirectory + FILE_SEPARATOR + algorithmName + "_" + travelName;
+        algorithm = std::move(algo);
+        route = createShipRoute(routePath);
+        loadContainersToPortsInRoute();
+        ship.readPlan(shipPath);
+        this->algName = algorithmName;
+        this->outputFolder = simOutputDirectory;
+        prepareAlgorithm(shipPath, routePath, simOutputDirectory);
+    }
+
+    catch (const FatalError& ferror) {
+        throw ferror;
+    }
 }
 
 //init algorithm stuff
@@ -57,7 +64,7 @@ void Simulation::removeLogFiles(const string& simulationFolder) {
 //will load all containers from file to the relevant port
 bool Simulation::loadContainersToPortsInRoute() {
     map<string, list<string>> portsMap = createPortsCargoFromFiles();
-
+    map<string, int> portsEncountermentsMap;
     vector<Port>& ports = this->route;
 
     //last port doesn't need a file, ignore it
@@ -65,24 +72,36 @@ bool Simulation::loadContainersToPortsInRoute() {
         Port& port = ports[i];
         string portCode = port.getPortCode();
 
+        //count how many times we've visited each port so we can get the currect file
+        if (portsEncountermentsMap.find(portCode) == portsEncountermentsMap.end()) {
+            portsEncountermentsMap.insert(std::make_pair(portCode, 1));
+        } else {
+            int numOfTimes = portsEncountermentsMap.find(portCode)->second;
+            portsEncountermentsMap.find(portCode)->second = numOfTimes + 1;
+        }
+
         //check if port doesn't exist
         if (portsMap.find(portCode) == portsMap.end()) {
-            Logger::Instance().logError("Port file doesn't exist");
+            LOG.logError("Port file doesn't exist");
             logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
         }
 
         else {
+            
             auto& filesList = portsMap.find(portCode)->second;
+            bool foundFile = false;
 
-            //check if port doesn't exist
-            if (filesList.empty()) {
-                Logger::Instance().logError("Port file doesn't exist");
-                logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
+            for (string file : filesList) {
+                if (file == portCode + '_' + std::to_string(portsEncountermentsMap.find(portCode)->second) + string(CARGO_EXT)) {
+                    port.loadContainersFromFile(folder + file);
+                    foundFile = true;
+                }
             }
 
-            else {
-                port.loadContainersFromFile(folder + filesList.front());
-                filesList.pop_front();
+            //check if port doesn't exist
+            if (!foundFile) {
+                LOG.logError("Port file doesn't exist");
+                logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
             }
         }
     }
@@ -115,26 +134,22 @@ map<string, list<string>> Simulation::createPortsCargoFromFiles() {
 }
 
 //the main function for simulator, will run the sim itself
-int Simulation::runSimulation()
-{
-	vector<Port>& ports = this->route;
-	string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
+int Simulation::runSimulation() {
+    vector<Port>& ports = this->route;
+    string outputFolderPath = folder + SIMULATION_CARGO_INSTRUCTIONS_FOLDER;
 
-	//go through all the ports and do actions there
-	for (size_t i = 0; i < ports.size(); i++) {
-		try
-		{
-			string outputFilePath = outputFolderPath + std::to_string(i);
-			algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
-			performAlgorithmActions(outputFilePath, ports[i]);
-		}
-		catch (const std::exception & error)
-		{
-			logSimulationErrors("runSimulation", error.what());
-		}
-	}
+    //go through all the ports and do actions there
+    for (size_t i = 0; i < ports.size(); i++) {
+        try {
+            string outputFilePath = outputFolderPath + std::to_string(i);
+            algorithm->getInstructionsForCargo(ports[i].getCargoFilePath(), outputFilePath);
+            performAlgorithmActions(outputFilePath, ports[i]);
+        } catch (const std::exception& error) {
+            logSimulationErrors("runSimulation", error.what());
+        }
+    }
 
-	logResults();
+    logResults();
     return actionsPerformedCounter;
 }
 
@@ -149,7 +164,7 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
             continue;
         }
 
-        CraneOperation* craneOperation = createOperationFromLine(lineFromFile);
+        unique_ptr<CraneOperation> craneOperation = createOperationFromLine(lineFromFile);
 
         //check that craneOperation is valid
 
@@ -167,7 +182,6 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
             }
         }
 
-        delete craneOperation;
     }
 
     validateAllPortCargoUnloaded(this->ship, port);
@@ -188,9 +202,9 @@ void Simulation::validateAllPortCargoUnloaded(Ship& ship, Port& port) {
 }
 
 //create a crane operation from the input proviced from one instruction
-CraneOperation* Simulation::createOperationFromLine(const string& lineFromFile) {
+unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lineFromFile) {
     vector<string> operationsData;
-    CraneOperation* craneOperation = NULL;
+    unique_ptr<CraneOperation> craneOperation = NULL;
 
     //get data from line, params may vary
     operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
@@ -203,16 +217,16 @@ CraneOperation* Simulation::createOperationFromLine(const string& lineFromFile) 
     try {
         switch (operation) {
             case Operations::load:
-                craneOperation = new LoadCraneOperation(operationsData);
+                craneOperation = std::make_unique<LoadCraneOperation>(operationsData);
                 break;
             case Operations::unload:
-                craneOperation = new UnloadCraneOperation(operationsData);
+                craneOperation = std::make_unique<UnloadCraneOperation>(operationsData);
                 break;
             case Operations::move:
-                craneOperation = new MoveCraneOperation(operationsData);
+                craneOperation = std::make_unique<MoveCraneOperation>(operationsData);
                 break;
             case Operations::reject:
-                craneOperation = new RejectCraneOperation(operationsData);
+                craneOperation = std::make_unique<RejectCraneOperation>(operationsData);
                 break;
             default:
                 logSimulationErrors("createOperationFromLine", "invalid operation enum type");
@@ -223,7 +237,7 @@ CraneOperation* Simulation::createOperationFromLine(const string& lineFromFile) 
         std::cout << error.what();
     }
 
-    return craneOperation;
+    return std::move(craneOperation);
 }
 
 void Simulation::logResults() {

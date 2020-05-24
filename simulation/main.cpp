@@ -82,6 +82,7 @@ int main(int argc, char** argv) {
                 int num = simulation.runSimulation();
                 r.addAlgResult(num);
             } catch (std::exception& e) {
+                cerr << e.what() << endl;
                 LOG.logError(e.what());
                 r.addAlgResult(-1);
             }
