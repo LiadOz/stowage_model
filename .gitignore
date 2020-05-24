@@ -60,3 +60,5 @@ interfaces/.vscode
 *.results
 *.code-workspace
 *.code-workspace
+
+*.crane_instructions
