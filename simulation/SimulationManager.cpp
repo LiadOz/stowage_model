@@ -40,6 +40,7 @@ void SimulationManager::addTravelsToResults(const string& travelDir){
 
 void SimulationManager::runSimulations(const string& travelDir, const string& outputDir){
     auto& registrar = AlgorithmRegistrar::getInstance();
+    addTravelsToResults(travelDir);
 
     // iterating over the algs
     for (auto algo_iter = registrar.begin();
