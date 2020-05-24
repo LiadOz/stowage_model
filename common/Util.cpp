@@ -139,7 +139,6 @@ void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathSt
     path travelPath{travelPathStr};
 
     if (!fs::exists(algorithmPath)) {
-        //todo: log in err file as well
         cerr << "Provided algorithm directory doesn't exist. using root folder for algorithms instead." << endl;
         algorithmPathStr = fs::current_path();
     } else {
@@ -158,8 +157,9 @@ void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathSt
     }
 
     catch (std::filesystem::filesystem_error &fs_error) {
-        //todo: log in err file as well
-        cerr << fs_error.what() << endl;
+
+        string errDesc = outputPathStr == "" ? "no output argument provided." : "can not create output directory at given argument.";
+        cerr << outputPathStr << endl;
         cerr << "using root folder for output instead." << endl;
         outputPathStr = fs::current_path();
     }
