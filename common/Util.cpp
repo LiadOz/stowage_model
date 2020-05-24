@@ -51,6 +51,7 @@ void Logger::logError(const string &message) {
     file << "," << message;
     file.close();
     std::cerr << "Error in " << logType << " : " << message << std::endl;
+    logged = true;
 }
 void Logger::setLogType(const string &type) {
     ofstream file;
@@ -133,9 +134,9 @@ string getCommandLineParameterByName(int argc, char **argv, string paramName) {
 
 void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathStr, string &travelPathStr) {
 
-    path algorithmPath{fs::canonical(algorithmPathStr)};
-    path outputPath{fs::canonical(outputPathStr)};
-    path travelPath{fs::canonical(travelPathStr)};
+    path algorithmPath{fs::absolute(algorithmPathStr)};
+    path outputPath{fs::absolute(outputPathStr)};
+    path travelPath{fs::absolute(travelPathStr)};
 
     if (!fs::exists(algorithmPath)) {
         //todo: log in err file as well

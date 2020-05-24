@@ -16,7 +16,7 @@ void SimulationManager::initilizeFiles(const string& rootFolder){
     remove((rootFolder + FILE_SEPARATOR + RESULTS_FILE).c_str());
 
     LOG.setFile(rootFolder + FILE_SEPARATOR + LOG_FILE);
-    LOG.setLogType("General");
+    LOG.setLogType("General Errors");
 }
 
 SimulationManager::SimulationManager(const string& algDir, const string& outputDir){
