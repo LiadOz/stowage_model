@@ -32,7 +32,7 @@ private:
 	map<string, list<string> > createPortsCargoFromFiles(); 
 	
 	//init algorithm stuff
-	void prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory);
+    void prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory);
 	
 	//will load all containers from file to the relevant port
 	bool loadContainersToPortsInRoute();

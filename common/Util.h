@@ -56,9 +56,11 @@ private:
     string logType;
     string filePath;
     bool firstLine = true;
+    bool logged = false;
 public:
     static Logger& Instance();
     void setFile(const string& file_path){filePath=file_path; firstLine = true;}
     void logError(const string& message);
     void setLogType(const string& type);
+    ~Logger();
 };

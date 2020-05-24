@@ -262,15 +262,11 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
         std::cerr << error.what();
     }
 
-    return std::move(craneOperation);
+    return craneOperation;
 }
 
 void Simulation::logResults() {
-    ofstream file;
-    file.open(folder + SIMULATION_RESULTS_FILE_NAME, std::ios::app);
-    file << "algorithm " << algName << " has performed " << actionsPerformedCounter << " actions." << endl;
-    file << "the ship successfully delivered " << ship.getTotalCorrectUnloads() << " cargos. " << endl;
-    file.close();
+    // currently does nothing
 }
 
 void Simulation::logSimulationErrors(const string& funcName, const string& error) {

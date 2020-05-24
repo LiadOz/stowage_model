@@ -54,8 +54,9 @@ int main(int argc, char** argv) {
     const path travelPath{travelDirStr};
     const path outputPath{outputDirStr};
 
-    remove((outputDirStr + '/' + LOG_FILE).c_str());
-    LOG.setFile(outputDirStr + '/' + LOG_FILE);
+    remove((outputDirStr + FILE_SEPARATOR + LOG_FILE).c_str());
+    remove((outputDirStr + FILE_SEPARATOR + RESULTS_FILE).c_str());
+    LOG.setFile(outputDirStr + FILE_SEPARATOR + LOG_FILE);
     LOG.setLogType("General");
 
     Results r;  // registring travels in results
@@ -82,13 +83,12 @@ int main(int argc, char** argv) {
                 int num = simulation.runSimulation();
                 r.addAlgResult(num);
             } catch (std::exception& e) {
-                cerr << e.what() << endl;
                 LOG.logError(e.what());
                 r.addAlgResult(-1);
             }
         }
     }
-    r.writeToFile(outputPath.string() + '/' + RESULTS_FILE);
+    r.writeToFile(outputDirStr + FILE_SEPARATOR + RESULTS_FILE);
 
     return EXIT_SUCCESS;
 }
