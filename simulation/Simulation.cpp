@@ -100,7 +100,8 @@ bool Simulation::loadContainersToPortsInRoute() {
 
             //check if port doesn't exist
             if (!foundFile) {
-                logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
+                //no need for an error if file is not found: instead it is treated as an empty file.
+                //logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
             }
         }
     }
