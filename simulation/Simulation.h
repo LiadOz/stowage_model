@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "../common/Ship.h"
+#include "../common/WeightBalanceCalculator.h"
 #include "../interfaces/AbstractAlgorithm.h"
 #include "CraneOperations.h"
 #include "Port.h"
@@ -24,6 +25,7 @@ private:
     vector<Port> route;
 	string folder; //root folder of the sim, changes per travel
 	string outputFolder;
+	WeightBalanceCalculator wbCalculator;
 	int actionsPerformedCounter = 0; //count total actions performed
 	
 	//will load all containers from file to the relevant port

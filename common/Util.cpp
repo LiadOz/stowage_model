@@ -51,7 +51,6 @@ void Logger::logError(const string &message) {
     file << "," << message;
     file.close();
     std::cerr << "Error in " << logType << " : " << message << std::endl;
-    logged = true;
 }
 void Logger::setLogType(const string &type) {
     ofstream file;
@@ -63,6 +62,7 @@ void Logger::setLogType(const string &type) {
     file << logType;
     file.close();
 }
+
 Logger::~Logger(){
     if (!logged) remove(filePath.c_str());
 }
@@ -124,7 +124,7 @@ string getCommandLineParameterByName(int argc, char **argv, string paramName) {
 
             //return param, if it starts with dot remove it
             string paramVal = argv[i + 1];
-            return paramVal[0] != '.' ? paramVal : paramVal.substr(1);
+            return paramVal;
         }
     }
 
@@ -132,16 +132,15 @@ string getCommandLineParameterByName(int argc, char **argv, string paramName) {
 }
 
 void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathStr, string &travelPathStr) {
-    string defaultPath = fs::current_path().string();
 
-    path algorithmPath{defaultPath + COMMAND_LINE_FOLDER_SEPARATOR + algorithmPathStr};
-    path outputPath{defaultPath + COMMAND_LINE_FOLDER_SEPARATOR + outputPathStr};
-    path travelPath{defaultPath + COMMAND_LINE_FOLDER_SEPARATOR + travelPathStr};
+    path algorithmPath{fs::absolute(algorithmPathStr)};
+    path outputPath{fs::absolute(outputPathStr)};
+    path travelPath{fs::absolute(travelPathStr)};
 
     if (!fs::exists(algorithmPath)) {
         //todo: log in err file as well
         cerr << "Provided algorithm directory doesn't exist. using root folder for algorithms instead." << endl;
-        algorithmPathStr = defaultPath;
+        algorithmPathStr = fs::current_path();
     } else {
         algorithmPathStr = algorithmPath.string();
     }
@@ -161,7 +160,7 @@ void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathSt
         //todo: log in err file as well
         cerr << fs_error.what() << endl;
         cerr << "using root folder for output instead." << endl;
-        outputPathStr = defaultPath;
+        outputPathStr = fs::current_path();
     }
 }
 
