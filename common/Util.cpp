@@ -53,6 +53,7 @@ void Logger::logError(const string &message) {
     std::cerr << "Error in " << logType << " : " << message << std::endl;
     logged = true;
 }
+
 void Logger::setLogType(const string &type) {
     ofstream file;
     file.open(filePath, std::ios::out | std::ios::app);

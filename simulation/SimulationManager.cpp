@@ -1,8 +1,11 @@
 #include "./SimulationManager.h"
 
+#include "./../common/Util.h"
 #include "./AlgorithmRegistrar.h"
 #include "./Simulation.h"
-#include "./../common/Util.h"
+
+#include "./ThreadPoolExecuter.h"
+#include "./AlgTravelProducer.h"
 
 #define LOG_FILE "simulation.errors"
 #define RESULTS_FILE "simulation.results"
@@ -39,13 +42,21 @@ void SimulationManager::addTravelsToResults(const string& travelDir){
 }
 
 void SimulationManager::runSimulations(const string& travelDir, const string& outputDir){
+    AlgTravelProducer producer(travelDir, outputDir);
+    // TODO : determine number of threads
+    ThreadPoolExecuter ex {producer, 5};
+    ex.start();
+    ex.wait_till_finish();
+}
+/* Single Threaded
+void SimulationManager::runSimulations(const string& travelDir, const string& outputDir){
     auto& registrar = AlgorithmRegistrar::getInstance();
     addTravelsToResults(travelDir);
 
     // iterating over the algs
     for (auto algo_iter = registrar.begin();
          algo_iter != registrar.end(); ++algo_iter) {
-        std::string algName =
+        string algName =
             registrar.getAlgorithmName(algo_iter - registrar.begin());
 
         r.startRecordingAlg(algName);
@@ -55,7 +66,7 @@ void SimulationManager::runSimulations(const string& travelDir, const string& ou
 
             // setting the logger
             LOG.setLogType(algName + " " + entry.path().filename().string());
-            auto algo = (*algo_iter)();
+            std::unique_ptr<AbstractAlgorithm> algo = (*algo_iter)();
             try {
                 string travelName = entry.path().filename().string();
                 Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
@@ -69,6 +80,7 @@ void SimulationManager::runSimulations(const string& travelDir, const string& ou
         }
     }
 }
+*/
 
 void SimulationManager::recordResults(const string& outputDir){
     r.writeToFile(outputDir + FILE_SEPARATOR + RESULTS_FILE);

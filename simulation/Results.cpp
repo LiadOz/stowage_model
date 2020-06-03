@@ -4,9 +4,14 @@
 #include <iostream>
 #include <algorithm>
 
+void Results::addTravel(const string& travelName){
+    if (travelMapping.find(travelName) == travelMapping.end())
+        travelMapping.insert({travelName, travelMapping.size()});
+}
+
 void Results::sortResults(){
     std::sort(algResults.begin(), algResults.end(),
-            [this](auto& r1, auto& r2){
+            [](auto& r1, auto& r2){
             if (r1.second.back() == r2.second.back())
                 return r1.second.end()[-2] < r2.second.end()[-2];
             return r1.second.back() < r2.second.back(); });
