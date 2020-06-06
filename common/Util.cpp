@@ -15,6 +15,10 @@
 #define ERROR_NO_FILE "no files found the ext "
 #define ERROR_TOO_MANY_FILES "found too many files with the ext "
 
+//todo: make define header for all these?
+#define PLAN_EXT ".ship_plan"
+#define ROUTE_EXT ".route"
+
 namespace fs = std::filesystem;
 
 using std::cerr;

@@ -20,11 +20,6 @@ using std::stringstream;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-#define CRANE_INSTRUCTIONS_EXT ".crane_instructions"
-#define CARGO_EXT ".cargo_data"
-#define PLAN_EXT ".ship_plan"
-#define ROUTE_EXT ".route"
-
 Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> algo) {
     folder = travelDirectory + FILE_SEPARATOR + travelName + FILE_SEPARATOR;
     try {
