@@ -34,6 +34,7 @@ public:
     bool pushContainer(size_t x, size_t y, Container& c);
     // pops container from (x,y) throws error if out of bounds or cannot pop more
     Container popContainer(size_t x, size_t y);
+    Container peekContainer(size_t x, size_t y);
     size_t getNumFloors(){ return maxFloors;}
     size_t getCoordinateHeight(size_t x, size_t y);
     int getCoordinateDepth(size_t x, size_t y);

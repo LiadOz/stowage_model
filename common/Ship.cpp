@@ -17,7 +17,6 @@ void ShipLogger::logAction(const string& action){
 }
 
 void Ship::insertContainer(size_t x, size_t y, Container& c){
-    // TODO: add calculator check
     storage.pushContainer(x, y, c);
     logger.logAction("L," + c.getId() + "," +
             to_string(getCoordinateHeight(x, y)) + 
@@ -27,7 +26,6 @@ void Ship::insertContainer(size_t x, size_t y, Container& c){
 }
 
 Container Ship::removeContainer(size_t x, size_t y){
-    // TODO: add calculator check
     int h = getCoordinateHeight(x, y);
     Container c = storage.popContainer(x, y);
     logger.logAction("U," + c.getId() + "," +
@@ -38,7 +36,6 @@ Container Ship::removeContainer(size_t x, size_t y){
 }
 
 void Ship::moveContainer(size_t x1, size_t y1, size_t x2, size_t y2){
-    // TODO: add calculator check
     int firstHeight = getCoordinateHeight(x1, y1);
     Container c = storage.popContainer(x1, y1);
     try {
@@ -47,11 +44,15 @@ void Ship::moveContainer(size_t x1, size_t y1, size_t x2, size_t y2){
         storage.pushContainer(x1, y1, c);
         throw e;
     }
-    logger.logAction("M," + c.getId() + "," +
+    logger.logAction(
+            "M," + 
+            c.getId() + "," +
             to_string(firstHeight) + "," + 
-            to_string(x1) + "," + to_string(y1) +
+            to_string(x1) + "," + 
+            to_string(y1) + "," +
             to_string(getCoordinateHeight(x2, y2)) + "," + 
-            to_string(x2) + "," + to_string(y2) 
+            to_string(x2) + "," + 
+            to_string(y2) 
             );
 }
 

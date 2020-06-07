@@ -44,7 +44,7 @@ void SimulationManager::addTravelsToResults(const string& travelDir){
 void SimulationManager::runSimulations(const string& travelDir, const string& outputDir){
     AlgTravelProducer producer(travelDir, outputDir);
     // TODO : determine number of threads
-    ThreadPoolExecuter ex {producer, 5};
+    ThreadPoolExecuter ex {producer, 1};
     ex.start();
     ex.wait_till_finish();
 }

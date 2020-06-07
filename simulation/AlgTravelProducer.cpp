@@ -19,6 +19,7 @@ AlgTravelProducer::AlgTravelProducer (const string& directory, const string& out
             string algName =
                 registrar.getAlgorithmName(algo_iter - registrar.begin());
             auto algo = (*algo_iter)();
+            // TODO : move something better than the algo
             pairs.push_back({std::move(algo), entry.path(), algName});
         }
     }
@@ -37,6 +38,7 @@ std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {
     auto task_index = next_task_index(); // or: next_task_index_simple();
     if(task_index) {
         return [task_index, this]{
+            // TODO : move to member function and then call it from here
             AlgorithmTravelPair& p = pairs[task_index.value()];
             auto algo = p.getAlgorithm();
             fs::path entry{p.getTravelPath()};
@@ -54,5 +56,4 @@ std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {
     }
     else return {};
 }
-
 

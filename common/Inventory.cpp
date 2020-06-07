@@ -136,6 +136,14 @@ Container Inventory::popContainer(size_t x, size_t y){
     return c;
 }
 
+Container Inventory::peekContainer(size_t x, size_t y){
+    rangeCheck(x, y);
+    if (emptyCoordinate(x, y))
+        throw out_of_range("Coordinate is empty");
+    Container c = storage[y][x].back();
+    return c;
+}
+
 vector<Container> Inventory::getAllContainers(){
     vector<Container> l;
     for (auto& vv : storage) {

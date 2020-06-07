@@ -23,7 +23,7 @@ using fs::path;
 //files params
 #define PORT_FILE_NUM_OF_PARAMS 3
 #define SHIPROUTE_FILE_NUM_OF_PARAMS 1
-#define CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS 7
+#define CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS 8
 
 //commandline params
 #define COMMAND_LINE_ALGORITHM "-algorithm_path"

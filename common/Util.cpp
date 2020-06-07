@@ -46,6 +46,7 @@ Logger &Logger::Instance() {
 // currently the logger prints to the screen
 
 void Logger::logError(const string &message) {
+    // 2020-06-04 09:52 TODO : not open file every time
     ofstream file;
     file.open(filePath, std::ios::out | std::ios::app);
     file << "," << message;
