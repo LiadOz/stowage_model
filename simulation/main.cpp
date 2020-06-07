@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     }
 
     // call the Simulation Manager
-    SimulationManager s(algorithmDirStr, outputDirStr);
+    SimulationManager s(algorithmDirStr, travelDirStr, outputDirStr);
     s.runSimulations(travelDirStr, outputDirStr);
     s.recordResults(outputDirStr);
 

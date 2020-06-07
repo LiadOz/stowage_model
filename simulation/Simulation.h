@@ -12,6 +12,11 @@
 #include "CraneOperations.h"
 #include "Port.h"
 
+#define CRANE_INSTRUCTIONS_EXT ".crane_instructions"
+#define CARGO_EXT ".cargo_data"
+#define PLAN_EXT ".ship_plan"
+#define ROUTE_EXT ".route"
+
 using std::map;
 using std::list;
 using std::unique_ptr;
