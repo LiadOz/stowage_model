@@ -16,7 +16,6 @@ private:
     ofstream file;
     string filePath;
     std::mutex locker;
-    bool firstLine = true;
     bool logged = false;
 
     Logger(){};

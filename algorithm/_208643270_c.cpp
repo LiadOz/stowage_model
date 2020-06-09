@@ -56,7 +56,10 @@ pair<int, int> _208643270_c::findValidLocation(int x, int y){
         for (size_t j = 0; j < d.second; ++j){
             if ((int)i == x && (int)j == y) continue;
             if (s.fullCoordinate(i, j)) continue;
-            if (s.emptyCoordinate(i, j)) return {i, j};
+            if (s.emptyCoordinate(i, j) && lowestDistance == -1){
+                closest = {i, j};
+                continue;
+            }
 
             Container other = s.peekContainer(i, j);
             int dist = placeOn(c.getDestination(), other.getDestination());
