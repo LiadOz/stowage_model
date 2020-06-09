@@ -5,6 +5,7 @@
 
 #include "../common/Exceptions.h"
 #include "../common/Util.h"
+#include "../common/Logger.h"
 
 namespace fs = std::filesystem;
 

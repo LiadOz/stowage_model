@@ -6,6 +6,7 @@
 #include "Exceptions.h"
 #include "Util.h"
 #include "Parser.h"
+#include "Logger.h"
 
 using std::out_of_range;
 using std::runtime_error;

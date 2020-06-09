@@ -1,10 +1,12 @@
 #include "./SimulationManager.h"
 
-#include "./../common/Util.h"
 #include "./AlgTravelProducer.h"
 #include "./AlgorithmRegistrar.h"
 #include "./Simulation.h"
 #include "./ThreadPoolExecuter.h"
+
+#include "./../common/Util.h"
+#include "./../common/Logger.h"
 
 #define LOG_FILE "simulation.errors"
 #define RESULTS_FILE "simulation.results"

@@ -2,9 +2,10 @@
 
 #include <filesystem>
 
-#include "../common/Util.h"
 #include "./AlgorithmRegistrar.h"
 #include "./Simulation.h"
+#include "../common/Util.h"
+#include "../common/Logger.h"
 
 
 namespace fs = std::filesystem;
@@ -50,6 +51,7 @@ std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {
             string algName = p.getAlgorithmName();
             try {
                 string travelName = entry.filename().string();
+                LOG.setLogType(algName + "-" + travelName);
                 Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
 
                 // TODO : int num = simulation.runSimulation();

@@ -3,10 +3,9 @@ ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
 
-OBJS = Container.o Inventory.o Util.o Ship.o WeightBalanceCalculator.o Parser.o Exceptions.o
 #The executabel filename DON'T CHANGE
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
-OBJS = Container.o Inventory.o Util.o Ship.o WeightBalanceCalculator.o Parser.o Exceptions.o
+OBJS = Container.o Inventory.o Util.o Ship.o WeightBalanceCalculator.o Parser.o Exceptions.o Logger.o
 #The executabel filename DON'T CHANGE
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC
 #CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -pedantic-errors -DNDEBUG
@@ -30,6 +29,8 @@ Parser.o: Parser.cpp
 CraneOperations.o: CraneOperations.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 Exceptions.o: Exceptions.cpp
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+Logger.o: Logger.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:
 	rm -f $(OBJS) $(EXEC)

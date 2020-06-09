@@ -43,24 +43,3 @@ stringstream getCommandLineParameters(int argc, char** argv);
 bool isDirectoriesExists(const path& algorithmPath,const path& travelPath);
 // returns path to file with certian extension
 string getFileWithExt(const string& folder, const string& ext);
-
-// making the logger easier to start
-#define LOG Logger::Instance()
-// singleton to log errors 
-// cannot be while the program is runnig
-class Logger{
-private:
-    Logger(){};
-    Logger(Logger const&);
-    Logger& operator=(Logger const&);
-    string logType;
-    string filePath;
-    bool firstLine = true;
-    bool logged = false;
-public:
-    static Logger& Instance();
-    void setFile(const string& file_path){filePath=file_path; firstLine = true;}
-    void logError(const string& message);
-    void setLogType(const string& type);
-    ~Logger();
-};
