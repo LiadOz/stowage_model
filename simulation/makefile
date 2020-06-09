@@ -3,7 +3,7 @@ ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
 
-OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o Results.o 
+OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o Results.o SimulationManager.o
 COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/WeightBalanceCalculator.o
 #The executabel filename DON'T CHANGE
 EXEC = simulator
@@ -28,6 +28,8 @@ Simulation.o: Simulation.cpp
 Port.o: Port.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 Results.o: Results.cpp
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+SimulationManager.o: SimulationManager.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 CraneOperations.o: CraneOperations.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp

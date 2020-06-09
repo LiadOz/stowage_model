@@ -33,7 +33,7 @@ bool Port::loadContainersFromFile(const string &filePath) {
         vector<string> containerData;
         parse >> containerData;
         if (containerData.size() < PORT_FILE_NUM_OF_PARAMS) {
-            Logger::Instance().logError("cargo missing arguments");
+            LOG.logError("cargo missing arguments");
         }
 
         // try to parse the first param to weight & create the object
@@ -46,7 +46,7 @@ bool Port::loadContainersFromFile(const string &filePath) {
 
             addContainer(container);
         } catch (std::runtime_error &error) {
-            Logger::Instance().logError(error.what());
+            LOG.logError(error.what());
         }
     }
 

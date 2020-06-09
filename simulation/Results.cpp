@@ -33,7 +33,7 @@ void Results::writeToFile(const string& outputFile){
     for (auto& x : travels) {
         file << "," << x;
     }
-    file << ",total" << std::endl;
+    file << ",Sum,Num Errors" << std::endl;
     for (auto& alg : algResults) {
         file << alg.first; 
         for (auto i : alg.second) {

@@ -58,3 +58,7 @@ interfaces/.vscode
 !/compiled/*
 *.errors
 *.results
+*.code-workspace
+*.code-workspace
+
+*.crane_instructions
