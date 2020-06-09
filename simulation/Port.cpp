@@ -5,6 +5,7 @@
 #include "../common/Exceptions.h"
 #include "../common/Parser.h"
 #include "../common/Util.h"
+#include "../common/Logger.h"
 
 using std::runtime_error;
 

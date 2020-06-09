@@ -15,6 +15,10 @@
 #define ERROR_NO_FILE "no files found the ext "
 #define ERROR_TOO_MANY_FILES "found too many files with the ext "
 
+//todo: make define header for all these?
+#define PLAN_EXT ".ship_plan"
+#define ROUTE_EXT ".route"
+
 namespace fs = std::filesystem;
 
 using std::cerr;
@@ -38,34 +42,6 @@ bool validCargoFile(const string &filename) {
     return true;
 }
 
-Logger &Logger::Instance() {
-    static Logger instance;
-    return instance;
-}
-
-// currently the logger prints to the screen
-
-void Logger::logError(const string &message) {
-    ofstream file;
-    file.open(filePath, std::ios::out | std::ios::app);
-    file << "," << message;
-    file.close();
-    std::cerr << "Error in " << logType << " : " << message << std::endl;
-}
-void Logger::setLogType(const string &type) {
-    ofstream file;
-    file.open(filePath, std::ios::out | std::ios::app);
-    if (!firstLine)
-        file << std::endl;
-    firstLine = false;
-    logType = type;
-    file << logType;
-    file.close();
-}
-
-Logger::~Logger(){
-    if (!logged) remove(filePath.c_str());
-}
 
 bool isCommentLine(const string &line) {
     unsigned index = 0;
@@ -133,32 +109,32 @@ string getCommandLineParameterByName(int argc, char **argv, string paramName) {
 
 void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathStr, string &travelPathStr) {
 
-    path algorithmPath{fs::absolute(algorithmPathStr)};
-    path outputPath{fs::absolute(outputPathStr)};
-    path travelPath{fs::absolute(travelPathStr)};
+    path algorithmPath{algorithmPathStr};
+    path outputPath{outputPathStr};
+    path travelPath{travelPathStr};
 
     if (!fs::exists(algorithmPath)) {
-        //todo: log in err file as well
         cerr << "Provided algorithm directory doesn't exist. using root folder for algorithms instead." << endl;
         algorithmPathStr = fs::current_path();
     } else {
-        algorithmPathStr = algorithmPath.string();
+        algorithmPathStr = fs::canonical(algorithmPath).string();
     }
 
     if (!fs::exists(travelPath)) {
         throw FatalError("travel path is invalid.");
     } else {
-        travelPathStr = travelPath.string();
+        travelPathStr = fs::canonical(travelPath).string();
     }
 
     try {
         fs::create_directory(outputPath);
-        outputPathStr = outputPath.string();
+        outputPathStr =  fs::canonical(outputPath.string());
     }
 
     catch (std::filesystem::filesystem_error &fs_error) {
-        //todo: log in err file as well
-        cerr << fs_error.what() << endl;
+
+        string errDesc = outputPathStr == "" ? "no output argument provided." : "can not create output directory at given argument.";
+        cerr << outputPathStr << endl;
         cerr << "using root folder for output instead." << endl;
         outputPathStr = fs::current_path();
     }
