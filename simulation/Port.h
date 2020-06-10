@@ -1,17 +1,15 @@
 #pragma once
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <filesystem>
 
 #include "../common/Container.h"
 
 using std::string;
 using std::vector;
-
-
 
 #define EMPTY_FILE "emptyFile.txt"  //for when there's no file for creating a port
 
@@ -28,6 +26,10 @@ class Port {
 
     string getCargoFilePath() {
         return cargoFilePath;
+    }
+
+    const vector<Container>& getCargoList() const {
+        return containers;
     }
 
     Port(const string& code, const string& cargoFilePath = std::filesystem::current_path().string() + '/' + EMPTY_FILE);

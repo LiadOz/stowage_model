@@ -131,6 +131,7 @@ map<string, list<string>> Simulation::createPortsCargoFromFiles() {
 //the main function for simulator, will run the sim itself
 int Simulation::runSimulation() {
     vector<Port>& ports = this->route;
+    vector<Port> nextPortsToVisit = this->route;
 
     map<string, int> portsEncountermentsMap;
 
@@ -152,7 +153,7 @@ int Simulation::runSimulation() {
 
             string outputFilePath = this->outputFolder + "/" + instructionsFileName;
             algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
-            performAlgorithmActions(outputFilePath, port);
+            performAlgorithmActions(outputFilePath, port, i);
         } catch (const std::exception& error) {
             logSimulationErrors("runSimulation", error.what());
         }
@@ -163,7 +164,7 @@ int Simulation::runSimulation() {
 }
 
 //read file from algo and try to do the actions
-void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
+void Simulation::performAlgorithmActions(const string& filePath, Port& port, int routePortIndex) {
     std::ifstream file(filePath);
     string lineFromFile;
 
@@ -184,20 +185,11 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
         //operation format is valid
         else {
             try {
-                //NOTE: THIS IS NOT A REAL IMPLEMENTATION. TO BE USED FOR REAL IN EX3.
-                if (this->wbCalculator.tryOperation('N',0,0,0) == WeightBalanceCalculator::BalanceStatus::APPROVED){
-                    craneOperation->doOperation(ship, port);
-                }
-
-                else{
-                    //oh no operation is not approved! but it will never reach this part in ex2.
-                }
-
+                craneOperation->doOperation(ship, port);
 
                 if (craneOperation->getOperation() != Operations::reject) {
-                    actionsPerformedCounter+= craneOperation->getCost();
+                    actionsPerformedCounter += craneOperation->getCost();
                 }
-
             } catch (const std::exception& error) {
                 logSimulationErrors("performAlgorithmActions", error.what());
             }
@@ -205,6 +197,7 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
     }
 
     validateAllPortCargoUnloaded(this->ship, port);
+    validateAllShipCargoLoaded(this->ship, port, routePortIndex);
 
     file.close();
 }
@@ -217,6 +210,32 @@ void Simulation::validateAllPortCargoUnloaded(Ship& ship, Port& port) {
     for (size_t i = 0; i < shipContainers.size(); i++) {
         if (shipContainers[i].getDestination() == portID) {
             logSimulationErrors("validateAllPortCargoUnloaded", "container " + shipContainers[i].getId() + " didn't unload at port " + portID);
+        }
+    }
+}
+
+void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePortIndex) {
+    string portID = port.getPortCode();
+    const vector<Container>& cargoInPort = port.getCargoList();
+
+    //if there is free space
+    if (ship.freeSpaces() != 0) {
+        //go through all the containers left in the port
+        for (size_t i = 0; i < cargoInPort.size(); i++) {
+            bool containerHasPortInRoute = false;
+            const Container& cargo = cargoInPort[i];
+
+            //go through all the next ports in route
+            for (; routePortIndex < this->route.size(); routePortIndex++) {
+                if (cargo.getDestination() == this->route[routePortIndex].getPortCode()) {
+                    containerHasPortInRoute = true;
+                    break;
+                }
+            }
+
+            if (!containerHasPortInRoute) {
+                logSimulationErrors("validateAllShipCargoLoaded", "container " + cargo.getId() + " wasn't loaded into ship, and was left at port " + portID);
+            }
         }
     }
 }

@@ -43,13 +43,16 @@ private:
 	bool loadContainersToPortsInRoute();
 
 	//read file from algo and try to do the actions
-	void performAlgorithmActions(const string& filePath, Port& port);
+	void performAlgorithmActions(const string& filePath, Port& port, int routePortIndex);
 
 	//create a crane operation from the input proviced from one instruction
 	unique_ptr<CraneOperation> createOperationFromLine(const string& line);
 
 	//make sure all cargo is in the port
 	void validateAllPortCargoUnloaded(Ship& ship, Port& port);
+
+	//make sure ship not empty and took all next cargo
+	void validateAllShipCargoLoaded(Ship& ship, Port& port, int routePortIndex);
 
 	//log the results 
 	void logResults();

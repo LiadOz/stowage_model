@@ -23,6 +23,6 @@ public:
     Container(vector<string>& line);
     friend ostream& operator<<(ostream& out, const Container &c);
     int getWeight(){ return weight; }
-    string getDestination(){ return destination; }
-    string getId(){ return id; }
+    const string& getDestination() const { return destination; }
+    const string& getId() const { return id; }
 };
