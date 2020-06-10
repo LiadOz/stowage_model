@@ -7,6 +7,9 @@ using std::runtime_error;
 using std::stringstream;
 using std::stoi;
 
+#define LOAD_UNLOAD_COST 5;
+#define MOVE_COST 3;
+
 Operations CraneOperation::getOperationType(const string& opStr)
 {
 	if (opStr == OPERATION_LOAD)
@@ -41,6 +44,7 @@ LoadCraneOperation::LoadCraneOperation(const vector<string>& params) {
 	{
 		operation = Operations::load;
 		containerID = params[1];
+		cost = LOAD_UNLOAD_COST;
 		height = stoi(params[2]);
 		row = stoi(params[3]);
 		col = stoi(params[4]);
@@ -73,6 +77,7 @@ UnloadCraneOperation::UnloadCraneOperation(const vector<string>& params) {
 	{
 		operation = Operations::unload;
 		containerID = params[1];
+		cost = LOAD_UNLOAD_COST;
 		height = stoi(params[2]);
 		row = stoi(params[3]);
 		col = stoi(params[4]);
@@ -114,6 +119,7 @@ MoveCraneOperation::MoveCraneOperation(const vector<string>& params) {
 	{
 		operation = Operations::move;
 		containerID = params[1];
+		cost = MOVE_COST;
 		heightFrom = stoi(params[2]);
 		rowFrom = stoi(params[3]);
 		colFrom = stoi(params[4]);

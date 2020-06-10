@@ -30,6 +30,7 @@ class CraneOperation {
    protected:
     Operations operation;
     string containerID;
+    int cost;
 
    public:
     virtual void doOperation(Ship& ship, Port& port) = 0;
@@ -37,9 +38,12 @@ class CraneOperation {
     CraneOperation() {
         operation = Operations::undefined;
         containerID = "";
+        cost = 0;
     };
     virtual ~CraneOperation(){};
     Operations getOperation() { return operation; }
+    int getCost() { return cost; }
+
 };
 
 //the operation to load a cargo from the port to the ship
