@@ -46,35 +46,6 @@ Algorithm::InsertStatus _208643270_c::loadAwaiting(
     return ret; 
 }
 
-pair<int, int> _208643270_c::findValidLocation(int x, int y){
-    Container c = s.peekContainer(x, y);
-
-    pair<int, int> closest = {-1, -1};
-    int lowestDistance = -1;
-    pair<size_t, size_t> d = s.getStorageDimensions();
-    for (size_t i = 0; i < d.first; ++i){
-        for (size_t j = 0; j < d.second; ++j){
-            if ((int)i == x && (int)j == y) continue;
-            if (s.fullCoordinate(i, j)) continue;
-            if (s.emptyCoordinate(i, j) && lowestDistance == -1){
-                closest = {i, j};
-                continue;
-            }
-
-            Container other = s.peekContainer(i, j);
-            int dist = placeOn(c.getDestination(), other.getDestination());
-            if (dist >= 0 && lowestDistance == -1) lowestDistance = dist;
-            else continue;
-
-            if (dist <= lowestDistance){
-                lowestDistance = dist;
-                closest = {i, j};
-            }
-
-        }
-    }
-    return closest;
-}
 
 unordered_set<string> _208643270_c::unloadPort(const string& port, vector<Container>& awaiting){
     pair<size_t, size_t> d = s.getStorageDimensions();
@@ -93,7 +64,7 @@ unordered_set<string> _208643270_c::unloadPort(const string& port, vector<Contai
                 }
 
                 // when no other good move exists
-                pair<int, int> mv = findValidLocation(i, j);
+                pair<int, int> mv = findGoodLocation(i, j, port);
                 if (mv.first == -1 && mv.second == -1 &&
                         calc.tryOperation((char)Action::UNLOAD, c.getWeight(), i, j)
                         == WeightBalanceCalculator::APPROVED) {

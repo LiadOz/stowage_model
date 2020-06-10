@@ -17,16 +17,19 @@ void AdvancedAlgorithm::setPriority(){
     reverse(routes.begin(), routes.end());
 }
 
-void AdvancedAlgorithm::getPortInstructions(
-        const string& port, vector<Container>& awaiting){
-    // now the ones at the start should be at the bottom
-    auto mustReturn = unloadPort(port, awaiting);
-    setPriority();
-    std::sort(awaiting.begin(), awaiting.end(),
+void AdvancedAlgorithm::prioritySort(vector<Container>& toSort){
+    std::sort(toSort.begin(), toSort.end(),
             [this](Container& a, Container& b){
             return cargoPriority.at(a.getDestination()) >
             cargoPriority.at(b.getDestination());
             });
+}
+
+void AdvancedAlgorithm::getPortInstructions(
+        const string& port, vector<Container>& awaiting){
+    setPriority();
+    auto mustReturn = unloadPort(port, awaiting);
+    prioritySort(awaiting);
     if(loadAwaiting(awaiting, mustReturn) == FULL)
         errorVar(errorStatus, ERROR_TOO_MUCH_CARGO);
 }
@@ -50,4 +53,53 @@ unordered_set<string> AdvancedAlgorithm::unloadPort(const string& port, vector<C
         }
     }
     return mustReturn;
+}
+
+pair<int, int> AdvancedAlgorithm::findGoodLocation(int x, int y, const string& port){
+    Container c = s.peekContainer(x, y);
+
+    pair<int, int> closest = {-1, -1};
+    int lowestDistance = -1;
+    pair<size_t, size_t> d = s.getStorageDimensions();
+    for (size_t i = 0; i < d.first; ++i){
+        for (size_t j = 0; j < d.second; ++j){
+            if ((int)i == x && (int)j == y) continue;
+            if (s.fullCoordinate(i, j)) continue;
+            // dont move to a place that will be  unloaded at a later stage
+            if (s.getContainerDestinationLevel(i, j, port) != -1) continue;
+            if (s.emptyCoordinate(i, j) && lowestDistance == -1){
+                closest = {i, j};
+                continue;
+            }
+
+            Container other = s.peekContainer(i, j);
+            int dist = placeOn(c.getDestination(), other.getDestination());
+            if (dist >= 0 && lowestDistance == -1) lowestDistance = dist;
+            else continue;
+
+            if (dist <= lowestDistance){
+                lowestDistance = dist;
+                closest = {i, j};
+            }
+
+        }
+    }
+    return closest;
+}
+
+pair<int, int> AdvancedAlgorithm::getClosestCoordinate(const string& port){
+    pair<int, int> ret = {-1, -1};
+    int m = s.getNumFloors() + 1;
+    pair<size_t, size_t> d = s.getStorageDimensions();
+    for (size_t i = 0; i < d.first; ++i){
+        for (size_t j = 0; j < d.second; ++j){
+            int level = s.getContainerDestinationLevel(i, j, port);
+            if (level != -1 && level < m){
+                m = level;
+                ret = {i, j};
+            }
+        }
+    }
+
+    return ret;
 }
