@@ -195,7 +195,7 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port) {
 
 
                 if (craneOperation->getOperation() != Operations::reject) {
-                    actionsPerformedCounter++;
+                    actionsPerformedCounter+= craneOperation->getCost();
                 }
 
             } catch (const std::exception& error) {
