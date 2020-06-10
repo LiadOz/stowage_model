@@ -30,7 +30,8 @@ void AdvancedAlgorithm::getPortInstructions(
     setPriority();
     auto mustReturn = unloadPort(port, awaiting);
     prioritySort(awaiting);
-    if(loadAwaiting(awaiting, mustReturn) == FULL)
+    loadAwaiting(awaiting, mustReturn);
+    if (s.freeSpaces() == 0)
         errorVar(errorStatus, ERROR_TOO_MUCH_CARGO);
 }
 

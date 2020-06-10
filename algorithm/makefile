@@ -3,9 +3,9 @@ ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
 
-OBJS = _208643270_a.o Algorithm.o _208643270_b.o AdvancedAlgorithm.o _208643270_c.o
+OBJS = _208643270_a.o Algorithm.o _208643270_b.o AdvancedAlgorithm.o _208643270_c.o _208643270_d.o
 EXEC = algtest
-SHARED_OBJS = _208643270_a.so _208643270_b.so _208643270_c.so
+SHARED_OBJS = _208643270_a.so _208643270_b.so _208643270_c.so _208643270_d.so
 COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/WeightBalanceCalculator.o
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden
 CPP_LINK_FLAG = -lstdc++fs -shared
@@ -20,11 +20,15 @@ _208643270_b.so: _208643270_b.o Algorithm.o AdvancedAlgorithm.o
 		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
 _208643270_c.so: _208643270_c.o Algorithm.o AdvancedAlgorithm.o
 		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
+_208643270_d.so: _208643270_d.o Algorithm.o AdvancedAlgorithm.o
+		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
 _208643270_a.o: _208643270_a.cpp 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp 
 _208643270_b.o: _208643270_b.cpp 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp 
 _208643270_c.o: _208643270_c.cpp 
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp 
+_208643270_d.o: _208643270_d.cpp 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp 
 Algorithm.o: Algorithm.cpp 
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp 
