@@ -106,16 +106,17 @@ void SimulationManager::singleThreadedRun(const string& outputDir, const string&
             string algName =
                 registrar.getAlgorithmName(algo_iter - registrar.begin());
             auto algo = (*algo_iter)();
+            int moves = -1;
+            string travelName = entry.path().filename().string();
             try {
-                string travelName = entry.path().filename().string();
                 LOG.setLogType(algName + "-" + travelName);
                 Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
 
-                int num = simulation.runSimulation();
-                r.addResult(algName, travelName, num);
+                moves = simulation.runSimulation();
             } catch (std::exception& e) {
                 LOG.logError(e.what());
             }
+            r.addResult(algName, travelName, moves);
         }
     }
 }
