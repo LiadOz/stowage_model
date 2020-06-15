@@ -21,8 +21,10 @@ int main(int argc, char** argv) {
     }
 
     // call the Simulation Manager
-    SimulationManager s(algorithmDirStr, travelDirStr, outputDirStr);
-    s.runSimulations(travelDirStr, outputDirStr);
+    // the one should be replaced with the num of threads
+    // TODO: get number of threads
+    SimulationManager s(algorithmDirStr, outputDirStr);
+    s.runSimulations(travelDirStr, outputDirStr, 1);
     s.recordResults(outputDirStr);
 
 

@@ -5,6 +5,7 @@
 
 #include "../common/Exceptions.h"
 #include "../common/Util.h"
+#include "../common/Logger.h"
 
 namespace fs = std::filesystem;
 
@@ -226,7 +227,7 @@ void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePor
             const Container& cargo = cargoInPort[i];
 
             //go through all the next ports in route
-            for (; routePortIndex < this->route.size(); routePortIndex++) {
+            for (; routePortIndex < (int)this->route.size(); routePortIndex++) {
                 if (cargo.getDestination() == this->route[routePortIndex].getPortCode()) {
                     containerHasPortInRoute = true;
                     break;
@@ -247,7 +248,7 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
 
     //get data from line, params may vary
     operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
-
+ddd
     //peak at the (supposed) type of action
     string operationString = operationsData.size() ? operationsData[0] : "";
     Operations operation = CraneOperation::getOperationType(operationString);
