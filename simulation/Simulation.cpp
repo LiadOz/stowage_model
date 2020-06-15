@@ -227,7 +227,7 @@ void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePor
             const Container& cargo = cargoInPort[i];
 
             //go through all the next ports in route
-            for (; routePortIndex < this->route.size(); routePortIndex++) {
+            for (; routePortIndex < (int)this->route.size(); routePortIndex++) {
                 if (cargo.getDestination() == this->route[routePortIndex].getPortCode()) {
                     containerHasPortInRoute = true;
                     break;
