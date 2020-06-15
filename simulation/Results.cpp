@@ -5,28 +5,44 @@
 #include <algorithm>
 
 void Results::addTravel(const string& travelName){
-    if (travelMapping.find(travelName) == travelMapping.end())
+    if (travelMapping.find(travelName) == travelMapping.end()){
+        travels.push_back(travelName);
         travelMapping.insert({travelName, travelMapping.size()});
+    }
+}
+void Results::addAlg(const string& algName){
+    if (algMapping.find(algName) == algMapping.end()){
+        algs.push_back(algName);
+        algMapping.insert({algName, algMapping.size()});
+    }
+}
+
+void Results::reserveSpace(){
+    algResults = vector<vector<int>>(algs.size(), vector<int>(travels.size(), 0));
+}
+
+void Results::addResult(const string& algName, const string& travelName, int x){
+    algResults[algMapping[algName]][travelMapping[travelName]] = x;
 }
 
 void Results::sortResults(){
     std::sort(algResults.begin(), algResults.end(),
             [](auto& r1, auto& r2){
-            if (r1.second.back() == r2.second.back())
-                return r1.second.end()[-2] < r2.second.end()[-2];
-            return r1.second.back() < r2.second.back(); });
+            if (r1.back() == r2.back())
+                return r1.end()[-2] < r2.end()[-2];
+            return r1.back() < r2.back(); });
 }
 
 void Results::sumResults(){
     for (auto& algP : algResults) {
         int errors = 0;
         int sum = 0;
-        for (int x : algP.second) {
+        for (int x : algP) {
             if(x != -1) sum+=x;
             else errors++;
         }
-        algP.second.push_back(sum);
-        algP.second.push_back(errors);
+        algP.push_back(sum);
+        algP.push_back(errors);
     }
 }
 void Results::writeToFile(const string& outputFile){
@@ -39,10 +55,10 @@ void Results::writeToFile(const string& outputFile){
         file << "," << x;
     }
     file << ",Sum,Num Errors" << std::endl;
-    for (auto& alg : algResults) {
-        file << alg.first; 
-        for (auto i : alg.second) {
-            file << "," << i;
+    for (int i = 0; i < (int)algs.size(); ++i) {
+        file << algs[i];
+        for (int x : algResults[i]) {
+           file << "," << x;
         }
         file << std::endl;
     }

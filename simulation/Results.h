@@ -14,17 +14,20 @@ typedef pair<string, string> algTravel;
 class Results {
 private:
     vector<string> travels;
-    vector<pair<string, vector<int>>> algResults;
+    vector<string> algs;
     unordered_map<string, int> travelMapping;
     unordered_map<string, int> algMapping;
+    vector<vector<int>> algResults;
 
     void sumResults();
     void sortResults();
 public:
     Results(){};
     void writeToFile(const string& outputFile);
-    void startRecordingAlg(const string& algName){ algResults.push_back({algName, vector<int>()});}
-    void addAlgResult(int x){ algResults.back().second.push_back(x);}
     void addTravel(const string& travelName);
+    void addAlg(const string& algName);
+    void reserveSpace();
+    // can add results only to reserved spaces
+    void addResult(const string& algName, const string& travelName, int x);
 };
 

@@ -1,5 +1,7 @@
 #include "./SimulationManager.h"
 
+#include <thread>
+
 #include "./AlgTravelProducer.h"
 #include "./AlgorithmRegistrar.h"
 #include "./Simulation.h"
@@ -8,12 +10,6 @@
 #include "./../common/Util.h"
 #include "./../common/Logger.h"
 
-#define LOG_FILE "simulation.errors"
-#define RESULTS_FILE "simulation.results"
-#define FILE_SEPARATOR "/"
-#define DYNAMIC_FILE_EXTENSION ".so"
-
-#define SIMULATION_ERROR_RESULT -1
 
 void SimulationManager::initilizeFiles(const string& rootFolder) {
     remove((rootFolder + FILE_SEPARATOR + LOG_FILE).c_str());
@@ -23,12 +19,11 @@ void SimulationManager::initilizeFiles(const string& rootFolder) {
     LOG.setLogType("General Errors");
 }
 
-SimulationManager::SimulationManager(const string& algDir, const string& travelDir, const string& outputDir) {
+SimulationManager::SimulationManager(const string& algDir, const string& outputDir) {
     initilizeFiles(outputDir);
     // registring the algs
     auto& registrar = AlgorithmRegistrar::getInstance();
     int totalAlgoRegistered = 0;
-    int totalTravels = countTotalTravels(travelDir);
     for (const auto& entry : fs::directory_iterator(algDir)) {
         if (entry.path().filename().extension() == DYNAMIC_FILE_EXTENSION) {
             string error;
@@ -40,22 +35,34 @@ SimulationManager::SimulationManager(const string& algDir, const string& travelD
             }
         }
     }
-
-    //optimizations, reserve enoguh space for writing data
-    this->algoTravelData.reserve(totalAlgoRegistered * totalTravels);
 }
 
 void SimulationManager::addTravelsToResults(const string& travelDir) {
     for (const auto& entry : fs::directory_iterator(travelDir))
         if (entry.is_directory()) r.addTravel(entry.path().filename().string());
 }
+void SimulationManager::addAlgsToResults(){
+    auto& registrar = AlgorithmRegistrar::getInstance();
+    for (auto algo_iter = registrar.begin();
+            algo_iter != registrar.end(); ++algo_iter) {
+        r.addAlg(registrar.getAlgorithmName(algo_iter - registrar.begin()));
+    }
+}
 
-void SimulationManager::runSimulations(const string& travelDir, const string& outputDir) {
-    AlgTravelProducer producer(travelDir, outputDir);
-    // TODO : determine number of threads
-    ThreadPoolExecuter ex{producer, 5};
-    ex.start();
-    ex.wait_till_finish();
+void SimulationManager::runSimulations(const string& travelDir, const string& outputDir, int numThreads) {
+    addTravelsToResults(travelDir);
+    addAlgsToResults();
+    r.reserveSpace();
+    if (numThreads == 1)
+        singleThreadedRun(outputDir, travelDir);
+    else {
+        AlgTravelProducer producer(travelDir, outputDir, r);
+        if (numThreads < (int)std::thread::hardware_concurrency())
+                numThreads = (int)std::thread::hardware_concurrency();
+        ThreadPoolExecuter ex{producer, numThreads};
+        ex.start();
+        ex.wait_till_finish();
+    }
 }
 
 int SimulationManager::countTotalTravels(const string& travelsDirectory) {
@@ -89,39 +96,29 @@ bool SimulationManager::validateTravelsDirectory(const string& travelFolder) {
     return (routeEXT == 1 && shipPlanEXT == 1);
 }
 
-/* Single Threaded
-void SimulationManager::runSimulations(const string& travelDir, const string& outputDir){
+// Single Threaded
+void SimulationManager::singleThreadedRun(const string& outputDir, const string& travelDir){
     auto& registrar = AlgorithmRegistrar::getInstance();
-    addTravelsToResults(travelDir);
-
-    // iterating over the algs
-    for (auto algo_iter = registrar.begin();
-         algo_iter != registrar.end(); ++algo_iter) {
-        string algName =
-            registrar.getAlgorithmName(algo_iter - registrar.begin());
-
-        r.startRecordingAlg(algName);
-
-        for (const auto& entry : fs::directory_iterator(travelDir)) {
-            if (!entry.is_directory()) continue;
-
-            // setting the logger
-            LOG.setLogType(algName + " " + entry.path().filename().string());
-            std::unique_ptr<AbstractAlgorithm> algo = (*algo_iter)();
+    for (const auto& entry : fs::directory_iterator(travelDir)) {        
+        if (!entry.is_directory()) continue;
+        for (auto algo_iter = registrar.begin();
+                algo_iter != registrar.end(); ++algo_iter) {
+            string algName =
+                registrar.getAlgorithmName(algo_iter - registrar.begin());
+            auto algo = (*algo_iter)();
             try {
                 string travelName = entry.path().filename().string();
+                LOG.setLogType(algName + "-" + travelName);
                 Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
 
                 int num = simulation.runSimulation();
-                r.addAlgResult(num);
+                r.addResult(algName, travelName, num);
             } catch (std::exception& e) {
                 LOG.logError(e.what());
-                r.addAlgResult(SIMULATION_ERROR_RESULT);
             }
         }
     }
 }
-*/
 
 void SimulationManager::recordResults(const string& outputDir) {
     r.writeToFile(outputDir + FILE_SEPARATOR + RESULTS_FILE);

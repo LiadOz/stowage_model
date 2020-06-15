@@ -10,7 +10,7 @@
 
 namespace fs = std::filesystem;
 
-AlgTravelProducer::AlgTravelProducer (const string& directory, const string& outputDir): travelDir(directory), outputDir(outputDir) {
+AlgTravelProducer::AlgTravelProducer (const string& directory, const string& outputDir, Results& results): travelDir(directory), outputDir(outputDir), r(results) {
     // TODO : add preprocessing
 
     int pairsIndexCounter = 0;
@@ -25,7 +25,7 @@ AlgTravelProducer::AlgTravelProducer (const string& directory, const string& out
             string algName =
                 registrar.getAlgorithmName(algo_iter - registrar.begin());
             auto algo = (*algo_iter)();
-            pairs.push_back({std::move(algo), entry.path(), algName, pairsIndexCounter});
+            pairs.push_back({algo_iter - registrar.begin(), entry.path()});
             pairsIndexCounter++;
         }
     }
@@ -40,26 +40,30 @@ std::optional<int> AlgTravelProducer::next_task_index() {
     return {};
 }
 
+void AlgTravelProducer::simulationStart(int task_index){
+    auto p = pairs[task_index];
+    auto algo = AlgorithmRegistrar::getInstance()
+        .getAlgorithmByIndex(p.first)();
+    fs::path entry{p.second};
+    string algName = AlgorithmRegistrar::getInstance()
+        .getAlgorithmName(p.first);
+    try {
+        string travelName = entry.filename().string();
+        LOG.setLogType(algName + "-" + travelName);
+        Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
+
+        int num = simulation.runSimulation();
+        r.addResult(algName, travelName, num);
+    } catch (std::exception& e) {
+        LOG.logError(e.what());
+    }
+}
+
 std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {
     auto task_index = next_task_index(); // or: next_task_index_simple();
     if(task_index) {
         return [task_index, this]{
-            // TODO : move to member function and then call it from here
-            AlgorithmTravelPair& p = pairs[task_index.value()];
-            auto algo = p.getAlgorithm();
-            fs::path entry{p.getTravelPath()};
-            string algName = p.getAlgorithmName();
-            try {
-                string travelName = entry.filename().string();
-                LOG.setLogType(algName + "-" + travelName);
-                Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
-
-                // TODO : int num = simulation.runSimulation();
-                int num = simulation.runSimulation();
-                LOG.logError("------THIS IS A RESULT------ " + std::to_string(num));
-            } catch (std::exception& e) {
-                LOG.logError(e.what());
-            }
+            simulationStart(task_index.value());
         };
     }
     else return {};

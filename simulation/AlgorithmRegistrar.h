@@ -64,4 +64,7 @@ public:
         std::string getAlgorithmName(int index){
             return _names[index];
         }
+        AlgorithmFactory getAlgorithmByIndex(int index){
+            return _factories[index];
+        }
 };

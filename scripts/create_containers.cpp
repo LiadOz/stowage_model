@@ -44,7 +44,8 @@ int main(int argc, char *argv[]) {
             name.push_back((char)(rand() % 10 + '0'));
         }
         name.push_back((char)validContainer(name) + '0');
-        file << name << endl;
+        if (name[name.length()-1] != ':')
+            file << name << endl;
     }
     file.close();
     return 0;

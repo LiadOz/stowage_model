@@ -47,7 +47,7 @@ def write_travel(full_route, directory, max_size, max_height, max_containers):
                          route + '_' + str(iteration) + '.cargo_data')
         with open(p, 'w') as f:
             for cargo, dest in zip(cargo, cargo_dest):
-                f.write(cargo + ', 0, ' + dest + '\n')
+                f.write(cargo + ', 1, ' + dest + '\n')
 
 
 directory = './temp/'
