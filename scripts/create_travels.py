@@ -14,7 +14,11 @@ def get_full_route(min_unique, max_unique, max_duplicates):
     route = []
     for port in ports[:unique_ports_num]:
         route.append(port)
-    return random.choices(route, k=ports_num)
+    addition = random.choices(route, k=ports_num-unique_ports_num)
+    for port in addition:
+        route.append(port)
+    random.shuffle(route)
+    return route
 
 
 def init_travel(full_route, directory, max_size, max_height):
@@ -47,22 +51,21 @@ def write_travel(full_route, directory, max_size, max_height, max_containers):
                          route + '_' + str(iteration) + '.cargo_data')
         with open(p, 'w') as f:
             for cargo, dest in zip(cargo, cargo_dest):
+                if dest == route:
+                    continue
                 f.write(cargo + ', 1, ' + dest + '\n')
 
 
-directory = './temp/'
-max_size = 5
-max_height = 5
+max_size = 2
+max_height = 3
 max_containers = 100
-full_route = get_full_route(3, 10, 5)
-init_travel(full_route, directory, max_size, max_height)
 containers = []
 with open('./samples') as f:
     containers = [line.rstrip() for line in f]
 
 main_directory = './scripted_travels'
-for i in range(300):
+for i in range(100):
     d = os.path.join(main_directory, 'travel_' + str(i))
-    full_route = get_full_route(3, 10, 5)
+    full_route = get_full_route(2, 7, 4)
     init_travel(full_route, d, max_size, max_height)
     write_travel(full_route, d, max_size, max_height, max_containers)
