@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <string>
+#include <fstream>
 #define CONTAINER_REGEX "[A-Z]{3}[U,J,Z]\\d{6}\\d"
 #define ID_NUMBER_OF_LETTERS 4
 using namespace std;
@@ -31,7 +32,9 @@ int validContainer(string id){
 char middle[] = {'U', 'J', 'Z'};
 
 int main(int argc, char *argv[]) {
-    for (int i = 0; i < 100; ++i) {
+    ofstream file;
+    file.open("samples");
+    for (int i = 0; i < 10000; ++i) {
         string name;
         for (int i = 0; i < 3; ++i) {
             name.push_back((char)(rand() % 26 + 'A'));
@@ -41,6 +44,8 @@ int main(int argc, char *argv[]) {
             name.push_back((char)(rand() % 10 + '0'));
         }
         name.push_back((char)validContainer(name) + '0');
-        cout << name << endl;
+        file << name << endl;
     }
+    file.close();
+    return 0;
 }
