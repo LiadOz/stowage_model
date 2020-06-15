@@ -1,0 +1,5 @@
+this is what shows up
+Error in _208643270_a.so-travel_97: function validateAllShipCargoLoaded: container WQSZ5426297 wasn't loaded into ship, and was left at port VENUS
+
+if you remove the duplicate at the end it doesn't appear
+
