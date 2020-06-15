@@ -248,7 +248,7 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
 
     //get data from line, params may vary
     operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
-ddd
+    
     //peak at the (supposed) type of action
     string operationString = operationsData.size() ? operationsData[0] : "";
     Operations operation = CraneOperation::getOperationType(operationString);
