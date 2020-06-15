@@ -29,6 +29,7 @@ using fs::path;
 #define COMMAND_LINE_ALGORITHM "-algorithm_path"
 #define COMMAND_LINE_TRAVEL "-travel_path"
 #define COMMAND_LINE_OUTPUT "-output"
+#define COMMAND_LINE_NUM_THREADS "-num_threads"
 #define COMMAND_LINE_FOLDER_SEPARATOR "/"
 
 //files extensions
