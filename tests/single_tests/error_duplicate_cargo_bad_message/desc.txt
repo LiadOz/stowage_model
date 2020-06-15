@@ -1,0 +1,2 @@
+should display the message cargo already at port
+also it should continue to load and unload cargo
