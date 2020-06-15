@@ -59,6 +59,13 @@ def write_travel(full_route, directory, max_size, max_height, max_containers):
 max_size = 2
 max_height = 3
 max_containers = 100
+
+directory = './temp/'
+max_size = 5
+max_height = 5
+max_containers = 100
+full_route = get_full_route(3, 10, 5)
+init_travel(full_route, directory, max_size, max_height)
 containers = []
 with open('./samples') as f:
     containers = [line.rstrip() for line in f]

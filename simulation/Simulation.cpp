@@ -234,7 +234,8 @@ void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePor
                 }
             }
 
-            if (!containerHasPortInRoute) {
+            //if container has route ahead and wasn't loaded (there is free space), log error
+            if (containerHasPortInRoute) {
                 logSimulationErrors("validateAllShipCargoLoaded", "container " + cargo.getId() + " wasn't loaded into ship, and was left at port " + portID);
             }
         }
@@ -248,7 +249,7 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
 
     //get data from line, params may vary
     operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
-
+    
     //peak at the (supposed) type of action
     string operationString = operationsData.size() ? operationsData[0] : "";
     Operations operation = CraneOperation::getOperationType(operationString);
