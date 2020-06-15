@@ -27,6 +27,5 @@ int main(int argc, char** argv) {
     s.runSimulations(travelDirStr, outputDirStr, 1);
     s.recordResults(outputDirStr);
 
-
     return EXIT_SUCCESS;
 }

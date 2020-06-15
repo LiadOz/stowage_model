@@ -234,7 +234,8 @@ void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePor
                 }
             }
 
-            if (!containerHasPortInRoute) {
+            //if container has route ahead and wasn't loaded (there is free space), log error
+            if (containerHasPortInRoute) {
                 logSimulationErrors("validateAllShipCargoLoaded", "container " + cargo.getId() + " wasn't loaded into ship, and was left at port " + portID);
             }
         }
