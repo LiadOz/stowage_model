@@ -55,7 +55,8 @@ std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {
                 Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
 
                 // TODO : int num = simulation.runSimulation();
-                simulation.runSimulation();
+                int num = simulation.runSimulation();
+                LOG.logError("------THIS IS A RESULT------ " + std::to_string(num));
             } catch (std::exception& e) {
                 LOG.logError(e.what());
             }

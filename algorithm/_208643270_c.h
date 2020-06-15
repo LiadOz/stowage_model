@@ -3,9 +3,6 @@
 
 class _208643270_c : public AdvancedAlgorithm {
 private:
-    // finds a good location to move a container at coordinate
-    // if no location is found returns {-1, -1}
-    pair<int, int> findValidLocation(int x, int y);
     int whereToStart(vector<Container>& awaiting,
             unordered_set<string>& mustReturn);
 
