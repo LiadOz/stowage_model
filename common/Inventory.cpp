@@ -6,6 +6,7 @@
 #include "Exceptions.h"
 #include "Util.h"
 #include "Parser.h"
+#include "Logger.h"
 
 using std::out_of_range;
 using std::runtime_error;
@@ -29,12 +30,13 @@ void Inventory::initFromRow(vector<string>& row){
         depth = std::stoi(row[PARSING_DEPTH]); 
         x = stoi(row[PARSING_X]);
         y = stoi(row[PARSING_Y]);
+        if ((int)depth <= 0 || (int)x <= 0 || (int)y <= 0) throw std::exception();
     }catch(std::exception& e) {
         throw Error("Cannot read first line of ship plan", ERROR_BAD_PLAN_FILE);
     }
     maxFloors = depth;
     dimensions = {x, y};
-    heights = vector<vector<size_t>>(y, vector<size_t>(x, 0)
+    heights = vector<vector<size_t>>(y, vector<size_t>(x, depth)
             );
     storage = vector<vector<vector<Container>>>(y,
             vector<vector<Container>>(x)
@@ -66,7 +68,7 @@ void Inventory::parseRow(vector<string>& row){
         return;
     }
     // prevent duplicate (x,y)
-    if(heights[y][x]) {
+    if(heights[y][x] != maxFloors) {
         LOG.logError("Duplicate coordinate found");
         if((int)heights[y][x] == floors)
             errorVar(errorStatus, ERROR_BAD_FORMAT);
@@ -75,7 +77,6 @@ void Inventory::parseRow(vector<string>& row){
         return;
     }
     else heights[y][x] = floors;
-    maxCapacity += heights[y][x];
 }
 
 int Inventory::readPlan(const string& file_path){
@@ -98,6 +99,13 @@ int Inventory::readPlan(const string& file_path){
         }
         // parsing each (x,y)
         else parseRow(row);
+    }
+    maxCapacity = 0;
+    for (auto v : heights) {
+        for (auto x : v) {
+            maxCapacity += x;
+        }
+        
     }
     return errorStatus;
 }
@@ -133,6 +141,14 @@ Container Inventory::popContainer(size_t x, size_t y){
     Container c = storage[y][x].back();
     storage[y][x].pop_back();
     currentCapacity--;
+    return c;
+}
+
+Container Inventory::peekContainer(size_t x, size_t y){
+    rangeCheck(x, y);
+    if (emptyCoordinate(x, y))
+        throw out_of_range("Coordinate is empty");
+    Container c = storage[y][x].back();
     return c;
 }
 

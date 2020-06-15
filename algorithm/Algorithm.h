@@ -12,6 +12,13 @@
 
 using std::string;
 
+#define OUTSIDE_X -1
+#define OUTSIDE_Y -1
+#define PARSING_ID 0
+#define PARSING_WEIGHT 1
+#define PARSING_PORT 2
+#define UNLOAD_ALL "ALL"
+
 class Algorithm : public AbstractAlgorithm{
 protected:
     enum InsertStatus { SUCCSESS, IMPOSSIBLE, ERROR, FULL };

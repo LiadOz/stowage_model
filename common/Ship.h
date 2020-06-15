@@ -55,6 +55,7 @@ public:
     void moveContainer(size_t x1, size_t y1, size_t x2, size_t y2); 
     // removes container from (x1, y1) throws error if cannot be executed
     Container removeContainer(size_t x, size_t y);
+    Container peekContainer(size_t x, size_t y){ return storage.peekContainer(x, y); }
     // used to format rejection to container
     void rejectContainer(Container& c);
 

@@ -42,36 +42,6 @@ bool validCargoFile(const string &filename) {
     return true;
 }
 
-Logger &Logger::Instance() {
-    static Logger instance;
-    return instance;
-}
-
-// currently the logger prints to the screen
-
-void Logger::logError(const string &message) {
-    ofstream file;
-    file.open(filePath, std::ios::out | std::ios::app);
-    file << "," << message;
-    file.close();
-    std::cerr << "Error in " << logType << " : " << message << std::endl;
-    logged = true;
-}
-
-void Logger::setLogType(const string &type) {
-    ofstream file;
-    file.open(filePath, std::ios::out | std::ios::app);
-    if (!firstLine)
-        file << std::endl;
-    firstLine = false;
-    logType = type;
-    file << logType;
-    file.close();
-}
-
-Logger::~Logger(){
-    if (!logged) remove(filePath.c_str());
-}
 
 bool isCommentLine(const string &line) {
     unsigned index = 0;

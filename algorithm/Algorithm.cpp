@@ -17,12 +17,6 @@ using std::regex_match;
 using std::pair;
 using std::runtime_error;
 
-#define OUTSIDE_X -1
-#define OUTSIDE_Y -1
-#define PARSING_ID 0
-#define PARSING_WEIGHT 1
-#define PARSING_PORT 2
-#define UNLOAD_ALL "ALL"
 
 // TODO: add error number 18 !!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -72,8 +66,8 @@ int Algorithm::readShipRoute(const string& full_path_and_file_name){
 vector<Container> Algorithm::unloadAll(string port){
     pair<size_t, size_t> d = s.getStorageDimensions();
     vector<Container> outside;
-    for (size_t i = 0; i < d.second; ++i) {
-        for (size_t j = 0; j < d.first; ++j) {
+    for (size_t i = 0; i < d.first; ++i) {
+        for (size_t j = 0; j < d.second; ++j) {
             while(!s.emptyCoordinate(i, j)){
                 Container c = s.removeContainer(i, j);
                 // freeing the port's cargo
