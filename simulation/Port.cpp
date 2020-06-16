@@ -45,7 +45,13 @@ bool Port::loadContainersFromFile(const string &filePath) {
 
             Container container(containerWeight, portDest, containerID);
 
-            addContainer(container);
+            //if cargo dest is the same port, don't load..
+            if (portDest != this->getPortCode()){
+                addContainer(container);
+            }
+            else{
+                LOG.logError("container " + containerID + "'s destination is the current port.");
+            }
         } catch (std::runtime_error &error) {
             LOG.logError(error.what());
         }
@@ -77,7 +83,7 @@ Container Port::removeContainer(const string &containerToRemove) {
     }
 
     // TODO: consider changing logic to pointers in exec2
-    throw runtime_error("container not in port");
+    throw runtime_error("container " + containerToRemove + " is not at port " + this->getPortCode() + " and can't be removed.");
 }
 
 vector<Port> createShipRoute(const string &filePath) {

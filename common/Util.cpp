@@ -42,7 +42,6 @@ bool validCargoFile(const string &filename) {
     return true;
 }
 
-
 bool isCommentLine(const string &line) {
     unsigned index = 0;
     while (index < line.length()) {
@@ -108,7 +107,6 @@ string getCommandLineParameterByName(int argc, char **argv, string paramName) {
 }
 
 void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathStr, string &travelPathStr) {
-
     path algorithmPath{algorithmPathStr};
     path outputPath{outputPathStr};
     path travelPath{travelPathStr};
@@ -128,11 +126,10 @@ void validateAndChangeDirectories(string &algorithmPathStr, string &outputPathSt
 
     try {
         fs::create_directory(outputPath);
-        outputPathStr =  fs::canonical(outputPath.string());
+        outputPathStr = fs::canonical(outputPath.string());
     }
 
     catch (std::filesystem::filesystem_error &fs_error) {
-
         string errDesc = outputPathStr == "" ? "no output argument provided." : "can not create output directory at given argument.";
         cerr << outputPathStr << endl;
         cerr << "using root folder for output instead." << endl;

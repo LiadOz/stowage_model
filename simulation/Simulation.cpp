@@ -191,14 +191,18 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
                 if (craneOperation->getOperation() != Operations::reject) {
                     actionsPerformedCounter += craneOperation->getCost();
                 }
-            } catch (const std::exception& error) {
+            }
+             catch (const std::runtime_error& error) {
+                logSimulationErrors("performAlgorithmActions", error.what());
+            }
+             catch (const std::exception& error) {
                 logSimulationErrors("performAlgorithmActions", error.what());
             }
         }
     }
 
     validateAllPortCargoUnloaded(this->ship, port);
-    validateAllShipCargoLoaded(this->ship, port, routePortIndex);
+    validateAllShipCargoLoaded(this->ship, port, routePortIndex+1);
 
     file.close();
 }
