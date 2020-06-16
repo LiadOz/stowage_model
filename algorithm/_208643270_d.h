@@ -46,7 +46,7 @@ protected:
     //  container, return the one that is closest to target.
     //  2. if you failed find a top of stack that goes after you first.
     //  3. if you failed find a top of stack that is as far away as possible
-    pair<int, int> getBestStack(const string& port);
+    pair<int, int> getBestStack(const string& port, int x, int );
 public:
     _208643270_d (){};
     virtual ~_208643270_d(){};

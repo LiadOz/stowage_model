@@ -198,7 +198,7 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
     }
 
     validateAllPortCargoUnloaded(this->ship, port);
-    validateAllShipCargoLoaded(this->ship, port, routePortIndex);
+    validateAllShipCargoLoaded(this->ship, port, routePortIndex + 1);
 
     file.close();
 }

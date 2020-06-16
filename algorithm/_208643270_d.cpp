@@ -24,7 +24,7 @@ Algorithm::InsertStatus _208643270_d::loadAwaiting(
     InsertStatus ret = SUCCSESS;
     for (auto c : awaiting) {
         if (mustReturn.find(c.getId()) == mustReturn.end()) continue;
-        auto p = getBestStack(c.getDestination());
+        auto p = getBestStack(c.getDestination(), -1, -1);
         if (p.first == -1)
             insertBiggestDepth(c);
         else
@@ -33,7 +33,7 @@ Algorithm::InsertStatus _208643270_d::loadAwaiting(
     return ret; 
 }
 
-pair<int, int> _208643270_d::getBestStack(const string& port){
+pair<int, int> _208643270_d::getBestStack(const string& port, int x, int y){
     pair<int, int> ret;
     // a mapping of coordinate with sorted flag and top port
     vector<std::tuple<pair<int, int>, bool, string>> mapping;
@@ -41,6 +41,7 @@ pair<int, int> _208643270_d::getBestStack(const string& port){
     // calculating the mapping
     for (size_t i = 0; i < d.first; ++i){
         for (size_t j = 0; j < d.second; ++j){
+            if (x == (int)i && y == (int)j) continue;
             if (s.fullCoordinate(i, j)) continue;
             if (s.emptyCoordinate(i, j)){
                 mapping.push_back({ {i, j}, true, routes.back()});
@@ -97,7 +98,7 @@ unordered_set<string> _208643270_d::unloadPort(const string& port, vector<Contai
             continue;
         }
         Container c = s.peekContainer(p.first, p.second);
-        auto bs = getBestStack(c.getDestination());
+        auto bs = getBestStack(c.getDestination(), p.first, p.second);
         if (bs.first == -1){
             s.removeContainer(p.first, p.second);
             mustReturn.insert(c.getDestination());

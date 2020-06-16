@@ -64,7 +64,7 @@ directory = './temp/'
 max_size = 5
 max_height = 5
 max_containers = 100
-full_route = get_full_route(3, 10, 5)
+full_route = get_full_route(3, 10, 10)
 init_travel(full_route, directory, max_size, max_height)
 containers = []
 with open('./samples') as f:

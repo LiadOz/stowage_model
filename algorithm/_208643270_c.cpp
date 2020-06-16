@@ -72,8 +72,7 @@ unordered_set<string> _208643270_c::unloadPort(const string& port, vector<Contai
                     awaiting.push_back(c);
                     mustReturn.insert(c.getId());
                 }
-
-                if (calc.tryOperation((char)Action::MOVE, c.getWeight(), i, j) 
+                else if (calc.tryOperation((char)Action::MOVE, c.getWeight(), i, j) 
                             == WeightBalanceCalculator::APPROVED)
                     s.moveContainer(i, j, mv.first, mv.second);
             }

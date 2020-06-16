@@ -145,6 +145,7 @@ stringstream getCommandLineParameters(int argc, char **argv) {
     string travelPath;
     string outputPath;
     int numOfThreads;
+    (void)numOfThreads;
 
     travelPath = getCommandLineParameterByName(argc, argv, COMMAND_LINE_TRAVEL);
 

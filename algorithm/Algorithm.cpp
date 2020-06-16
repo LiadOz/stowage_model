@@ -18,8 +18,6 @@ using std::pair;
 using std::runtime_error;
 
 
-// TODO: add error number 18 !!!!!!!!!!!!!!!!!!!!!!!!!!
-
 int Algorithm::readShipPlan(const string& full_path_and_file_name){
     errorStatus = 0;
     try {
@@ -124,7 +122,7 @@ bool Algorithm::validDestination(const string& destination){
     return false;
 }
 
-void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awaiting){
+void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awaiting, const string& port){
     std::unordered_set<string> cargoIds;
 
     Parser parse;
@@ -142,9 +140,10 @@ void Algorithm::setAwaitingCargo(const string& file_path, vector<Container>& awa
                 throw NonFatalError("Id " + c.getId() + " route is invalid", ERROR_BAD_CARGO_PORT); 
             if(cargoIds.find(c.getId()) != cargoIds.end())
                 throw NonFatalError("Id " + c.getId() + " already at port", ERROR_DUPLICATE_PORT_ID); 
-            if (s.idOnShip(c.getId())){
+            if (s.idOnShip(c.getId()))
                 throw NonFatalError("Id " + c.getId() + " already on ship", ERROR_ID_ON_SHIP); 
-        }
+            if (c.getDestination() == port)
+                throw NonFatalError("Destination of " + c.getId() + " is the same as current port", ERROR_BAD_CARGO_PORT);
             awaiting.push_back(c);
             cargoIds.insert(c.getId());
         }
@@ -172,7 +171,7 @@ int Algorithm::getInstructionsForCargo(
         string currentPort = routes.back();
         routes.pop_back();
         vector<Container> awaiting;
-        setAwaitingCargo(input_full_path_and_file_name, awaiting);
+        setAwaitingCargo(input_full_path_and_file_name, awaiting, currentPort);
         this->getPortInstructions(currentPort, awaiting);
     }
     s.closeLogFile();

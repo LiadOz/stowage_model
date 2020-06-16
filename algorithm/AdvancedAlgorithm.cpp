@@ -9,6 +9,7 @@ int AdvancedAlgorithm::placeOn(const string& above, const string& below){
 }
 
 void AdvancedAlgorithm::setPriority(){
+    cargoPriority.clear();
     reverse(routes.begin(), routes.end());
     for (size_t i = 0; i < routes.size(); ++i) {
         if(cargoPriority.find(routes[i]) == cargoPriority.end())
@@ -20,7 +21,7 @@ void AdvancedAlgorithm::setPriority(){
 void AdvancedAlgorithm::prioritySort(vector<Container>& toSort){
     std::sort(toSort.begin(), toSort.end(),
             [this](Container& a, Container& b){
-            return cargoPriority.at(a.getDestination()) >
+            return cargoPriority.at(a.getDestination()) <
             cargoPriority.at(b.getDestination());
             });
 }
@@ -30,6 +31,11 @@ void AdvancedAlgorithm::getPortInstructions(
     setPriority();
     auto mustReturn = unloadPort(port, awaiting);
     prioritySort(awaiting);
+    if(port == "EKANS"){
+        for (auto i : awaiting) {
+            std::cout << i << std::endl;
+        }
+    }
     loadAwaiting(awaiting, mustReturn);
     if (s.freeSpaces() == 0)
         errorVar(errorStatus, ERROR_TOO_MUCH_CARGO);
