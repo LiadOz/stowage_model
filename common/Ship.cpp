@@ -40,7 +40,7 @@ void Ship::moveContainer(size_t x1, size_t y1, size_t x2, size_t y2){
     Container c = storage.popContainer(x1, y1);
     try {
         storage.pushContainer(x2, y2, c);
-    }catch(std::out_of_range& e) {
+    }catch(std::exception& e) {
         storage.pushContainer(x1, y1, c);
         throw e;
     }
