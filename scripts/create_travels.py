@@ -68,6 +68,6 @@ with open('./samples') as f:
 main_directory = './scripted_travels'
 for i in range(100):
     d = os.path.join(main_directory, 'travel_' + str(i))
-    full_route = get_full_route(2, 7, 4)
+    full_route = get_full_route(3, 6, 10)
     init_travel(full_route, d, max_size, max_height)
     write_travel(full_route, d, max_size, max_height, max_containers)
