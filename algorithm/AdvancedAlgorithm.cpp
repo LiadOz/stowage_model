@@ -31,11 +31,6 @@ void AdvancedAlgorithm::getPortInstructions(
     setPriority();
     auto mustReturn = unloadPort(port, awaiting);
     prioritySort(awaiting);
-    if(port == "EKANS"){
-        for (auto i : awaiting) {
-            std::cout << i << std::endl;
-        }
-    }
     loadAwaiting(awaiting, mustReturn);
     if (s.freeSpaces() == 0)
         errorVar(errorStatus, ERROR_TOO_MUCH_CARGO);
@@ -74,8 +69,9 @@ pair<int, int> AdvancedAlgorithm::findGoodLocation(int x, int y, const string& p
             if (s.fullCoordinate(i, j)) continue;
             // dont move to a place that will be  unloaded at a later stage
             if (s.getContainerDestinationLevel(i, j, port) != -1) continue;
-            if (s.emptyCoordinate(i, j) && lowestDistance == -1){
-                closest = {i, j};
+            if (s.emptyCoordinate(i, j)){
+                if (lowestDistance == -1)
+                    closest = {i, j};
                 continue;
             }
 

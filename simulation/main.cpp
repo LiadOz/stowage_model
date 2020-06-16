@@ -20,10 +20,9 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    // call the Simulation Manager
-    // the one should be replaced with the num of threads
-    // TODO: get number of threads
     SimulationManager s(algorithmDirStr, outputDirStr);
+    // TODO: add more threads to nova using this  guide
+    // https://www.youtube.com/watch?v=dQw4w9WgXcQ
     s.runSimulations(travelDirStr, outputDirStr, 1);
     s.recordResults(outputDirStr);
 
