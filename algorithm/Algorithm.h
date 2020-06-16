@@ -37,7 +37,7 @@ protected:
     virtual void getPortInstructions(
             const string& port, vector<Container>& awaiting) = 0;
     // prepares the cargo in port
-    void setAwaitingCargo(const string& file_path, vector<Container>& awaiting);
+    void setAwaitingCargo(const string& file_path, vector<Container>& awaiting, const string& port);
     bool validDestination(const string& destination);
 public:
     Algorithm (){};

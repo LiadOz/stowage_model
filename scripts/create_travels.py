@@ -35,6 +35,7 @@ def init_travel(full_route, directory, max_size, max_height):
 
 
 def write_travel(full_route, directory, max_size, max_height, max_containers):
+    taken = set()
     full_route.sort()
     prev_route = ''
     iteration = 1
@@ -51,21 +52,15 @@ def write_travel(full_route, directory, max_size, max_height, max_containers):
                          route + '_' + str(iteration) + '.cargo_data')
         with open(p, 'w') as f:
             for cargo, dest in zip(cargo, cargo_dest):
-                if dest == route:
+                if dest == route or cargo in taken:
                     continue
                 f.write(cargo + ', 1, ' + dest + '\n')
+                taken.add(cargo)
 
 
-max_size = 2
-max_height = 3
-max_containers = 100
-
-directory = './temp/'
 max_size = 5
 max_height = 5
-max_containers = 100
-full_route = get_full_route(3, 10, 5)
-init_travel(full_route, directory, max_size, max_height)
+max_containers = 200
 containers = []
 with open('./samples') as f:
     containers = [line.rstrip() for line in f]

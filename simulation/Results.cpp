@@ -26,6 +26,12 @@ void Results::addResult(const string& algName, const string& travelName, int x){
 }
 
 void Results::sortResults(){
+    std::sort(algs.begin(), algs.end(),[this](auto& a, auto& b) {
+            int i = algMapping[a], j = algMapping[b];
+            if (algResults[i].back() == algResults[j].back())
+                return algResults[i].end()[-2] < algResults[j].end()[-2];
+            return algResults[i].back() < algResults[j].back();
+            });
     std::sort(algResults.begin(), algResults.end(),
             [](auto& r1, auto& r2){
             if (r1.back() == r2.back())

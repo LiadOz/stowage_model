@@ -4,8 +4,8 @@
 #include <iostream>
 
 #include "../common/Exceptions.h"
-#include "../common/Util.h"
 #include "../common/Logger.h"
+#include "../common/Util.h"
 
 namespace fs = std::filesystem;
 
@@ -191,18 +191,16 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
                 if (craneOperation->getOperation() != Operations::reject) {
                     actionsPerformedCounter += craneOperation->getCost();
                 }
-            }
-             catch (const std::runtime_error& error) {
+            } catch (const std::runtime_error& error) {
                 logSimulationErrors("performAlgorithmActions", error.what());
-            }
-             catch (const std::exception& error) {
+            } catch (const std::exception& error) {
                 logSimulationErrors("performAlgorithmActions", error.what());
             }
         }
     }
 
     validateAllPortCargoUnloaded(this->ship, port);
-    validateAllShipCargoLoaded(this->ship, port, routePortIndex+1);
+    validateAllShipCargoLoaded(this->ship, port, routePortIndex + 1);
 
     file.close();
 }
@@ -229,6 +227,7 @@ void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePor
         for (size_t i = 0; i < cargoInPort.size(); i++) {
             bool containerHasPortInRoute = false;
             const Container& cargo = cargoInPort[i];
+            if (cargo.getDestination() == portID) continue;
 
             //go through all the next ports in route
             for (; routePortIndex < (int)this->route.size(); routePortIndex++) {
@@ -253,7 +252,7 @@ unique_ptr<CraneOperation> Simulation::createOperationFromLine(const string& lin
 
     //get data from line, params may vary
     operationsData = getDataFromLine(lineFromFile, CRANE_OPERATIONS_FILE_MAX_NUM_OF_PARAMS, true);
-    
+
     //peak at the (supposed) type of action
     string operationString = operationsData.size() ? operationsData[0] : "";
     Operations operation = CraneOperation::getOperationType(operationString);

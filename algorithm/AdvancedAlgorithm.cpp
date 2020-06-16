@@ -9,6 +9,7 @@ int AdvancedAlgorithm::placeOn(const string& above, const string& below){
 }
 
 void AdvancedAlgorithm::setPriority(){
+    cargoPriority.clear();
     reverse(routes.begin(), routes.end());
     for (size_t i = 0; i < routes.size(); ++i) {
         if(cargoPriority.find(routes[i]) == cargoPriority.end())
@@ -20,7 +21,7 @@ void AdvancedAlgorithm::setPriority(){
 void AdvancedAlgorithm::prioritySort(vector<Container>& toSort){
     std::sort(toSort.begin(), toSort.end(),
             [this](Container& a, Container& b){
-            return cargoPriority.at(a.getDestination()) >
+            return cargoPriority.at(a.getDestination()) <
             cargoPriority.at(b.getDestination());
             });
 }
@@ -68,8 +69,9 @@ pair<int, int> AdvancedAlgorithm::findGoodLocation(int x, int y, const string& p
             if (s.fullCoordinate(i, j)) continue;
             // dont move to a place that will be  unloaded at a later stage
             if (s.getContainerDestinationLevel(i, j, port) != -1) continue;
-            if (s.emptyCoordinate(i, j) && lowestDistance == -1){
-                closest = {i, j};
+            if (s.emptyCoordinate(i, j)){
+                if (lowestDistance == -1)
+                    closest = {i, j};
                 continue;
             }
 

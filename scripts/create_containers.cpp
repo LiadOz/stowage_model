@@ -34,7 +34,7 @@ char middle[] = {'U', 'J', 'Z'};
 int main(int argc, char *argv[]) {
     ofstream file;
     file.open("samples");
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < 30000; ++i) {
         string name;
         for (int i = 0; i < 3; ++i) {
             name.push_back((char)(rand() % 26 + 'A'));

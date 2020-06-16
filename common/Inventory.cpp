@@ -8,7 +8,6 @@
 #include "Parser.h"
 #include "Logger.h"
 
-using std::out_of_range;
 using std::runtime_error;
 using std::stoi;
 using std::to_string;
@@ -110,10 +109,10 @@ int Inventory::readPlan(const string& file_path){
     return errorStatus;
 }
 
-// test the range of (x, y) if it's outside throws out_of_range error
+// test the range of (x, y) if it's outside throws error
 void Inventory::rangeCheck(size_t x, size_t y){
     if (x >= dimensions.first || y >= dimensions.second)
-        throw out_of_range("Attempted to access invalid location");
+        throw runtime_error("Attempted to access invalid location");
 }
 bool Inventory::emptyCoordinate(size_t x, size_t y){
     rangeCheck(x, y);
@@ -128,7 +127,7 @@ bool Inventory::fullCoordinate(size_t x, size_t y){
 bool Inventory::pushContainer(size_t x, size_t y, Container& c){
     rangeCheck(x, y);
     if (fullCoordinate(x, y))
-        throw out_of_range("Coordinate is full");
+        throw runtime_error("Coordinate is full");
     storage[y][x].push_back(c);
     currentCapacity++;
     return true;
@@ -137,7 +136,7 @@ bool Inventory::pushContainer(size_t x, size_t y, Container& c){
 Container Inventory::popContainer(size_t x, size_t y){
     rangeCheck(x, y);
     if (emptyCoordinate(x, y))
-        throw out_of_range("Coordinate is empty");
+        throw runtime_error("Coordinate is empty");
     Container c = storage[y][x].back();
     storage[y][x].pop_back();
     currentCapacity--;
@@ -147,7 +146,7 @@ Container Inventory::popContainer(size_t x, size_t y){
 Container Inventory::peekContainer(size_t x, size_t y){
     rangeCheck(x, y);
     if (emptyCoordinate(x, y))
-        throw out_of_range("Coordinate is empty");
+        throw runtime_error("Coordinate is empty");
     Container c = storage[y][x].back();
     return c;
 }
