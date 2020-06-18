@@ -68,7 +68,7 @@ bool Simulation::loadContainersToPortsInRoute() {
     vector<Port>& ports = this->route;
 
     //last port doesn't need a file, ignore it
-    for (size_t i = 0; i < ports.size() - 1; i++) {
+    for (size_t i = 0; i < ports.size(); i++) {
         Port& port = ports[i];
         string portCode = port.getPortCode();
 
@@ -102,6 +102,9 @@ bool Simulation::loadContainersToPortsInRoute() {
                 //logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
             }
         }
+
+        if ( i == ports.size() - 1 && port.getCargoList().size() != 0)
+            LOG.logError(ERROR_STRING_BAD_LAST_PORT);
     }
 
     return true;

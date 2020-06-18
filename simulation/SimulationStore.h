@@ -3,11 +3,15 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <map>
+#include <list>
 
 #include "../common/Ship.h"
 #include "Port.h"
 
 using std::unordered_map;
+using std::map;
+using std::list;
 
 class SimulationStore {
    private:
