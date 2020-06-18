@@ -37,8 +37,6 @@ private:
 	
 	//will load all containers from file to the relevant port
 	map<string, list<string> > createPortsCargoFromFiles(); 
-
-	static vector<Port> getRouteFromStore(const string& routePath);
 	
 	//init algorithm stuff
     void prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory);

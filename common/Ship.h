@@ -27,6 +27,7 @@ class ShipLogger {
    public:
     ShipLogger() : logToScreen(false) {}
     ShipLogger(ShipLogger& other){(void)other;}; //to deal with deleted copy constructor (from ofstream)
+    ShipLogger(const ShipLogger& other){(void)other;}; //to deal with deleted copy constructor (from ofstream)
     ShipLogger operator=(const ShipLogger& other) {
         (void)other;
         return *this;

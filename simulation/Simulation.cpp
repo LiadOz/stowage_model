@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <iostream>
 
+
 #include "../common/Exceptions.h"
 #include "../common/Logger.h"
 #include "../common/Util.h"
@@ -21,10 +22,10 @@ using std::stringstream;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> algo, SimulationStore& store) {
+Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName,
+ const string& algorithmName, unique_ptr<AbstractAlgorithm> algo, SimulationStore& store) {
     folder = travelDirectory + FILE_SEPARATOR + travelName + FILE_SEPARATOR;
     try {
-        getRouteFromStore(folder);
         string shipPath = getFileWithExt(folder, PLAN_EXT);
         string routePath = getFileWithExt(folder, ROUTE_EXT);
         string simOutputDirectory = outputDirectory + FILE_SEPARATOR + algorithmName + "_" + travelName;

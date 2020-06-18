@@ -2,6 +2,9 @@ COMP = g++-9.3.0
 ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
+ifdef STOWAGE_MATAN # used to complie on my computer
+	COMP = g++
+endif
 
 OBJS = Algorithm.o AdvancedAlgorithm.o SuperAdvancedAlgorithm.o _208643270_c.o _208643270_d.o _208643270_e.o _208643270_f.o 
 EXEC = algtest
