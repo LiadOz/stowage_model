@@ -11,7 +11,11 @@ using std::get;
 
 void _208643270_d::getPortInstructions(
         const string& port, vector<Container>& awaiting){
+
+    routes.push_back(port); // adding current port to the priority
     setPriority();
+    routes.pop_back();
+
     unordered_set<string> cargoToInsert = cargoToAdd(port, awaiting);
     unloadPort(port, awaiting);
     prioritySort(awaiting);
@@ -23,7 +27,10 @@ Algorithm::InsertStatus _208643270_d::loadAwaiting(
         vector<Container>& awaiting, unordered_set<string>& mustReturn){
     InsertStatus ret = SUCCSESS;
     for (auto c : awaiting) {
-        if (mustReturn.find(c.getId()) == mustReturn.end()) continue;
+        if (mustReturn.find(c.getId()) == mustReturn.end()){
+            s.rejectContainer(c);
+            continue;
+        }
         auto p = getBestStack(c.getDestination(), -1, -1);
         if (p.first == -1)
             insertBiggestDepth(c);

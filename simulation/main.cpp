@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     SimulationManager s(algorithmDirStr, outputDirStr);
     // TODO: add more threads to nova using this  guide
     // https://www.youtube.com/watch?v=dQw4w9WgXcQ
-    s.runSimulations(travelDirStr, outputDirStr, 1);
+    s.runSimulations(travelDirStr, outputDirStr, 8);
     s.recordResults(outputDirStr);
 
     return EXIT_SUCCESS;

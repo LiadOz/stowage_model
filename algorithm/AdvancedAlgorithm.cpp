@@ -28,7 +28,11 @@ void AdvancedAlgorithm::prioritySort(vector<Container>& toSort){
 
 void AdvancedAlgorithm::getPortInstructions(
         const string& port, vector<Container>& awaiting){
+
+    routes.push_back(port); // adding current port to the priority
     setPriority();
+    routes.pop_back();
+
     auto mustReturn = unloadPort(port, awaiting);
     prioritySort(awaiting);
     loadAwaiting(awaiting, mustReturn);
