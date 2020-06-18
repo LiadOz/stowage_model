@@ -21,10 +21,6 @@ _208643270_a.so: _208643270_a.o Algorithm.o AdvancedAlgorithm.o SuperAdvancedAlg
 		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
 _208643270_b.so: _208643270_b.o Algorithm.o AdvancedAlgorithm.o SuperAdvancedAlgorithm.o
 		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
-_208643270_a.so: _208643270_a.o Algorithm.o 
-		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
-_208643270_b.so: _208643270_b.o Algorithm.o AdvancedAlgorithm.o
-		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
 _208643270_c.so: _208643270_c.o Algorithm.o AdvancedAlgorithm.o
 		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
 _208643270_d.so: _208643270_d.o Algorithm.o AdvancedAlgorithm.o
