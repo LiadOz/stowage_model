@@ -28,7 +28,7 @@ Simulation::Simulation(const string& outputDirectory, const string& travelDirect
     try {
         string shipPath = getFileWithExt(folder, PLAN_EXT);
         string routePath = getFileWithExt(folder, ROUTE_EXT);
-        string simOutputDirectory = outputDirectory + FILE_SEPARATOR + algorithmName + "_" + travelName;
+        string simOutputDirectory = outputDirectory + FILE_SEPARATOR + algorithmName + "_" + travelName + "_crane_instructions";
         algorithm = std::move(algo);
         route = store.getRouteFromStore(routePath);
         loadContainersToPortsInRoute();
@@ -155,7 +155,7 @@ int Simulation::runSimulation() {
 
             string instructionsFileName = portCode + '_' + std::to_string(portsEncountermentsMap.find(portCode)->second) + string(CRANE_INSTRUCTIONS_EXT);
 
-            string outputFilePath = this->outputFolder + "/" + instructionsFileName;
+            string outputFilePath = this->outputFolder +   +"/" + instructionsFileName;
             algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
 
             if (!fs::exists(outputFilePath)) {
