@@ -21,6 +21,7 @@ void Logger::logError(const string& message) {
 
 void Logger::setFile(const string& file_path){
     file.open(file_path); 
+    filePath = file_path;
 }
 void Logger::setLogType(const string& type) {
     logType = type;
