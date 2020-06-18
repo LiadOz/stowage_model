@@ -56,7 +56,7 @@ void Results::writeToFile(const string& outputFile){
     std::ofstream file(outputFile);
     sumResults();
     sortResults();
-    file << "Results";
+    file << "RESULTS";
     for (auto& x : travels) {
         file << "," << x;
     }

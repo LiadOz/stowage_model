@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 #include "../common/Container.h"
 
@@ -26,6 +27,14 @@ class Port {
 
     string getCargoFilePath() {
         return cargoFilePath;
+    }
+
+    unordered_set<string> getCargoSet() {
+        unordered_set<string> cargoIDSet;
+        for(Container c : containers){
+            cargoIDSet.insert(c.getId());
+        }
+        return cargoIDSet;
     }
 
     const vector<Container>& getCargoList() const {
