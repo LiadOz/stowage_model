@@ -17,6 +17,10 @@ all: complie_common $(SHARED_OBJS)
 
 complie_common:
 	+$(MAKE) -C ../common
+_208643270_a.so: _208643270_a.o Algorithm.o AdvancedAlgorithm.o SuperAdvancedAlgorithm.o
+		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
+_208643270_b.so: _208643270_b.o Algorithm.o AdvancedAlgorithm.o SuperAdvancedAlgorithm.o
+		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
 _208643270_a.so: _208643270_a.o Algorithm.o 
 		$(COMP) $(COMMONOBJS) $(CPP_LINK_FLAG) -o $@ $^
 _208643270_b.so: _208643270_b.o Algorithm.o AdvancedAlgorithm.o
