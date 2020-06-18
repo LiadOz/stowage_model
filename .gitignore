@@ -64,3 +64,6 @@ interfaces/.vscode
 
 *.crane_instructions
 simulation/*.zip
+
+tests/huge_route_duplicates_none/
+tests/huge_route_duplicates_none/*.*

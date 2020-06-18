@@ -57,11 +57,9 @@ Ship SimulationStore::getShipFromStore(const string& shipPlanPath) {
 }
 
 bool SimulationStore::isValidFile(const string& path) {
-    try {
+    
         auto invalidFileIterator = invalidateFiles.find(path);
         return (invalidFileIterator == invalidateFiles.end());
-    } catch (std::exception& e) {
-        std::cout << e.what() << std::endl;
-    }
+    
     return true;
 }
