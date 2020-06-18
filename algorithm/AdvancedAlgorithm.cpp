@@ -4,6 +4,8 @@
 
 #include "../common/Exceptions.h"
 
+using std::get;
+
 int AdvancedAlgorithm::placeOn(const string& above, const string& below){
     return cargoPriority.at(below) - cargoPriority.at(above);
 }

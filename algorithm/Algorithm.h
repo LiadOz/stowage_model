@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "../common/Container.h"
-#include "../common/WeightBalanceCalculator.h"
+#include "../interfaces/WeightBalanceCalculator.h"
 #include "../common/Ship.h"
 
 using std::string;

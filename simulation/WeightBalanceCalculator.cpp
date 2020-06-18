@@ -1,4 +1,4 @@
-#include "WeightBalanceCalculator.h"
+#include "../interfaces/WeightBalanceCalculator.h"
 
 #define NO(x) (void)x;
 

@@ -5,7 +5,7 @@ endif
 
 #The executabel filename DON'T CHANGE
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG
-OBJS = Container.o Inventory.o Util.o Ship.o WeightBalanceCalculator.o Parser.o Exceptions.o Logger.o
+OBJS = Container.o Inventory.o Util.o Ship.o Parser.o Exceptions.o Logger.o
 #The executabel filename DON'T CHANGE
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC
 #CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -pedantic-errors -DNDEBUG
@@ -21,8 +21,6 @@ Inventory.o: Inventory.cpp
 Ship.o: Ship.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 Util.o: Util.cpp
-	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
-WeightBalanceCalculator.o: WeightBalanceCalculator.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 Parser.o: Parser.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp

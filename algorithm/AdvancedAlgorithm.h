@@ -39,6 +39,7 @@ protected:
     pair<int, int> findGoodLocation(int x, int y, const string& port);
     // sorts vector according to priority the starting cargos should be placed high
     void prioritySort(vector<Container>& toSort);
+
 public:
     AdvancedAlgorithm(){};
     virtual ~AdvancedAlgorithm(){};
