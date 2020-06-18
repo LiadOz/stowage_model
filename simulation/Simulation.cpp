@@ -154,6 +154,11 @@ int Simulation::runSimulation() {
 
             string outputFilePath = this->outputFolder + "/" + instructionsFileName;
             algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
+            
+            if (!fs::exists(outputFilePath)) {
+                throw FatalError("Algorithm didn't create cargo file for port " + port.getPortCode() + "(number " + std::to_string(i) + ")");
+            }
+
             performAlgorithmActions(outputFilePath, port, i);
         } catch (const FatalError& error) {
             logSimulationErrors("runSimulation", error.what());
