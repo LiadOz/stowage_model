@@ -50,7 +50,7 @@ bool Port::loadContainersFromFile(const string &filePath) {
                 addContainer(container);
             }
             else{
-                LOG.logError("container " + containerID + "'s destination is the current port.");
+                LOG.logError("container " + containerID + "'s destination is the current port ("+portDest+").");
             }
         } catch (std::runtime_error &error) {
             LOG.logError(error.what());
@@ -96,6 +96,7 @@ vector<Port> createShipRoute(const string &filePath) {
         vector<string> data;
         parse >> data;
         string port = data[0];
+        
         // check if port is repeated twice or more in a row
         if (isFirstTime) {
             isFirstTime = false;
@@ -105,7 +106,9 @@ vector<Port> createShipRoute(const string &filePath) {
         else {
             if (port == previousPort) {
                 LOG.logError(string(ERROR_STRING_DUPLICATE_PORT) + "[" + port + "]");
-            }
+                previousPort = port;
+                continue;
+            }   
             previousPort = port;
         }
 

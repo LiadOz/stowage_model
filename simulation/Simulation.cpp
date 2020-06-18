@@ -155,6 +155,9 @@ int Simulation::runSimulation() {
             string outputFilePath = this->outputFolder + "/" + instructionsFileName;
             algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
             performAlgorithmActions(outputFilePath, port, i);
+        } catch (const FatalError& error) {
+            logSimulationErrors("runSimulation", error.what());
+            return -1;
         } catch (const std::exception& error) {
             logSimulationErrors("runSimulation", error.what());
         }
@@ -199,25 +202,33 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
         }
     }
 
-    validateAllPortCargoUnloaded(this->ship, port);
-    validateAllShipCargoLoaded(this->ship, port, routePortIndex + 1);
+    //if failed validating either function (cargo that could be loaded + had dest in the route
+    //or failed to unload all cargo for current port) it's a fatal error - return -1.
+    if (!validateAllPortCargoUnloaded(this->ship, port)) {
+        throw FatalError("validateAllPortCargoUnloaded failed");
+    }
+    if (!validateAllShipCargoLoaded(this->ship, port, routePortIndex + 1)) {
+        throw FatalError("validateAllShipCargoLoaded failed");
+    }
 
     file.close();
 }
 
 //make sure all cargo is in the port
-void Simulation::validateAllPortCargoUnloaded(Ship& ship, Port& port) {
+bool Simulation::validateAllPortCargoUnloaded(Ship& ship, Port& port) {
     string portID = port.getPortCode();
     vector<Container> shipContainers = ship.getShipContainers();
 
     for (size_t i = 0; i < shipContainers.size(); i++) {
         if (shipContainers[i].getDestination() == portID) {
             logSimulationErrors("validateAllPortCargoUnloaded", "container " + shipContainers[i].getId() + " didn't unload at port " + portID);
+            return false;
         }
     }
+    return true;
 }
 
-void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePortIndex) {
+bool Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePortIndex) {
     string portID = port.getPortCode();
     const vector<Container>& cargoInPort = port.getCargoList();
 
@@ -240,9 +251,12 @@ void Simulation::validateAllShipCargoLoaded(Ship& ship, Port& port, int routePor
             //if container has route ahead and wasn't loaded (there is free space), log error
             if (containerHasPortInRoute) {
                 logSimulationErrors("validateAllShipCargoLoaded", "container " + cargo.getId() + " wasn't loaded into ship, and was left at port " + portID);
+                return false;
             }
         }
     }
+
+    return true;
 }
 
 //create a crane operation from the input proviced from one instruction

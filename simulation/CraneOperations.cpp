@@ -46,6 +46,9 @@ LoadCraneOperation::LoadCraneOperation(const vector<string>& params) {
 void LoadCraneOperation::doOperation(Ship& ship, Port& port) {
     try {
         Container container = port.removeContainer(this->containerID);
+        if (ship.idOnShip(container.getId())) {
+            throw std::runtime_error("Id " + container.getId() + " already on ship");
+        }
         ship.insertContainer(row, col, container);
     } catch (const std::runtime_error& error) {
         throw std::runtime_error("Load Operation: " + string(error.what()));

@@ -49,10 +49,10 @@ private:
 	unique_ptr<CraneOperation> createOperationFromLine(const string& line);
 
 	//make sure all cargo is in the port
-	void validateAllPortCargoUnloaded(Ship& ship, Port& port);
+	bool validateAllPortCargoUnloaded(Ship& ship, Port& port);
 
 	//make sure ship not empty and took all next cargo
-	void validateAllShipCargoLoaded(Ship& ship, Port& port, int routePortIndex);
+	bool validateAllShipCargoLoaded(Ship& ship, Port& port, int routePortIndex);
 
 	//log the results 
 	void logResults();
