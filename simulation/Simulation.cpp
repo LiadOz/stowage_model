@@ -3,7 +3,6 @@
 #include <filesystem>
 #include <iostream>
 
-
 #include "../common/Exceptions.h"
 #include "../common/Logger.h"
 #include "../common/Util.h"
@@ -23,7 +22,7 @@ using std::stringstream;
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
 Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName,
- const string& algorithmName, unique_ptr<AbstractAlgorithm> algo, SimulationStore& store) {
+                       const string& algorithmName, unique_ptr<AbstractAlgorithm> algo, SimulationStore& store) {
     folder = travelDirectory + FILE_SEPARATOR + travelName + FILE_SEPARATOR;
     try {
         string shipPath = getFileWithExt(folder, PLAN_EXT);
@@ -155,7 +154,7 @@ int Simulation::runSimulation() {
 
             string instructionsFileName = portCode + '_' + std::to_string(portsEncountermentsMap.find(portCode)->second) + string(CRANE_INSTRUCTIONS_EXT);
 
-            string outputFilePath = this->outputFolder +   +"/" + instructionsFileName;
+            string outputFilePath = this->outputFolder + "/" + instructionsFileName;
             algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
 
             if (!fs::exists(outputFilePath)) {
@@ -180,6 +179,8 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
     std::ifstream file(filePath);
     string lineFromFile;
 
+    unordered_set<string> originalPortCargoIDs = port.getCargoSet();
+
     while (getline(file, lineFromFile)) {
         /*if line is a comment - ignore*/
         if (isCommentLine(lineFromFile)) {
@@ -197,7 +198,11 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
         //operation format is valid
         else {
             try {
-                craneOperation->doOperation(ship, port);
+                //always true, for demo
+                if (this->wbCalculator.tryOperation('N', 0, 0, 0) == WeightBalanceCalculator::BalanceStatus::APPROVED) {
+                    craneOperation->doOperation(ship, port);
+                    originalPortCargoIDs.erase(craneOperation->getcontainerID());
+                }
 
                 if (craneOperation->getOperation() != Operations::reject) {
                     actionsPerformedCounter += craneOperation->getCost();
@@ -217,6 +222,10 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
     }
     if (!validateAllShipCargoLoaded(this->ship, port, routePortIndex + 1)) {
         throw FatalError("validateAllShipCargoLoaded failed");
+    }
+    
+    if (originalPortCargoIDs.size() > 0) {
+        LOG.logError("some cargos at port did not get instructions for file " + filePath);
     }
 
     file.close();
