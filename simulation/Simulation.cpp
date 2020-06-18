@@ -66,11 +66,18 @@ bool Simulation::loadContainersToPortsInRoute() {
     map<string, list<string>> portsMap = createPortsCargoFromFiles();
     map<string, int> portsEncountermentsMap;
     vector<Port>& ports = this->route;
+    unordered_map<string, int> routeMap = getPortsRouteEncounterment(this->route);
 
     //last port doesn't need a file, ignore it
     for (size_t i = 0; i < ports.size(); i++) {
         Port& port = ports[i];
         string portCode = port.getPortCode();
+
+        int appearances = routeMap.find(portCode)->second;
+        routeMap.find(portCode)->second = appearances -1;
+        if(routeMap.find(portCode)->second == 0){
+            routeMap.erase(portCode);
+        }
 
         //count how many times we've visited each port so we can get the currect file
         if (portsEncountermentsMap.find(portCode) == portsEncountermentsMap.end()) {
@@ -91,7 +98,7 @@ bool Simulation::loadContainersToPortsInRoute() {
 
             for (string file : filesList) {
                 if (file == portCode + '_' + std::to_string(portsEncountermentsMap.find(portCode)->second) + string(CARGO_EXT)) {
-                    port.loadContainersFromFile(folder + file);
+                    port.loadContainersFromFile(folder + file, routeMap);
                     foundFile = true;
                 }
             }
@@ -102,12 +109,27 @@ bool Simulation::loadContainersToPortsInRoute() {
                 //logSimulationErrors("loadContainersToPortsInRoute", "Port file doesn't exist");
             }
         }
-
-        if ( i == ports.size() - 1 && port.getCargoList().size() != 0)
-            LOG.logError(ERROR_STRING_BAD_LAST_PORT);
     }
 
     return true;
+}
+
+unordered_map<string, int> Simulation::getPortsRouteEncounterment(vector<Port>& route) {
+    unordered_map<string, int> map;
+
+    for (size_t i = 0; i < route.size(); i++) {
+        Port& port = route[i];
+        string portCode = port.getPortCode();
+
+        //count how many times we've visited each port so we can get the currect file
+        if (map.find(portCode) == map.end()) {
+            map.insert(std::make_pair(portCode, 1));
+        } else {
+            int numOfTimes = map.find(portCode)->second;
+            map.find(portCode)->second = numOfTimes + 1;
+        }
+    }
+    return map;
 }
 
 //helper function for loadContainersToPortsInRoute
@@ -226,7 +248,7 @@ void Simulation::performAlgorithmActions(const string& filePath, Port& port, int
     if (!validateAllShipCargoLoaded(this->ship, port, routePortIndex + 1)) {
         throw FatalError("validateAllShipCargoLoaded failed");
     }
-    
+
     if (originalPortCargoIDs.size() > 0) {
         LOG.logError("some cargos at port did not get instructions for file " + filePath);
     }

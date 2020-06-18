@@ -41,6 +41,9 @@ private:
 	//init algorithm stuff
     void prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory);
 	
+	//map for the route
+	unordered_map<string, int>getPortsRouteEncounterment(vector<Port>& route);
+
 	//will load all containers from file to the relevant port
 	bool loadContainersToPortsInRoute();
 

@@ -17,7 +17,8 @@ Port::Port(const string &code, const string &filePathForCargo) {
     cargoFilePath = filePathForCargo;
 }
 
-bool Port::loadContainersFromFile(const string &filePath) {
+bool Port::loadContainersFromFile(const string &filePath, std::unordered_map<string, int>& nextPortsInRoute) {
+
     Parser parse;
     try {
         parse.loadFile(filePath);
@@ -45,13 +46,24 @@ bool Port::loadContainersFromFile(const string &filePath) {
 
             Container container(containerWeight, portDest, containerID);
 
+            if(nextPortsInRoute.size() == 0){
+                LOG.logError(ERROR_STRING_BAD_LAST_PORT); 
+                break;
+            }
+
             //if cargo dest is the same port, don't load..
-            if (portDest != this->getPortCode()){
-                addContainer(container);
-            }
-            else{
+            if (portDest == this->getPortCode()){
                 LOG.logError("container " + containerID + "'s destination is the current port ("+portDest+").");
+                continue;
             }
+
+            if (nextPortsInRoute.find(portDest) == nextPortsInRoute.end()){
+                LOG.logError("container " + containerID + "'s destination is not in the route onwards.");
+                continue;
+            }
+
+            addContainer(container);
+
         } catch (std::runtime_error &error) {
             LOG.logError(error.what());
         }
