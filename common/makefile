@@ -2,6 +2,9 @@ COMP = g++-9.3.0
 ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
+ifdef STOWAGE_MATAN # used to complie on matan's computer
+	COMP = g++
+endif
 
 #The executabel filename DON'T CHANGE
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG

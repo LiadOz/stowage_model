@@ -12,7 +12,7 @@ using std::endl;
 int main(int argc, char** argv) {
     string algorithmDirStr, travelDirStr, outputDirStr;
     int numOfThreads;
-
+    
     try {  //get command line arguments
         getCommandLineParameters(argc, argv) >> algorithmDirStr >> travelDirStr >> outputDirStr >> numOfThreads;
     } catch (const FatalError& ferror) {

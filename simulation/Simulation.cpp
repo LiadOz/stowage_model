@@ -24,6 +24,7 @@ using std::stringstream;
 Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> algo) {
     folder = travelDirectory + FILE_SEPARATOR + travelName + FILE_SEPARATOR;
     try {
+        getRouteFromStore(folder);
         string shipPath = getFileWithExt(folder, PLAN_EXT);
         string routePath = getFileWithExt(folder, ROUTE_EXT);
         string simOutputDirectory = outputDirectory + FILE_SEPARATOR + algorithmName + "_" + travelName;
@@ -154,7 +155,7 @@ int Simulation::runSimulation() {
 
             string outputFilePath = this->outputFolder + "/" + instructionsFileName;
             algorithm->getInstructionsForCargo(port.getCargoFilePath(), outputFilePath);
-            
+
             if (!fs::exists(outputFilePath)) {
                 throw FatalError("Algorithm didn't create cargo file for port " + port.getPortCode() + "(number " + std::to_string(i) + ")");
             }

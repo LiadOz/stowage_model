@@ -2,6 +2,9 @@ COMP = g++-9.3.0
 ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
+ifdef STOWAGE_MATAN # used to complie on matan's computer
+	COMP = g++
+endif
 
 OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o Results.o SimulationManager.o AlgTravelProducer.o ThreadPoolExecuter.o WeightBalanceCalculator.o
 COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/Logger.o

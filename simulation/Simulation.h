@@ -32,9 +32,12 @@ private:
 	string outputFolder;
 	WeightBalanceCalculator wbCalculator;
 	int actionsPerformedCounter = 0; //count total actions performed
+	static map<string, vector<Port>> shipRouteStore;
 	
 	//will load all containers from file to the relevant port
 	map<string, list<string> > createPortsCargoFromFiles(); 
+
+	static vector<Port> getRouteFromStore(const string& routePath);
 	
 	//init algorithm stuff
     void prepareAlgorithm(const string& shipPath, const string& routePath, const string& outputDirectory);
