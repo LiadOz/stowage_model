@@ -6,9 +6,6 @@
 #include "Port.h"
 
 vector<Port> SimulationStore::getRouteFromStore(const string& routePath) {
-    if (!isValidFile(routePath)) {
-        throw FatalError(routePath + " is invalid.");
-    }
 
     auto routeIterator = this->routeStore.find(routePath);
     if (routeIterator != this->routeStore.end()) {
@@ -30,9 +27,6 @@ vector<Port> SimulationStore::getRouteFromStore(const string& routePath) {
 }
 
 Ship SimulationStore::getShipFromStore(const string& shipPlanPath) {
-    if (!isValidFile(shipPlanPath)) {
-        throw FatalError(shipPlanPath + " is invalid.");
-    }
 
     auto shipIterator = this->shipPlanStore.find(shipPlanPath);
     if (shipIterator != this->shipPlanStore.end()) {
