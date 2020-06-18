@@ -47,16 +47,18 @@ void AlgTravelProducer::simulationStart(int task_index){
     fs::path entry{p.second};
     string algName = AlgorithmRegistrar::getInstance()
         .getAlgorithmName(p.first);
+    string travelName = entry.filename().string();
+    int num = -1;
     try {
-        string travelName = entry.filename().string();
         LOG.setLogType(algName + "-" + travelName);
         Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
 
-        int num = simulation.runSimulation();
-        r.addResult(algName, travelName, num);
-    } catch (std::exception& e) {
+        num = simulation.runSimulation();
+    } catch (std::runtime_error& e) {
         LOG.logError(e.what());
+    } catch (std::exception& e) {
     }
+    r.addResult(algName, travelName, num);
 }
 
 std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {

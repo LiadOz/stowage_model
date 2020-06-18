@@ -113,8 +113,9 @@ void SimulationManager::singleThreadedRun(const string& outputDir, const string&
                 Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
 
                 moves = simulation.runSimulation();
-            } catch (std::exception& e) {
+            } catch (std::runtime_error& e) {
                 LOG.logError(e.what());
+            } catch (std::exception& e) {
             }
             r.addResult(algName, travelName, moves);
         }

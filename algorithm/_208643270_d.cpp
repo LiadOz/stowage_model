@@ -11,7 +11,6 @@ using std::get;
 
 void _208643270_d::getPortInstructions(
         const string& port, vector<Container>& awaiting){
-
     routes.push_back(port); // adding current port to the priority
     setPriority();
     routes.pop_back();
