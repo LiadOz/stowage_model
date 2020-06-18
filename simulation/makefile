@@ -3,8 +3,8 @@ ifdef STOWAGE # used to complie on my computer
 	COMP = g++-9
 endif
 
-OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o Results.o SimulationManager.o AlgTravelProducer.o ThreadPoolExecuter.o
-COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/WeightBalanceCalculator.o ../common/Logger.o
+OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o Results.o SimulationManager.o AlgTravelProducer.o ThreadPoolExecuter.o WeightBalanceCalculator.o
+COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/Logger.o
 #The executabel filename DON'T CHANGE
 EXEC = simulator
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC
@@ -36,6 +36,8 @@ CraneOperations.o: CraneOperations.cpp
 AlgTravelProducer.o: AlgTravelProducer.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 ThreadPoolExecuter.o: ThreadPoolExecuter.cpp
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+WeightBalanceCalculator.o: WeightBalanceCalculator.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 clean:
 	rm -f ../common/*.o

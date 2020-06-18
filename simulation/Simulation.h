@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "../common/Ship.h"
-#include "../common/WeightBalanceCalculator.h"
+#include "../interfaces/WeightBalanceCalculator.h"
 #include "../interfaces/AbstractAlgorithm.h"
 #include "CraneOperations.h"
 #include "Port.h"

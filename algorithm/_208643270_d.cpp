@@ -17,7 +17,8 @@ void _208643270_d::getPortInstructions(
     routes.pop_back();
 
     unordered_set<string> cargoToInsert = cargoToAdd(port, awaiting);
-    unloadPort(port, awaiting);
+    auto mustReturn = unloadPort(port, awaiting);
+    cargoToInsert.insert(mustReturn.begin(), mustReturn.end());
     prioritySort(awaiting);
     if(loadAwaiting(awaiting, cargoToInsert) == FULL)
         errorVar(errorStatus, ERROR_TOO_MUCH_CARGO);
@@ -108,13 +109,14 @@ unordered_set<string> _208643270_d::unloadPort(const string& port, vector<Contai
         auto bs = getBestStack(c.getDestination(), p.first, p.second);
         if (bs.first == -1){
             s.removeContainer(p.first, p.second);
-            mustReturn.insert(c.getDestination());
+            mustReturn.insert(c.getId());
             awaiting.push_back(c);
         }
         else 
             s.moveContainer(p.first, p.second, bs.first, bs.second);
         
     } 
+    return mustReturn;
     /*
     for (size_t i = 0; i < d.first; ++i){
         for (size_t j = 0; j < d.second; ++j){
@@ -145,7 +147,6 @@ unordered_set<string> _208643270_d::unloadPort(const string& port, vector<Contai
         }
     }
     */
-    return mustReturn;
 }
 
 
