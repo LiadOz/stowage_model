@@ -6,9 +6,9 @@ ifdef STOWAGE_MATAN # used to complie on my computer
 	COMP = g++
 endif
 
-OBJS = Algorithm.o AdvancedAlgorithm.o SuperAdvancedAlgorithm.o _208643270_c.o _208643270_d.o _208643270_e.o _208643270_f.o 
+OBJS = Algorithm.o AdvancedAlgorithm.o SuperAdvancedAlgorithm.o _208643270_a.o _208643270_b.o
 EXEC = algtest
-SHARED_OBJS = _208643270_c.so _208643270_d.so _208643270_e.so _208643270_f.so
+SHARED_OBJS = _208643270_a.so _208643270_b.so
 COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o
 CPP_COMP_FLAG = -std=c++2a -g -Wall -Wextra -Werror -pedantic-errors -DNDEBUG -fPIC -fvisibility=hidden
 CPP_LINK_FLAG = -lstdc++fs -shared 
