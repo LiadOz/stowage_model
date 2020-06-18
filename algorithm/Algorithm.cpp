@@ -178,7 +178,7 @@ int Algorithm::getInstructionsForCargo(
     return errorStatus;
 }
 
-void RejectAlgorithm::getPortInstructions(const string& port,
+void Algorithm::getPortInstructions(const string& port,
         vector<Container>& awaiting){
 
     vector<Container> outside = unloadAll(port);

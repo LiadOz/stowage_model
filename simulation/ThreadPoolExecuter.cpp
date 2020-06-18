@@ -4,7 +4,9 @@ void ThreadPoolExecuter::worker_function() {
     while(!stopped) {
         auto task = producer.getTask();
         if(!task) break;
-        (*task)();
+        //(*task)();
+        auto p = task.value();
+        func(p.first, p.second);
         ++num_tasks_finished;
         ++total_num_tasks_finished;
     }

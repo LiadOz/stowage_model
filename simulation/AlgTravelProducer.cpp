@@ -10,15 +10,12 @@
 
 namespace fs = std::filesystem;
 
-AlgTravelProducer::AlgTravelProducer (const string& directory, const string& outputDir, Results& results): travelDir(directory), outputDir(outputDir), r(results) {
-    // TODO : add preprocessing
-
+AlgTravelProducer::AlgTravelProducer (const string& directory): travelDir(directory) {
     int pairsIndexCounter = 0;
 
     auto& registrar = AlgorithmRegistrar::getInstance();
     for (const auto& entry : fs::directory_iterator(travelDir)) {        
 
-        //TODO: change to validate travel directory? (there is a function already)
         if (!entry.is_directory()) continue;
         for (auto algo_iter = registrar.begin();
                 algo_iter != registrar.end(); ++algo_iter) {
@@ -40,6 +37,7 @@ std::optional<int> AlgTravelProducer::next_task_index() {
     return {};
 }
 
+/*
 void AlgTravelProducer::simulationStart(int task_index){
     auto p = pairs[task_index];
     auto algo = AlgorithmRegistrar::getInstance()
@@ -47,24 +45,25 @@ void AlgTravelProducer::simulationStart(int task_index){
     fs::path entry{p.second};
     string algName = AlgorithmRegistrar::getInstance()
         .getAlgorithmName(p.first);
+    string travelName = entry.filename().string();
+    int num = -1;
     try {
-        string travelName = entry.filename().string();
         LOG.setLogType(algName + "-" + travelName);
         Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
 
-        int num = simulation.runSimulation();
-        r.addResult(algName, travelName, num);
-    } catch (std::exception& e) {
+        num = simulation.runSimulation();
+    } catch (std::runtime_error& e) {
         LOG.logError(e.what());
+    } catch (std::exception& e) {
     }
+    r.addResult(algName, travelName, num);
 }
+*/
 
-std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {
+std::optional<pair<int, string>> AlgTravelProducer::getTask() {
     auto task_index = next_task_index(); // or: next_task_index_simple();
     if(task_index) {
-        return [task_index, this]{
-            simulationStart(task_index.value());
-        };
+        return {pairs[task_index.value()]};
     }
     else return {};
 }
