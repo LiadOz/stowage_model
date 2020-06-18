@@ -25,6 +25,7 @@ private:
     bool logToScreen;
 public:
     ShipLogger(): logToScreen(false){}
+    ShipLogger(ShipLogger& other){};
     void setLogFile(const string& file_path){ file.open(file_path);}
     void setLogToScreen(bool flag){ logToScreen = flag;}
     void closeLogFile(){ file.close();}
