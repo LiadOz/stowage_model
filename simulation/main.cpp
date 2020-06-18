@@ -11,9 +11,10 @@ using std::endl;
 
 int main(int argc, char** argv) {
     string algorithmDirStr, travelDirStr, outputDirStr;
+    int numOfThreads;
 
     try {  //get command line arguments
-        getCommandLineParameters(argc, argv) >> algorithmDirStr >> travelDirStr >> outputDirStr;
+        getCommandLineParameters(argc, argv) >> algorithmDirStr >> travelDirStr >> outputDirStr >> numOfThreads;
     } catch (const FatalError& ferror) {
         std::cout << ferror.what() << endl
                   << "Exiting..." << endl;
@@ -23,7 +24,7 @@ int main(int argc, char** argv) {
     SimulationManager s(algorithmDirStr, outputDirStr);
     // TODO: add more threads to nova using this  guide
     // https://www.youtube.com/watch?v=dQw4w9WgXcQ
-    s.runSimulations(travelDirStr, outputDirStr, 8);
+    s.runSimulations(travelDirStr, outputDirStr, numOfThreads);
     s.recordResults(outputDirStr);
 
     return EXIT_SUCCESS;
