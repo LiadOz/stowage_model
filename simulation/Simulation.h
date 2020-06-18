@@ -18,6 +18,14 @@
 #define PLAN_EXT ".ship_plan"
 #define ROUTE_EXT ".route"
 
+#define FILE_SEPARATOR "/"
+#define SIMULATION_ROOT_FOLDER "./Simulation/"
+#define SIMULATION_SHIP_FILE_NAME "sample.plan"
+#define SIMULATION_ROUTE_FILE_NAME "ports"
+#define SIMULATION_CARGO_INSTRUCTIONS_FOLDER "Instructions/"
+#define SIMULATION_ERROR_FILE_NAME "errors.txt"
+#define SIMULATION_RESULTS_FILE_NAME "results.txt"
+
 using std::map;
 using std::list;
 using std::unique_ptr;

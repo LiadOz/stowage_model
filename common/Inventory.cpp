@@ -12,15 +12,6 @@ using std::runtime_error;
 using std::stoi;
 using std::to_string;
 
-#define PARSING_WORDS 3
-#define PARSING_DEPTH 0
-#define PARSING_X 1 
-#define PARSING_Y 2
-#define X_POSITION 0
-#define Y_POSITION 1
-#define FLOORS 2
-
-
 // initialize the size of the arrays
 void Inventory::initFromRow(vector<string>& row){
     size_t depth, x, y;

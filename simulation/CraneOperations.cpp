@@ -7,9 +7,6 @@ using std::runtime_error;
 using std::stoi;
 using std::stringstream;
 
-#define LOAD_UNLOAD_COST 5;
-#define MOVE_COST 3;
-
 Operations CraneOperation::getOperationType(const string& opStr) {
     if (opStr == OPERATION_LOAD) {
         return Operations::load;

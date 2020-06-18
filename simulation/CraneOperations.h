@@ -16,6 +16,9 @@
 #define CRANE_OPERATION_MOVE_NUM_OF_PARAM 8
 #define CRANE_OPERATION_REJECT_NUM_OF_PARAM 2
 
+#define LOAD_UNLOAD_COST 5;
+#define MOVE_COST 3;
+
 using std::string;
 using std::vector;
 

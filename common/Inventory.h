@@ -9,6 +9,14 @@ using std::vector;
 using std::string;
 using std::pair;
 
+#define PARSING_WORDS 3
+#define PARSING_DEPTH 0
+#define PARSING_X 1 
+#define PARSING_Y 2
+#define X_POSITION 0
+#define Y_POSITION 1
+#define FLOORS 2
+
 // represents the ship plan and allows storing containers
 class Inventory {
 private:

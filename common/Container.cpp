@@ -11,12 +11,6 @@ using std::regex;
 using std::regex_match;
 using std::pow;
 
-#define CONTAINER_REGEX "[A-Z]{3}[U,J,Z]\\d{6}\\d"
-#define ID_NUMBER_OF_LETTERS 4
-#define PARSING_ID 0
-#define PARSING_WEIGHT 1
-#define PARSING_PORT 2
-
 // retruns letter mapping according to ISO 6346
 int LetterMapping(char c){
     if (c == 'A') return 10;
