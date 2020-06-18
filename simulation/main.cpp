@@ -21,11 +21,14 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
+    // swift explanation:
+    // https://imgflip.com/i/45joto
     SimulationManager s(algorithmDirStr, outputDirStr);
+
     // TODO: add more threads to nova using this  guide
     // https://www.youtube.com/watch?v=dQw4w9WgXcQ
-    s.runSimulations(travelDirStr, outputDirStr, numOfThreads);
-    s.recordResults(outputDirStr);
+    s.runSimulations(travelDirStr, numOfThreads);
+    s.recordResults();
 
     return EXIT_SUCCESS;
 }

@@ -10,16 +10,6 @@
 #include <stdexcept>
 
 #include "Exceptions.h"
-#include "Logger.h"
-
-#define DYNAMIC_FILE_EXTENSION ".so"
-
-#define ERROR_NO_FILE "no files found the ext "
-#define ERROR_TOO_MANY_FILES "found too many files with the ext "
-
-//todo: make define header for all these?
-#define PLAN_EXT ".ship_plan"
-#define ROUTE_EXT ".route"
 
 namespace fs = std::filesystem;
 
@@ -158,13 +148,13 @@ stringstream getCommandLineParameters(int argc, char **argv) {
     try {
         numOfThreads = stoi(getCommandLineParameterByName(argc, argv, COMMAND_LINE_NUM_THREADS));
         if (numOfThreads < 1){
-            LOG.logError("num of threads parameter is lower than 1. using 1 as default.");
+            std::cerr<< "num of threads parameter is lower than 1. using 1 as default." << std::endl;
             numOfThreads = 1;
         }
     }
 
     catch(const std::exception& error){
-        LOG.logError("Invalid -num_threads parameter. using 1 as default.");
+        std::cerr<< "Invalid -num_threads parameter. using 1 as default." << std::endl;
         numOfThreads = 1;
     }
     

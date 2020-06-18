@@ -12,11 +12,10 @@ using std::vector;
 using std::string;
 using std::pair;
 
+// creates pairs of algorithm and travel
 class AlgTravelProducer {
 private:
     string travelDir;
-    string outputDir;
-    Results& r;
     int numTasks;
     vector<pair<int, string>> pairs;
     std::atomic_int task_counter = 0;
@@ -24,10 +23,9 @@ private:
 
 public:
     // creating the pairs and doing some preprocessing
-    AlgTravelProducer (const string& directory, const string& outputDir,
-            Results& results);
+    AlgTravelProducer (const string& directory);
 
-    std::optional<std::function<void(void)>> getTask();
+    std::optional<pair<int, string>> getTask();
 
-    void simulationStart(int task_index);
+    //void simulationStart(int task_index);
 };

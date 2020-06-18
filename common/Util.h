@@ -35,6 +35,13 @@ using fs::path;
 //files extensions
 #define DYNAMIC_FILE_EXTENSION ".so"
 
+#define ERROR_NO_FILE "no files found the ext "
+#define ERROR_TOO_MANY_FILES "found too many files with the ext "
+
+#define PLAN_EXT ".ship_plan"
+#define ROUTE_EXT ".route"
+
+
 bool validRoute(const string& route);
 bool validCargoFile(const string& filename);
 bool isCommentLine(const string& line);

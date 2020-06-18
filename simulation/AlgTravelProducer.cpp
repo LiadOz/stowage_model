@@ -10,15 +10,12 @@
 
 namespace fs = std::filesystem;
 
-AlgTravelProducer::AlgTravelProducer (const string& directory, const string& outputDir, Results& results): travelDir(directory), outputDir(outputDir), r(results) {
-    // TODO : add preprocessing
-
+AlgTravelProducer::AlgTravelProducer (const string& directory): travelDir(directory) {
     int pairsIndexCounter = 0;
 
     auto& registrar = AlgorithmRegistrar::getInstance();
     for (const auto& entry : fs::directory_iterator(travelDir)) {        
 
-        //TODO: change to validate travel directory? (there is a function already)
         if (!entry.is_directory()) continue;
         for (auto algo_iter = registrar.begin();
                 algo_iter != registrar.end(); ++algo_iter) {
@@ -40,6 +37,7 @@ std::optional<int> AlgTravelProducer::next_task_index() {
     return {};
 }
 
+/*
 void AlgTravelProducer::simulationStart(int task_index){
     auto p = pairs[task_index];
     auto algo = AlgorithmRegistrar::getInstance()
@@ -60,13 +58,12 @@ void AlgTravelProducer::simulationStart(int task_index){
     }
     r.addResult(algName, travelName, num);
 }
+*/
 
-std::optional<std::function<void(void)>> AlgTravelProducer::getTask() {
+std::optional<pair<int, string>> AlgTravelProducer::getTask() {
     auto task_index = next_task_index(); // or: next_task_index_simple();
     if(task_index) {
-        return [task_index, this]{
-            simulationStart(task_index.value());
-        };
+        return {pairs[task_index.value()]};
     }
     else return {};
 }

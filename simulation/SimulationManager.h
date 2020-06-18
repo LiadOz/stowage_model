@@ -34,12 +34,17 @@ private:
     void addAlgsToResults();
     bool validateTravelsDirectory(const string& travelFolder);
     int countTotalTravels(const string& travelsDirectory);
+
+    // runs a pair of algorithm and travel
+    void runAlgTravelPair(int algIndex, 
+            const string& travel, const string& travelDir);
     Results r;
+    string outputDir;
 
 public:
     SimulationManager (const string& algDir, const string& outputDir);
-    void runSimulations(const string& travelDir, const string& outputDir, int numThreads);
-    void singleThreadedRun(const string& outputDir, const string& travelDir);
-    void recordResults(const string& outputDir);
+    void runSimulations(const string& travelDir, int numThreads);
+    void singleThreadedRun(const string& travelDir);
+    void recordResults();
 
 };
