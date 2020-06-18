@@ -6,7 +6,7 @@ ifdef STOWAGE_MATAN # used to complie on matan's computer
 	COMP = g++
 endif
 
-OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o Results.o SimulationManager.o AlgTravelProducer.o ThreadPoolExecuter.o WeightBalanceCalculator.o
+OBJS = main.o AlgorithmRegistrar.o AlgorithmRegistration.o Simulation.o Port.o CraneOperations.o Results.o SimulationManager.o AlgTravelProducer.o ThreadPoolExecuter.o WeightBalanceCalculator.o SimulationStore.o
 COMMONOBJS = ../common/Container.o ../common/Exceptions.o ../common/Inventory.o ../common/Parser.o ../common/Ship.o ../common/Util.o ../common/Logger.o
 #The executabel filename DON'T CHANGE
 EXEC = simulator
@@ -35,6 +35,8 @@ Results.o: Results.cpp
 SimulationManager.o: SimulationManager.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 CraneOperations.o: CraneOperations.cpp
+	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
+SimulationStore.o: SimulationStore.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp
 AlgTravelProducer.o: AlgTravelProducer.cpp
 	$(COMP) $(CPP_COMP_FLAG) -c $*.cpp

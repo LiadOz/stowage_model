@@ -8,6 +8,7 @@
 #include <atomic>
 
 #include "./AlgTravelProducer.h"
+#include "SimulationStore.h"
 #include "./Results.h"
 
 namespace fs = std::filesystem;
@@ -28,6 +29,9 @@ using std::atomic_bool;
 // initialized with algorithm directory
 class SimulationManager {
 private:
+
+    SimulationStore simStore;
+
     // used to initialize results and errors files
     void initilizeFiles(const string& rootFolder);
     void addTravelsToResults(const string& travelDir);

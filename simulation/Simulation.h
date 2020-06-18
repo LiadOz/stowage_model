@@ -10,6 +10,7 @@
 #include "../interfaces/WeightBalanceCalculator.h"
 #include "../interfaces/AbstractAlgorithm.h"
 #include "CraneOperations.h"
+#include "SimulationStore.h"
 #include "Port.h"
 
 #define CRANE_INSTRUCTIONS_EXT ".crane_instructions"
@@ -65,7 +66,8 @@ private:
 
 public:
 	//constructor
-	Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> alg);
+	Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName,
+	 const string& algorithmName, unique_ptr<AbstractAlgorithm> alg, SimulationStore& store);
 
 	//remove older log files before running the entire program
 	static void removeLogFiles(const string& simulationFolder);

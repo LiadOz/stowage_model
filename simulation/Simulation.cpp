@@ -21,7 +21,7 @@ using std::stringstream;
 #define SIMULATION_ERROR_FILE_NAME "errors.txt"
 #define SIMULATION_RESULTS_FILE_NAME "results.txt"
 
-Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> algo) {
+Simulation::Simulation(const string& outputDirectory, const string& travelDirectory, const string& travelName, const string& algorithmName, unique_ptr<AbstractAlgorithm> algo, SimulationStore& store) {
     folder = travelDirectory + FILE_SEPARATOR + travelName + FILE_SEPARATOR;
     try {
         getRouteFromStore(folder);
@@ -29,9 +29,10 @@ Simulation::Simulation(const string& outputDirectory, const string& travelDirect
         string routePath = getFileWithExt(folder, ROUTE_EXT);
         string simOutputDirectory = outputDirectory + FILE_SEPARATOR + algorithmName + "_" + travelName;
         algorithm = std::move(algo);
-        route = createShipRoute(routePath);
+        route = store.getRouteFromStore(routePath);
         loadContainersToPortsInRoute();
-        ship.readPlan(shipPath);
+        // Ship s = store.getShipFromStore(shipPath);
+        ship = (store.getShipFromStore(shipPath));
         this->algName = algorithmName;
         this->outputFolder = simOutputDirectory;
         wbCalculator = WeightBalanceCalculator();

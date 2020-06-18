@@ -108,7 +108,7 @@ void SimulationManager::runAlgTravelPair(int algIndex,
     int num = -1;
     try {
         LOG.setLogType(algName + "-" + travelName);
-        Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo));
+        Simulation simulation(outputDir, travelDir, travelName, algName, std::move(algo), simStore);
 
         num = simulation.runSimulation();
     } catch (std::runtime_error& e) {
